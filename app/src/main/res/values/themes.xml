@@ -21,4 +21,7 @@
     <style name="ShapeAppearanceOverlay.App.8sdp" parent="">
         <item name="cornerSize">@dimen/_8sdp</item>
     </style>
+    <style name="ShapeAppearanceOverlay.App.CornerSize50Percent" parent="">
+        <item name="cornerSize">50%</item>
+    </style>
 </resources>

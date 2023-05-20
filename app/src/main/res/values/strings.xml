@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">Motivational Qoutes</string>
+    <string name="app_name">Daily Quotes</string>
+    <string name="shared_pref_name">Shared Perefrence Quotes</string>
 </resources>

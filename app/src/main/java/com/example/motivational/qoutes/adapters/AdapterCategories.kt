@@ -25,7 +25,7 @@ class AdapterCategories(var context: Context,
     }
 
     override fun onBindViewHolder(holder: ViewHolderClass, position: Int) {
-        holder.binding.catImage.setImageResource(UtilLists.getRandomWallpaper())
+        holder.binding.catImage.setImageResource(UtilLists.catWallpapers[position])
         holder.binding.catName.text=UtilLists.cats[position]
         holder.binding.root.setOnClickListener { clickListener.onClick(UtilLists.cats[position]) }
     }

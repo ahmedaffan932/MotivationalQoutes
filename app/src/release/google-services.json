@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "875259067158",
+    "project_id": "dailyquotes-f83a0",
+    "storage_bucket": "dailyquotes-f83a0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:875259067158:android:dd65b1a175887df8feae37",
+        "android_client_info": {
+          "package_name": "com.quotes.motivation.quotesforyou.quotesandstatus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "875259067158-ogt8pd7sqns9ht1hag9cj64m5qn09s3i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQssRHGyNgFBpa2N0BKCC58dE-RgcINA0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "875259067158-ogt8pd7sqns9ht1hag9cj64m5qn09s3i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
