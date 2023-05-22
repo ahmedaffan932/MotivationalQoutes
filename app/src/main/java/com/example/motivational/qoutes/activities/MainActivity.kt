@@ -13,6 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.motivational.qoutes.R
 import com.example.motivational.qoutes.adapters.AdapterCategories
 import com.example.motivational.qoutes.adapters.AdapterQouts
+import com.example.motivational.qoutes.ads.Ads
+import com.example.motivational.qoutes.ads.InterstitialAds
+import com.example.motivational.qoutes.ads.NativeAd
 import com.example.motivational.qoutes.database.QuotModel
 import com.example.motivational.qoutes.database.QuotViewModel
 import com.example.motivational.qoutes.databinding.ActivityMainBinding
@@ -35,10 +38,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        InterstitialAds.showInterstitialAdmob(this,this, Ads.dashboardIntAm,null)
+        NativeAd.showPreFetch(this,Ads.dashboardNativeAm,binding.adFrameLayout,null)
         vMdl=QuotViewModel(application)
         binding.btnFav.setOnClickListener {
             startActivity(
-                Intent(this@MainActivity, QoutStudioActivity::class.java).putExtra(
+                Intent(this@MainActivity, NewQuoteStudioActivity::class.java).putExtra(
                     "cat",
                     "MFAV"
                 )
@@ -61,23 +67,14 @@ class MainActivity : AppCompatActivity() {
         binding.qoutOfDay.qoutWallpaper.setImageResource(UtilLists.getRandomWallpaper())
         binding.qoutOfDay.root.setOnClickListener {
             startActivity(
-                Intent(this@MainActivity, QoutStudioActivity::class.java).putExtra(
+                Intent(this@MainActivity, NewQuoteStudioActivity::class.java).putExtra(
                     "cat",
                     "QOD"
                 )
             )
         }
 
-        try {
-            if (!vMdl.readAllFav().isNotEmpty()){
-                binding.btnFav.visibility= View.GONE
-            }
-            else{
-                binding.btnFav.visibility= View.VISIBLE
-            }
-        }catch (exc:Exception){
-            exc.printStackTrace()
-        }
+
 
 //        binding.recyclerPopularCats.isNestedScrollingEnabled = false
         binding.recyclerPopularCats.layoutManager = GridLayoutManager(this, 3)
@@ -88,7 +85,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(
                     Intent(
                         this@MainActivity,
-                        QoutStudioActivity::class.java
+                        NewQuoteStudioActivity::class.java
                     ).putExtra("cat", catName)
                 )
             }
@@ -107,12 +104,26 @@ class MainActivity : AppCompatActivity() {
                     startActivity(
                         Intent(
                             this@MainActivity,
-                            QoutStudioActivity::class.java
+                            NewQuoteStudioActivity::class.java
                         ).putExtra("cat", "").putExtra("model", quot)
                     )
                 }
             })
 
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        try {
+            if (!vMdl.readAllFav().isNotEmpty()){
+                binding.btnFav.visibility= View.GONE
+            }
+            else{
+                binding.btnFav.visibility= View.VISIBLE
+            }
+        }catch (exc:Exception){
+            exc.printStackTrace()
+        }
     }
 }

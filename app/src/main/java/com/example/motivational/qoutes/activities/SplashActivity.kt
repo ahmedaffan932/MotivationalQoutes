@@ -5,7 +5,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
+import android.view.View
+import com.example.motivational.qoutes.BuildConfig
 import com.example.motivational.qoutes.R
+import com.example.motivational.qoutes.ads.Ads
+import com.example.motivational.qoutes.ads.InterstitialAds
+import com.example.motivational.qoutes.ads.NativeAd
 import com.example.motivational.qoutes.database.QuotModel
 import com.example.motivational.qoutes.database.QuotViewModel
 import com.example.motivational.qoutes.databinding.ActivitySplashBinding
@@ -14,6 +19,8 @@ import com.example.motivational.qoutes.utils.UtilMiscs
 import com.example.motivational.qoutes.utils.UtilMiscs.readJsonFromFile
 import com.example.motivational.qoutes.utils.UtilMiscs.unzipFromAssets
 import com.example.motivational.qoutes.utils.UtilSharedPerefs
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,6 +37,7 @@ class SplashActivity : AppCompatActivity() {
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(R.layout.activity_splash)
 
+        setupRemoteConfig()
         setup()
 
         object : CountDownTimer(6000, 1000) {
@@ -59,8 +67,48 @@ class SplashActivity : AppCompatActivity() {
             QuotViewModel(application).insertUsers(quots)
             Log.d("logkey", "SZ: ${quots.size}")
         }
+    }
+
+    private fun setupRemoteConfig() {
+        val remoteConfig = FirebaseRemoteConfig.getInstance()
+        remoteConfig.setConfigSettingsAsync(
+            FirebaseRemoteConfigSettings.Builder()
+                .setMinimumFetchIntervalInSeconds(1)
+                .build()
+        )
+        remoteConfig.fetchAndActivate().addOnCompleteListener(this) { task ->
+            if (task.isSuccessful && !BuildConfig.DEBUG) {
+                remoteConfig.activate()
+                FirebaseRemoteConfig.getInstance().activate()
+                remoteConfig.activate()
 
 
+//                Ads.admob_interstitial_id =
+//                    remoteConfig.getString(("admob_interstitial_id")).trim()
+//                Ads.admob_native_id = remoteConfig.getString(("admob_native_id")).trim()
+
+                Ads.dashboardIntAm=remoteConfig.getString("dashboardIntAm").trim()
+                Ads.dashboardNativeAm=remoteConfig.getString("dashboardNativeAm").trim()
+
+                loadAds()
+
+            } else {
+                loadAds()
+            }
+
+
+        }
+    }
+
+    private fun loadAds() {
+        loadNativeAds()
+        InterstitialAds.loadInterAdmob(this)
 
     }
+
+    private fun loadNativeAds() {
+        NativeAd.loadAdmobNativePreFetch(this@SplashActivity)
+    }
+
+
 }

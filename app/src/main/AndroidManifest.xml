@@ -13,6 +13,12 @@
         android:theme="@style/Theme.MotivationalQoutes"
         tools:targetApi="31">
         <activity
+            android:name=".activities.FullViewActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.NewQuoteStudioActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.SettingsActivity"
             android:exported="false" />
         <activity
@@ -45,6 +51,9 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_path" />
         </provider>
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

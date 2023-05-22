@@ -1,0 +1,72 @@
+package com.example.motivational.qoutes.ads
+
+import android.app.Activity
+import android.content.Context
+import android.util.Log
+import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+
+object InterstitialAds {
+
+    var interAdmob: com.google.android.gms.ads.interstitial.InterstitialAd? = null
+
+    //load Admob Interstitial
+    fun loadInterAdmob(context: Context) {
+            Log.d("loadAdmob?", "Already loaded")
+
+            val admobRequest = AdRequest.Builder().build()
+
+            com.google.android.gms.ads.interstitial.InterstitialAd.load(
+                context,
+                Ads.admob_interstitial_id,
+                admobRequest,
+                object : InterstitialAdLoadCallback() {
+                    override fun onAdFailedToLoad(adError: LoadAdError) {
+                        Log.d("loadAdmob?", adError.message + adError.code)
+                        interAdmob = null
+                    }
+
+                    override fun onAdLoaded(interstitialAd: com.google.android.gms.ads.interstitial.InterstitialAd) {
+                        Log.d("loadAdmob?", "Ad was loaded.")
+                        interAdmob = interstitialAd
+                    }
+                })
+
+    }
+
+
+    fun showInterstitialAdmob(activity: Activity, context: Context,remote: String,callback: InterstitialCallback?) {
+        if (interAdmob != null && remote == "am") {
+            interAdmob?.show(activity)
+        } else {
+            Log.d("interAdmobShow", "The interstitial ad wasn't ready yet.")
+            callback?.onResult()
+        }
+
+        interAdmob?.fullScreenContentCallback = object : FullScreenContentCallback() {
+            override fun onAdDismissedFullScreenContent() {
+                Log.d("interAdmobShow", "Ad was dismissed.")
+                callback?.onResult()
+
+            }
+
+            override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+                Log.d("interAdmobShow", "Ad failed to show." + adError.message + adError.code)
+                callback?.onResult()
+
+            }
+
+            override fun onAdShowedFullScreenContent() {
+                Log.d("interAdmobShow", "Ad showed fullscreen content.")
+                interAdmob = null
+                loadInterAdmob(context)
+            }
+        }
+
+    }
+
+
+}
