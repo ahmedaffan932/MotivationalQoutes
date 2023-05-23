@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="@dimen/_98sdp"
+    android:layout_width="@dimen/_146sdp"
     android:layout_height="wrap_content"
+    android:layout_margin="@dimen/_6sdp"
     android:background="@drawable/bg_transparent_ripple_square"
-    android:layout_margin="@dimen/_4sdp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/catImage"
-        android:layout_width="@dimen/_88sdp"
+        android:layout_width="@dimen/_140sdp"
         android:layout_height="@dimen/_88sdp"
         android:src="@drawable/rp1"
         android:layout_margin="@dimen/_4sdp"
         android:scaleType="centerCrop"
+        android:background="@drawable/bg_simple_btn_ripple"
+        android:elevation="@dimen/_8sdp"
         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.8sdp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"

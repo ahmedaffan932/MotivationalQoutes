@@ -107,4 +107,20 @@ object UtilLists {
         "positive",
         "purpose"
     )
+    val quoteSplash= arrayOf(
+        "“Either you run the day or the day runs you.” — Jim Rohn",
+        "“Don’t let yesterday take up too much of today.” — Will Rogers",
+        "“He who conquers himself is the mightiest warrior.” — Confucius",
+        "“One man with courage makes a majority.” – Andrew Jackson",
+        "“Opportunities don't happen, you create them.” — Chris Grosser",
+        "“If you can dream it, you can do it.” ―Walt Disney"
+    )
+    val wallSplash= intArrayOf(
+        R.drawable.sp1,
+        R.drawable.sp2,
+        R.drawable.sp3,
+        R.drawable.sp4,
+        R.drawable.sp5,
+        R.drawable.sp6
+    )
 }

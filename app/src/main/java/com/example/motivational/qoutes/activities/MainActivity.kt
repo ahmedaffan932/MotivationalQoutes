@@ -8,8 +8,11 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.motivational.qoutes.R
 import com.example.motivational.qoutes.adapters.AdapterCategories
 import com.example.motivational.qoutes.adapters.AdapterQouts
@@ -19,10 +22,13 @@ import com.example.motivational.qoutes.ads.NativeAd
 import com.example.motivational.qoutes.database.QuotModel
 import com.example.motivational.qoutes.database.QuotViewModel
 import com.example.motivational.qoutes.databinding.ActivityMainBinding
+import com.example.motivational.qoutes.fragments.QuoteFragment
+import com.example.motivational.qoutes.fragments.TrendingFragment
 import com.example.motivational.qoutes.interfaces.InterfaceCatClick
 import com.example.motivational.qoutes.interfaces.InterfaceQuotClick
 import com.example.motivational.qoutes.utils.UtilLists
 import com.example.motivational.qoutes.utils.UtilSharedPerefs
+import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -34,6 +40,7 @@ import java.util.Locale
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var vMdl:QuotViewModel
+    private var arrListTrendingKerosil=ArrayList<QuotModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -42,17 +49,25 @@ class MainActivity : AppCompatActivity() {
         InterstitialAds.showInterstitialAdmob(this,this, Ads.dashboardIntAm,null)
         NativeAd.showPreFetch(this,Ads.dashboardNativeAm,binding.adFrameLayout,null)
         vMdl=QuotViewModel(application)
-        binding.btnFav.setOnClickListener {
-            startActivity(
-                Intent(this@MainActivity, NewQuoteStudioActivity::class.java).putExtra(
-                    "cat",
-                    "MFAV"
-                )
-            )
+
+        //initialize kerosil list
+        arrListTrendingKerosil.clear()
+        val trndLst=vMdl.readByCat("")
+        for(i in 0 until 6){
+            arrListTrendingKerosil.add(trndLst[i])
         }
-        binding.btnSettings.setOnClickListener {
-            startActivity(Intent(this,SettingsActivity::class.java))
-        }
+
+//        binding.btnFav.setOnClickListener {
+//            startActivity(
+//                Intent(this@MainActivity, NewQuoteStudioActivity::class.java).putExtra(
+//                    "cat",
+//                    "MFAV"
+//                )
+//            )
+//        }
+//        binding.btnSettings.setOnClickListener {
+//            startActivity(Intent(this,SettingsActivity::class.java))
+//        }
         val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
         if (UtilSharedPerefs.getDate(this)!=currentDate){
             UtilSharedPerefs.setDate(this,currentDate)
@@ -63,23 +78,21 @@ class MainActivity : AppCompatActivity() {
                 exc.printStackTrace()
             }
         }
-        binding.qoutOfDay.qoutData.text=UtilSharedPerefs.getQuote(this)
-        binding.qoutOfDay.qoutWallpaper.setImageResource(UtilLists.getRandomWallpaper())
-        binding.qoutOfDay.root.setOnClickListener {
-            startActivity(
-                Intent(this@MainActivity, NewQuoteStudioActivity::class.java).putExtra(
-                    "cat",
-                    "QOD"
-                )
-            )
-        }
+//        binding.qoutOfDay.qoutData.text=UtilSharedPerefs.getQuote(this)
+//        binding.qoutOfDay.qoutWallpaper.setImageResource(UtilLists.getRandomWallpaper())
+//        binding.qoutOfDay.root.setOnClickListener {
+//            startActivity(
+//                Intent(this@MainActivity, NewQuoteStudioActivity::class.java).putExtra(
+//                    "cat",
+//                    "QOD"
+//                )
+//            )
+//        }
 
 
 
 //        binding.recyclerPopularCats.isNestedScrollingEnabled = false
-        binding.recyclerPopularCats.layoutManager = GridLayoutManager(this, 3)
-        binding.recyclerTrending.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding.recyclerPopularCats.layoutManager = GridLayoutManager(this, 2)
         binding.recyclerPopularCats.adapter = AdapterCategories(this, object : InterfaceCatClick {
             override fun onClick(catName: String) {
                 startActivity(
@@ -91,39 +104,44 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
+        binding.quotesViewPager.setOnClickListener {
+            startActivity(
+                Intent(
+                    this@MainActivity,
+                    NewQuoteStudioActivity::class.java
+                ).putExtra("cat", "").putExtra("model", arrListTrendingKerosil[binding.quotesViewPager.currentItem])
+            )
+        }
 
-        Log.d(
-            "logkey",
-            "vMdl.readByCat(\"\") ${vMdl.readByCat("").size}"
-        )
-        binding.recyclerTrending.adapter = AdapterQouts(
-            this@MainActivity,
-            vMdl.readByCat(""),
-            object : InterfaceQuotClick {
-                override fun onClick(quot: QuotModel) {
-                    startActivity(
-                        Intent(
-                            this@MainActivity,
-                            NewQuoteStudioActivity::class.java
-                        ).putExtra("cat", "").putExtra("model", quot)
-                    )
-                }
-            })
-
+        binding.quotesViewPager.adapter=QuotesPagerAdapter(this)
+        TabLayoutMediator(binding.tabLayoutOnBoardingScreen, binding.quotesViewPager) { tab, position ->
+        }.attach()
 
     }
 
     override fun onResume() {
         super.onResume()
-        try {
-            if (!vMdl.readAllFav().isNotEmpty()){
-                binding.btnFav.visibility= View.GONE
-            }
-            else{
-                binding.btnFav.visibility= View.VISIBLE
-            }
-        }catch (exc:Exception){
-            exc.printStackTrace()
+//        try {
+//            if (!vMdl.readAllFav().isNotEmpty()){
+//                binding.btnFav.visibility= View.GONE
+//            }
+//            else{
+//                binding.btnFav.visibility= View.VISIBLE
+//            }
+//        }catch (exc:Exception){
+//            exc.printStackTrace()
+//        }
+    }
+
+
+    private inner class QuotesPagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
+        override fun getItemCount(): Int {
+            return arrListTrendingKerosil.size
+        }
+        override fun createFragment(position: Int): Fragment {
+            Log.d("logkey","createFragment")
+            return TrendingFragment.newInstance(arrListTrendingKerosil[position])
         }
     }
+
 }

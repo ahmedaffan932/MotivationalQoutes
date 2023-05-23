@@ -15,39 +15,40 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_10sdp"
-            android:text="@string/app_name"
-            android:textColor="@color/clr_txt1"
-            android:textSize="16sp"
-            android:textStyle="bold"
+        <ImageView
+            android:id="@+id/btnMenu"
+            android:layout_width="@dimen/_32sdp"
+            android:layout_height="@dimen/_32sdp"
+            android:layout_margin="@dimen/_4sdp"
+            android:background="@drawable/bg_transparent_ripple_circle"
+            android:padding="@dimen/_8sdp"
+            android:src="@drawable/ic_menu"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/btnSettings"
-            android:layout_width="@dimen/_42sdp"
-            android:layout_height="@dimen/_42sdp"
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_margin="@dimen/_10sdp"
-            android:background="@drawable/bg_transparent_ripple_circle"
-            android:padding="@dimen/_8sdp"
-            android:src="@drawable/round_settings_24"
+            android:text="@string/app_name"
+            android:textStyle="bold"
+            android:textColor="@color/clr_txt1"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/btnFav"
-            app:layout_constraintEnd_toStartOf="@+id/btnFav"
+            app:layout_constraintStart_toEndOf="@+id/btnMenu"
             app:layout_constraintTop_toTopOf="parent" />
 
+
         <ImageView
-            android:id="@+id/btnFav"
-            android:layout_width="@dimen/_42sdp"
-            android:layout_height="@dimen/_42sdp"
-            android:layout_margin="@dimen/_10sdp"
+            android:id="@+id/btnPro"
+            android:layout_width="@dimen/_32sdp"
+            android:layout_height="@dimen/_32sdp"
+            android:layout_margin="@dimen/_8sdp"
             android:background="@drawable/bg_transparent_ripple_circle"
-            android:padding="@dimen/_10sdp"
-            android:src="@drawable/ic_my_fav"
+            android:padding="@dimen/_1sdp"
+            android:src="@drawable/ic_crown"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -58,6 +59,7 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/_6sdp"
         app:layout_constraintBottom_toTopOf="@+id/adFrameLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolpar">
@@ -66,52 +68,55 @@
             android:layout_height="0dp"
             >
 
-            <include
-                android:id="@+id/qoutOfDay"
-                layout="@layout/layout_qout"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_180sdp"
-                android:layout_margin="@dimen/_10sdp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/bg_simple_btn_ripple"
+                android:elevation="@dimen/_8sdp"
                 android:layout_margin="@dimen/_10sdp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/qoutOfDay">
+                app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
-                    android:id="@+id/textView1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Trending"
-                    android:textColor="@color/clr_txt1"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerTrending"
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/quotes_view_pager"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/_8sdp"
+                    android:layout_height="@dimen/_180sdp"
+                    android:orientation="horizontal"
+
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView1" />
+                    app:layout_constraintTop_toTopOf="parent"/>
 
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabLayoutOnBoardingScreen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="8dp"
+                    android:layout_margin="@dimen/_10sdp"
+                    android:animateLayoutChanges="true"
+                    android:background="@android:color/transparent"
+                    android:clipToPadding="true"
+                    android:paddingLeft="@dimen/_8sdp"
+                    android:paddingRight="@dimen/_8sdp"
+                    app:barrierMargin="@dimen/_8sdp"
+                    app:layout_constraintBottom_toBottomOf="@+id/quotes_view_pager"
+                    app:layout_constraintEnd_toEndOf="@+id/quotes_view_pager"
+                    app:layout_constraintStart_toStartOf="@+id/quotes_view_pager"
+                    app:tabBackground="@drawable/tab_indicator_on_boarding_screen"
+                    app:tabIndicator="@drawable/tab_indicator_on_boarding_screen"
+                    app:tabIndicatorColor="@android:color/transparent"
+                    app:tabMinWidth="8dp"
+                    app:tabMaxWidth="8dp"
+                    app:tabTextAppearance="@style/MineCustomTabText" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_10sdp"
+                android:layout_marginVertical="@dimen/_10sdp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
@@ -120,6 +125,7 @@
                     android:id="@+id/textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/_10sdp"
                     android:text="Popular Categories"
                     android:textColor="@color/clr_txt1"
                     android:textSize="16sp"
