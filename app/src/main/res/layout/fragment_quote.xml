@@ -7,93 +7,113 @@
     android:background="@color/clr_dark_grey"
     tools:context=".fragments.QuoteFragment">
 
-    <include
-        android:id="@+id/quotLayout"
-        layout="@layout/layout_qout"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/_10sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayoutOptions"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_10sdp"
-        android:background="@drawable/bg_mask_tl"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <ImageView
-            android:id="@+id/btnShare"
-            android:layout_width="@dimen/_36sdp"
-            android:layout_height="@dimen/_36sdp"
-            android:layout_margin="@dimen/_2sdp"
-            android:background="@drawable/bg_transparent_ripple_circle"
-            android:padding="@dimen/_8sdp"
-            android:src="@drawable/ic_share"
+        <include
+            android:id="@+id/quotLayout"
+            layout="@layout/layout_qout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/_10sdp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btnFav"
-            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/btnFav"
-            android:layout_width="@dimen/_36sdp"
-            android:layout_height="@dimen/_36sdp"
-            android:layout_margin="@dimen/_2sdp"
-            android:background="@drawable/bg_transparent_ripple_circle"
-            android:padding="@dimen/_8sdp"
-            android:src="@drawable/ic_fav"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btnDown"
-            app:layout_constraintStart_toEndOf="@+id/btnShare"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/white" />
-
-        <ImageView
-            android:id="@+id/btnDown"
-            android:layout_width="@dimen/_36sdp"
-            android:layout_height="@dimen/_36sdp"
-            android:layout_margin="@dimen/_2sdp"
-            android:background="@drawable/bg_transparent_ripple_circle"
-            android:padding="@dimen/_8sdp"
-            android:src="@drawable/ic_download"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btnCopy"
-            app:layout_constraintStart_toEndOf="@+id/btnFav"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/btnCopy"
-            android:layout_width="@dimen/_36sdp"
-            android:layout_height="@dimen/_36sdp"
-            android:layout_margin="@dimen/_2sdp"
-            android:background="@drawable/bg_transparent_ripple_circle"
-            android:padding="@dimen/_8sdp"
-            android:src="@drawable/ic_copy"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btnFullScreen"
-            app:layout_constraintStart_toEndOf="@+id/btnDown"
-            app:layout_constraintTop_toTopOf="parent" />
-        <ImageView
-            android:id="@+id/btnFullScreen"
-            android:layout_width="@dimen/_36sdp"
-            android:layout_height="@dimen/_36sdp"
-            android:layout_margin="@dimen/_2sdp"
-            android:background="@drawable/bg_transparent_ripple_circle"
-            android:padding="@dimen/_8sdp"
-            android:src="@drawable/round_open_in_full_24"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayoutOptions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_10sdp"
+            android:background="@drawable/bg_mask_tl"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/btnCopy"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="parent">
 
+            <ImageView
+                android:id="@+id/btnShare"
+                android:layout_width="@dimen/_36sdp"
+                android:layout_height="@dimen/_36sdp"
+                android:layout_margin="@dimen/_2sdp"
+                android:background="@drawable/bg_transparent_ripple_circle"
+                android:padding="@dimen/_8sdp"
+                android:src="@drawable/ic_share"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btnFav"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/btnFav"
+                android:layout_width="@dimen/_36sdp"
+                android:layout_height="@dimen/_36sdp"
+                android:layout_margin="@dimen/_2sdp"
+                android:background="@drawable/bg_transparent_ripple_circle"
+                android:padding="@dimen/_8sdp"
+                android:src="@drawable/ic_fav"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btnDown"
+                app:layout_constraintStart_toEndOf="@+id/btnShare"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/white" />
+
+            <ImageView
+                android:id="@+id/btnDown"
+                android:layout_width="@dimen/_36sdp"
+                android:layout_height="@dimen/_36sdp"
+                android:layout_margin="@dimen/_2sdp"
+                android:background="@drawable/bg_transparent_ripple_circle"
+                android:padding="@dimen/_8sdp"
+                android:src="@drawable/ic_download"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btnCopy"
+                app:layout_constraintStart_toEndOf="@+id/btnFav"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/btnCopy"
+                android:layout_width="@dimen/_36sdp"
+                android:layout_height="@dimen/_36sdp"
+                android:layout_margin="@dimen/_2sdp"
+                android:background="@drawable/bg_transparent_ripple_circle"
+                android:padding="@dimen/_8sdp"
+                android:src="@drawable/ic_copy"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btnFullScreen"
+                app:layout_constraintStart_toEndOf="@+id/btnDown"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/btnFullScreen"
+                android:layout_width="@dimen/_36sdp"
+                android:layout_height="@dimen/_36sdp"
+                android:layout_margin="@dimen/_2sdp"
+                android:background="@drawable/bg_transparent_ripple_circle"
+                android:padding="@dimen/_8sdp"
+                android:src="@drawable/round_open_in_full_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btnCopy"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
+    <FrameLayout
+        android:id="@+id/adFrameLayout"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

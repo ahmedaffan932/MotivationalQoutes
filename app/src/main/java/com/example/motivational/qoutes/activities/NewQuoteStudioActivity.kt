@@ -22,7 +22,7 @@ class NewQuoteStudioActivity : AppCompatActivity() {
     private lateinit var binding:ActivityNewQuoteStudioBinding
     private var cat = ""
     private lateinit var vMdl: QuotViewModel
-    private var lstQuot= listOf<QuotModel?>()
+    private var lstQuot= ArrayList<QuotModel?>()
     private var activeQoute:QuotModel?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,13 +35,17 @@ class NewQuoteStudioActivity : AppCompatActivity() {
         vMdl = QuotViewModel(application)
         cat = intent.getStringExtra("cat") ?: ""
         if (cat=="MFAV"){
-            lstQuot=vMdl.readAllFav()
+            for (i in vMdl.readAllFav()){
+                lstQuot.add(i)
+            }
             if (lstQuot.isNotEmpty()){
                 activeQoute=lstQuot[0]
             }
         }
         else{
-            lstQuot=vMdl.readByCat(cat)
+            for (i in vMdl.readByCat(cat)){
+                lstQuot.add(i)
+            }
             if (cat==""){
                 activeQoute=intent.getParcelableExtra("model")
             }
@@ -51,12 +55,13 @@ class NewQuoteStudioActivity : AppCompatActivity() {
                 }
             }
         }
-        Log.d("logkey","List is ready")
 
         //adding ads in list
         for (i in 0 until  lstQuot.size){
             if (i% Ads.inBetweenQuotesNativeAdPosition==0){
-                lstQuot[i]=null
+                lstQuot.add(i,null)
+                Log.d("logkey","Adding Ad")
+
             }
         }
 

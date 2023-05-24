@@ -5,7 +5,6 @@ import android.content.res.ColorStateList
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,14 +12,15 @@ import androidx.core.app.ShareCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.drawToBitmap
-import androidx.lifecycle.ViewModel
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.motivational.qoutes.BuildConfig
 import com.example.motivational.qoutes.R
 import com.example.motivational.qoutes.activities.FullViewActivity
+import com.example.motivational.qoutes.ads.Ads
+import com.example.motivational.qoutes.ads.NativeAd
 import com.example.motivational.qoutes.database.QuotModel
 import com.example.motivational.qoutes.database.QuotViewModel
-import com.example.motivational.qoutes.databinding.ActivityNewQuoteStudioBinding
 import com.example.motivational.qoutes.databinding.FragmentQuoteBinding
 import com.example.motivational.qoutes.utils.UtilLists
 import com.example.motivational.qoutes.utils.UtilMiscs
@@ -48,15 +48,24 @@ class QuoteFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding= FragmentQuoteBinding.inflate(inflater,container,false)
+        binding = FragmentQuoteBinding.inflate(inflater, container, false)
         vMdl = ViewModelProvider(this)[QuotViewModel::class.java]
-        binding.quotLayout.qoutData.text=param1?.Quote
-        binding.quotLayout.qoutWallpaper.setImageResource(UtilLists.getRandomWallpaper())
-        updateUi()
-        btnClicks()
-
-        binding.root.setOnClickListener {
+        Log.d("logkey", "param1: $param1")
+        if (param1 == null) {
+            binding.mView.visibility=View.GONE
+            binding.adFrameLayout.visibility=View.VISIBLE
+            NativeAd.showPreFetch(requireContext(), Ads.inBetweenQuotesNativeAm,binding.adFrameLayout,null)
+        } else {
+            binding.mView.visibility=View.VISIBLE
+            binding.adFrameLayout.visibility=View.GONE
+            binding.quotLayout.qoutData.text = param1?.Quote
             binding.quotLayout.qoutWallpaper.setImageResource(UtilLists.getRandomWallpaper())
+            updateUi()
+            btnClicks()
+
+            binding.root.setOnClickListener {
+                binding.quotLayout.qoutWallpaper.setImageResource(UtilLists.getRandomWallpaper())
+            }
         }
         return binding.root
     }
