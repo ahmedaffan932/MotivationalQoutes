@@ -27,6 +27,7 @@
         android:shadowColor="@color/black"
         android:shadowDx="3"
         android:shadowDy="3"
+        android:textStyle="bold"
         android:shadowRadius="6"
         android:text="The best and most beautiful things in the world cannot be seen or even touched - they must be felt with the heart."
         android:textAlignment="center"

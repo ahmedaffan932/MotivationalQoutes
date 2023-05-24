@@ -131,7 +131,7 @@ class QuoteFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(param1: QuotModel) =
+        fun newInstance(param1: QuotModel?) =
             QuoteFragment().apply {
                 arguments = Bundle().apply {
                     putParcelable(ARG_PARAM1, param1)

@@ -17,6 +17,8 @@ import com.example.motivational.qoutes.databinding.ActivitySplashBinding
 import com.example.motivational.qoutes.utils.UtilLists
 import com.example.motivational.qoutes.utils.UtilMiscs
 import com.example.motivational.qoutes.utils.UtilMiscs.readJsonFromFile
+import com.example.motivational.qoutes.utils.UtilMiscs.setupRoomDb
+import com.example.motivational.qoutes.utils.UtilMiscs.unZipFolder
 import com.example.motivational.qoutes.utils.UtilMiscs.unzipFromAssets
 import com.example.motivational.qoutes.utils.UtilSharedPerefs
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -35,11 +37,18 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySplashBinding.inflate(layoutInflater)
-        setContentView(R.layout.activity_splash)
+        setContentView(binding.root)
+        var quotOfSp=UtilSharedPerefs.getQuote(this)
+        Log.d("logkey","quotOfSp: $quotOfSp, UtilLists.quoteSplash.size-1: ${UtilLists.quoteSplash.size-1}")
+        binding.splashQuote.text=UtilLists.quoteSplash[quotOfSp]
+        binding.imageView.setImageResource(UtilLists.wallSplash[quotOfSp])
+        UtilSharedPerefs.setQuote(this, if (quotOfSp>=UtilLists.quoteSplash.size-1) 0 else quotOfSp+1)
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
         supportActionBar?.hide()
         setupRemoteConfig()
-        setup()
+        unZipFolder()
+        setupRoomDb(application)
+
 
         object : CountDownTimer(6000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
@@ -55,20 +64,7 @@ class SplashActivity : AppCompatActivity() {
         }.start()
     }
 
-    private fun setup() {
-        val outputDirectory = filesDir.absolutePath
-        if (!File(outputDirectory, "quotes.json").exists()) {
-            val zipFileName = "archive.zip"
-            Log.d("logkey", "PTH: $outputDirectory")
-            unzipFromAssets(this, zipFileName, outputDirectory)
 
-            val gson = Gson()
-            val quotsJson = readJsonFromFile(filesDir.absolutePath + "/quotes.json")
-            val quots = gson.fromJson(quotsJson, Array<QuotModel>::class.java).toList()
-            QuotViewModel(application).insertUsers(quots)
-            Log.d("logkey", "SZ: ${quots.size}")
-        }
-    }
 
     private fun setupRemoteConfig() {
         val remoteConfig = FirebaseRemoteConfig.getInstance()

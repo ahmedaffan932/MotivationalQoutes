@@ -29,6 +29,7 @@
         android:textColor="@color/clr_txt1"
         android:textSize="11sp"
         android:text="sdddsdsd"
+        android:textStyle="bold"
         android:gravity="center"
         android:lines="3"
         app:layout_constraintBottom_toBottomOf="@+id/catImage"

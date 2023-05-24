@@ -75,6 +75,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.android.gms:play-services-ads:22.0.0'
+    implementation "com.android.billingclient:billing-ktx:5.1.0"
 
 
 }

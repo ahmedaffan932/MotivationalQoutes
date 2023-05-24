@@ -44,11 +44,7 @@ class QoutStudioActivity : AppCompatActivity() {
         vMdl = QuotViewModel(application)
         cat = intent.getStringExtra("cat") ?: ""
         binding.recyclerQuots.layoutManager =LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        if (cat=="QOD"){
-            binding.recyclerQuots.visibility= View.GONE
-            activeQoute=QuotModel(0,"","",0.0, UtilSharedPerefs.getQuote(this), listOf<String>(),0)
-        }
-        else if (cat=="MFAV"){
+        if (cat=="MFAV"){
             binding.recyclerQuots.visibility= View.VISIBLE
             lstQuot=vMdl.readAllFav()
             if (lstQuot.isNotEmpty()){

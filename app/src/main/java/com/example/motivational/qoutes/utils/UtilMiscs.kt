@@ -1,22 +1,25 @@
 package com.example.motivational.qoutes.utils
 
+import android.app.Application
+import android.app.ProgressDialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.Toast
-import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.view.drawToBitmap
+import com.example.motivational.qoutes.database.QuotModel
+import com.example.motivational.qoutes.database.QuotViewModel
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -28,6 +31,29 @@ import java.util.zip.ZipInputStream
 object UtilMiscs {
     var clipboard: ClipboardManager?=null
     var clip: ClipData?=null
+
+    fun showProgressD(context: Context):ProgressDialog{
+        val progress = ProgressDialog(context)
+        progress.setTitle("Loading")
+        progress.setCancelable(false)
+        progress.show()
+        return progress
+    }
+    fun Context.unZipFolder() {
+        val outputDirectory = filesDir.absolutePath
+        if (!File(outputDirectory, "quotes.json").exists()) {
+            val zipFileName = "archive.zip"
+            Log.d("logkey", "PTH: $outputDirectory")
+            unzipFromAssets(this, zipFileName, outputDirectory)
+        }
+    }
+    fun Context.setupRoomDb(application:Application){
+        val gson = Gson()
+        val quotsJson = readJsonFromFile(filesDir.absolutePath + "/quotes.json")
+        val quots = gson.fromJson(quotsJson, Array<QuotModel>::class.java).toList()
+        QuotViewModel(application).insertUsers(quots)
+        Log.d("logkey", "SZ: ${quots.size}")
+    }
     fun getRootPath(){
 
     }

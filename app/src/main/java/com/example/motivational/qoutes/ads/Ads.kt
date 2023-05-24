@@ -3,6 +3,10 @@ package com.example.motivational.qoutes.ads
 import com.example.motivational.qoutes.BuildConfig
 
 object Ads {
+    var inBetweenQuotesNativeAdPosition=5
+    var inBetweenQuotesNativeAm="am_hctr"
+    var proLifeTimeKey="android.test.purchased"
+    var proMonthlyKey="android.test.purchased"
     const val PURCHASE = "Purchase"
 
     const val admob = "am"

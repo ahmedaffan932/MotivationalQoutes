@@ -1,7 +1,9 @@
 package com.example.motivational.qoutes.utils
 
+import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.motivational.qoutes.R
 
@@ -24,11 +26,19 @@ object UtilSharedPerefs {
         sharedPreferancesEditorVar(context).putString("storedDateKey",date).apply()
     }
 
-    fun getQuote(context: Context):String{
-        return sharedPreferencesVar(context).getString("storedQuote", "The best and most beautiful things in the world cannot be seen or even touched - they must be felt with the heart.")?:"The best and most beautiful things in the world cannot be seen or even touched - they must be felt with the heart."
+    fun getQuote(context: Context):Int{
+        return sharedPreferencesVar(context).getInt("storedQuote",0)
     }
 
-    fun setQuote(context: Context, quote:String){
-        sharedPreferancesEditorVar(context).putString("storedQuote",quote).apply()
+    fun setQuote(context: Context, quote:Int){
+        Log.d("logkey","quoteIt: $quote")
+        sharedPreferancesEditorVar(context).putInt("storedQuote",quote).apply()
+    }
+
+    fun setPurchasedStatus(context: Context, b: Boolean) {
+        sharedPreferancesEditorVar(context).putBoolean("isPurchased",b).apply()
+    }
+    fun getPurchasedStatus(context: Context):Boolean{
+        return sharedPreferencesVar(context).getBoolean("isPurchased",false)
     }
 }

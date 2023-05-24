@@ -9,10 +9,12 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.example.motivational.qoutes.R
 import com.example.motivational.qoutes.activities.NewQuoteStudioActivity
+import com.example.motivational.qoutes.ads.Ads
 import com.example.motivational.qoutes.database.QuotModel
 import com.example.motivational.qoutes.database.QuotViewModel
 import com.example.motivational.qoutes.databinding.FragmentTrendingBinding
 import com.example.motivational.qoutes.utils.UtilLists
+import com.example.motivational.qoutes.ads.NativeAd
 
 private const val ARG_PARAM1 = "param1"
 class TrendingFragment : Fragment() {
@@ -32,16 +34,26 @@ class TrendingFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding=FragmentTrendingBinding.inflate(inflater,container,false)
-        binding.quotLayout.qoutData.text=param1?.Quote
-        binding.quotLayout.qoutWallpaper.setImageResource(UtilLists.getRandomWallpaper())
-        binding.root.setOnClickListener {
-            startActivity(
-                Intent(
-                    requireActivity(),
-                    NewQuoteStudioActivity::class.java
-                ).putExtra("cat", "")
-            )
+        if (param1==null){
+            binding.adFrameLayout.visibility=View.VISIBLE
+            binding.quotLayout.root.visibility=View.GONE
+            NativeAd.showPreFetch(requireContext(), Ads.inBetweenQuotesNativeAm, binding.adFrameLayout,null)
         }
+        else{
+            binding.adFrameLayout.visibility=View.GONE
+            binding.quotLayout.root.visibility=View.VISIBLE
+            binding.quotLayout.qoutData.text=param1?.Quote
+            binding.quotLayout.qoutWallpaper.setImageResource(UtilLists.getRandomWallpaper())
+            binding.root.setOnClickListener {
+                startActivity(
+                    Intent(
+                        requireActivity(),
+                        NewQuoteStudioActivity::class.java
+                    ).putExtra("cat", "")
+                )
+            }
+        }
+
         return binding.root
     }
 

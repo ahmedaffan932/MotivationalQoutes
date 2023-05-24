@@ -8,11 +8,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.motivational.qoutes.R
+import com.example.motivational.qoutes.ads.Ads
 import com.example.motivational.qoutes.database.QuotModel
 import com.example.motivational.qoutes.database.QuotViewModel
 import com.example.motivational.qoutes.databinding.ActivityNewQuoteStudioBinding
 import com.example.motivational.qoutes.fragments.QuoteFragment
 import com.example.motivational.qoutes.utils.HorizontalMarginItemDecoration
+import com.example.motivational.qoutes.utils.UtilMiscs
 import com.example.motivational.qoutes.utils.UtilSharedPerefs
 import java.lang.Math.abs
 
@@ -20,21 +22,19 @@ class NewQuoteStudioActivity : AppCompatActivity() {
     private lateinit var binding:ActivityNewQuoteStudioBinding
     private var cat = ""
     private lateinit var vMdl: QuotViewModel
-    private var lstQuot= listOf<QuotModel>()
+    private var lstQuot= listOf<QuotModel?>()
     private var activeQoute:QuotModel?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityNewQuoteStudioBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        Log.d("logkey","onCreate")
+        val loader=UtilMiscs.showProgressD(this)
 
         vMdl = QuotViewModel(application)
         cat = intent.getStringExtra("cat") ?: ""
-        if (cat=="QOD"){
-            activeQoute=QuotModel(0,"","",0.0, UtilSharedPerefs.getQuote(this), listOf<String>(),0)
-            lstQuot+=activeQoute!!
-        }
-        else if (cat=="MFAV"){
+        if (cat=="MFAV"){
             lstQuot=vMdl.readAllFav()
             if (lstQuot.isNotEmpty()){
                 activeQoute=lstQuot[0]
@@ -51,6 +51,15 @@ class NewQuoteStudioActivity : AppCompatActivity() {
                 }
             }
         }
+        Log.d("logkey","List is ready")
+
+        //adding ads in list
+        for (i in 0 until  lstQuot.size){
+            if (i% Ads.inBetweenQuotesNativeAdPosition==0){
+                lstQuot[i]=null
+            }
+        }
+
         binding.btnBack.setOnClickListener {
             onBackPressed()
         }
@@ -77,7 +86,7 @@ class NewQuoteStudioActivity : AppCompatActivity() {
             R.dimen.viewpager_current_item_horizontal_margin
         )
         binding.quotesViewPager.addItemDecoration(itemDecoration)
-        
+        loader.dismiss()
         
         
     }
@@ -86,7 +95,9 @@ class NewQuoteStudioActivity : AppCompatActivity() {
 
     private inner class QuotesPagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
         override fun getItemCount(): Int {
+            Log.d("logkey","lstQuot.size: ${lstQuot.size}")
             return lstQuot.size
+
         }
         override fun createFragment(position: Int): Fragment {
             Log.d("logkey","createFragment")

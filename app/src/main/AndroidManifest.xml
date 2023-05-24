@@ -13,6 +13,9 @@
         android:theme="@style/Theme.MotivationalQoutes"
         tools:targetApi="31">
         <activity
+            android:name=".activities.InAppActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.FullViewActivity"
             android:exported="false" />
         <activity
