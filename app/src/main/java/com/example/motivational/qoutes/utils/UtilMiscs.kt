@@ -20,6 +20,9 @@ import com.example.motivational.qoutes.database.QuotModel
 import com.example.motivational.qoutes.database.QuotViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -47,12 +50,16 @@ object UtilMiscs {
             unzipFromAssets(this, zipFileName, outputDirectory)
         }
     }
-    fun Context.setupRoomDb(application:Application){
-        val gson = Gson()
-        val quotsJson = readJsonFromFile(filesDir.absolutePath + "/quotes.json")
-        val quots = gson.fromJson(quotsJson, Array<QuotModel>::class.java).toList()
-        QuotViewModel(application).insertUsers(quots)
-        Log.d("logkey", "SZ: ${quots.size}")
+    fun Context.setupRoomDb(application:Application) {
+        CoroutineScope(Dispatchers.IO).launch {
+            if (QuotViewModel(application).getAllCats().isEmpty()) {
+                val gson = Gson()
+                val quotsJson = readJsonFromFile(filesDir.absolutePath + "/quotes.json")
+                val quots = gson.fromJson(quotsJson, Array<QuotModel>::class.java).toList()
+                QuotViewModel(application).insertUsers(quots)
+                Log.d("logkey", "SZ: ${quots.size}")
+            }
+        }
     }
     fun getRootPath(){
 

@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 class QuotRepository(private val myDao: QuotDao) {
     val readAllData: LiveData<List<QuotModel>> = myDao.readAllVideos()
 
-    fun getAllCats(): List<String>{
+    suspend fun getAllCats(): List<String>{
        return myDao.getAllCategories()
     }
 
@@ -15,13 +15,13 @@ class QuotRepository(private val myDao: QuotDao) {
     suspend fun updateQoute(qoute: QuotModel){
         myDao.updateQoute(qoute)
     }
-    fun readByCat(cat:String): List<QuotModel>{
+    suspend fun readByCat(cat:String): List<QuotModel>{
         return myDao.readByCat(cat)
     }
-    fun readAllFav(): List<QuotModel>{
+    suspend fun readAllFav(): List<QuotModel>{
         return myDao.readAllFav()
     }
-    fun getRandomObject(): QuotModel{
+    suspend fun getRandomObject(): QuotModel{
         return myDao.getRandomObject()
     }
 

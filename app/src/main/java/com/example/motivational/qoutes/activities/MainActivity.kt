@@ -3,27 +3,23 @@ package com.example.motivational.qoutes.activities
 import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.view.Window
 import android.widget.Toast
-import androidx.core.content.res.ResourcesCompat
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.motivational.qoutes.R
 import com.example.motivational.qoutes.adapters.AdapterCategories
-import com.example.motivational.qoutes.adapters.AdapterQouts
 import com.example.motivational.qoutes.ads.Ads
 import com.example.motivational.qoutes.ads.InterstitialAds
 import com.example.motivational.qoutes.ads.NativeAd
@@ -31,23 +27,13 @@ import com.example.motivational.qoutes.database.QuotModel
 import com.example.motivational.qoutes.database.QuotViewModel
 import com.example.motivational.qoutes.databinding.ActivityMainBinding
 import com.example.motivational.qoutes.databinding.DialogRateBinding
-import com.example.motivational.qoutes.fragments.QuoteFragment
 import com.example.motivational.qoutes.fragments.TrendingFragment
 import com.example.motivational.qoutes.interfaces.InterfaceCatClick
-import com.example.motivational.qoutes.interfaces.InterfaceQuotClick
-import com.example.motivational.qoutes.utils.UtilLists
 import com.example.motivational.qoutes.utils.UtilMiscs
-import com.example.motivational.qoutes.utils.UtilMiscs.setupRoomDb
-import com.example.motivational.qoutes.utils.UtilMiscs.unZipFolder
-import com.example.motivational.qoutes.utils.UtilSharedPerefs
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -66,21 +52,25 @@ class MainActivity : AppCompatActivity() {
 
         //initialize kerosil list
         arrListTrendingKerosil.clear()
-        val trndLst=vMdl.readByCat("")
-
-        if (trndLst.size>0){
-            binding.quotesViewPager.visibility=View.VISIBLE
-            for(i in 0 until 6){
-                arrListTrendingKerosil.add(trndLst[i])
+        CoroutineScope(Dispatchers.IO).launch {
+            val trndLst = vMdl.readByCat("")
+            if (trndLst.size>0){
+                binding.quotesViewPager.visibility=View.VISIBLE
+                for(i in 0 until 6){
+                    arrListTrendingKerosil.add(trndLst[i])
+                }
             }
+            else{
+                binding.quotesViewPager.visibility=View.GONE
+            }
+
+            runOnUiThread { binding.quotesViewPager.adapter=QuotesPagerAdapter(this@MainActivity)
+                TabLayoutMediator(binding.tabLayoutOnBoardingScreen, binding.quotesViewPager) { tab, position ->
+                }.attach() }
+
+
         }
-        else{
-            binding.quotesViewPager.visibility=View.GONE
-//            val dlog=UtilMiscs.showProgressD(this)
-//            unZipFolder()
-//            setupRoomDb(application)
-//            dlog.dismiss()
-        }
+
 
         binding.btnMenu.setOnClickListener {
             if (binding.drawerLayout.isDrawerVisible(
@@ -214,18 +204,7 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
-        binding.quotesViewPager.setOnClickListener {
-            startActivity(
-                Intent(
-                    this@MainActivity,
-                    NewQuoteStudioActivity::class.java
-                ).putExtra("cat", "").putExtra("model", arrListTrendingKerosil[binding.quotesViewPager.currentItem])
-            )
-        }
 
-        binding.quotesViewPager.adapter=QuotesPagerAdapter(this)
-        TabLayoutMediator(binding.tabLayoutOnBoardingScreen, binding.quotesViewPager) { tab, position ->
-        }.attach()
 
         //kerosil spinner
         kerosilSpinnerHandler= Handler(mainLooper)
@@ -239,6 +218,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             ,2000)
+
     }
 
     private fun kerosilSpinner() {
@@ -252,6 +232,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+//        Log.d("logkey","Total Size Of DB: ${vMdl.readAllData.value?.size}")
+
 //        try {
 //            if (!vMdl.readAllFav().isNotEmpty()){
 //                binding.btnFav.visibility= View.GONE

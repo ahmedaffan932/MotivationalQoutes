@@ -17,8 +17,8 @@ class QuotViewModel(application: Application) : AndroidViewModel(application)  {
         readAllData = repository.readAllData
     }
 
-    fun getAllCats() :List<String> {
-            return repository.getAllCats()
+    suspend fun getAllCats() :List<String> {
+        return repository.getAllCats()
     }
 
     fun insertUsers(users: List<QuotModel>){
@@ -32,14 +32,14 @@ class QuotViewModel(application: Application) : AndroidViewModel(application)  {
         }
     }
 
-    fun readByCat(cat:String): List<QuotModel>{
+    suspend fun readByCat(cat:String): List<QuotModel>{
         return repository.readByCat(cat)
     }
 
-    fun readAllFav(): List<QuotModel>{
+    suspend fun readAllFav(): List<QuotModel>{
         return repository.readAllFav()
     }
-    fun getRandomObject(): QuotModel{
+    suspend fun getRandomObject(): QuotModel{
         return repository.getRandomObject()
     }
 

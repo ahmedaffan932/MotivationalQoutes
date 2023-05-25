@@ -51,6 +51,9 @@ class InAppActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding= ActivityInAppBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.txtLifeTime.text="Life Time: $${Ads.proLifeTimePrice}"
+        binding.txtMonthly.text="Monthly: $${Ads.proMonthlyPrice}"
         billingClient = BillingClient.newBuilder(this)
             .setListener(purchasesUpdatedListener)
             .enablePendingPurchases()
@@ -82,6 +85,19 @@ class InAppActivity : AppCompatActivity() {
             binding.btnMonthly.background=null
             binding.radioButtonLifeTime.isChecked=true
             binding.radioButtonMonthly.isChecked=false
+
+            if (isBillingClientConnected) {
+                GlobalScope.launch {
+                    querySkuDetails()
+                }
+            } else {
+                Toast.makeText(
+                    this,
+                    "Please check your internet connection and try again.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
         }
         binding.btnMonthly.setOnClickListener {
             activeSubScription=2
@@ -89,6 +105,18 @@ class InAppActivity : AppCompatActivity() {
             binding.btnLifeTime.background=null
             binding.radioButtonMonthly.isChecked=true
             binding.radioButtonLifeTime.isChecked=false
+
+            if (isBillingClientConnected) {
+                GlobalScope.launch {
+                    querySkuDetails()
+                }
+            } else {
+                Toast.makeText(
+                    this,
+                    "Please check your internet connection and try again.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
         binding.btnContinue.setOnClickListener {
             if (isBillingClientConnected) {
