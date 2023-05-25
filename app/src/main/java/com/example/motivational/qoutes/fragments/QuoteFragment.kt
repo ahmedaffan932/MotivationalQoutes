@@ -22,6 +22,7 @@ import com.example.motivational.qoutes.ads.NativeAd
 import com.example.motivational.qoutes.database.QuotModel
 import com.example.motivational.qoutes.database.QuotViewModel
 import com.example.motivational.qoutes.databinding.FragmentQuoteBinding
+import com.example.motivational.qoutes.interfaces.InterfaceMisClick
 import com.example.motivational.qoutes.utils.UtilLists
 import com.example.motivational.qoutes.utils.UtilMiscs
 import kotlinx.coroutines.CoroutineScope
@@ -33,14 +34,22 @@ private const val ARG_PARAM1 = "param1"
 
 class QuoteFragment : Fragment() {
     private var param1: QuotModel? = null
-    private lateinit var binding:FragmentQuoteBinding
+    private lateinit var binding: FragmentQuoteBinding
     private lateinit var vMdl: QuotViewModel
+    private lateinit var infc: InterfaceMisClick
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getParcelable(ARG_PARAM1)
         }
+    }
+
+    override fun onPause() {
+        Log.d("logkey", "onPause: ${param1?.Popularity}")
+        binding.constraintLayoutOptions.visibility = View.GONE
+        super.onPause()
     }
 
     override fun onCreateView(
@@ -50,28 +59,49 @@ class QuoteFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentQuoteBinding.inflate(inflater, container, false)
         vMdl = ViewModelProvider(this)[QuotViewModel::class.java]
+        infc = activity as InterfaceMisClick
+
         Log.d("logkey", "param1: $param1")
         if (param1 == null) {
-            binding.mView.visibility=View.GONE
-            binding.adFrameLayout.visibility=View.VISIBLE
-            NativeAd.showPreFetch(requireContext(), Ads.inBetweenQuotesNativeAm,binding.adFrameLayout,null)
+            binding.mView.visibility = View.GONE
+            binding.adFrameLayout.visibility = View.VISIBLE
+            NativeAd.showPreFetch(
+                requireContext(),
+                Ads.inBetweenQuotesNativeAm,
+                binding.adFrameLayout,
+                null
+            )
         } else {
-            binding.mView.visibility=View.VISIBLE
-            binding.adFrameLayout.visibility=View.GONE
-            binding.quotLayout.qoutData.text = param1?.Quote
+            binding.mView.visibility = View.VISIBLE
+            binding.adFrameLayout.visibility = View.GONE
+            binding.quotLayout.qoutData.text = param1?.Popularity.toString()
             binding.quotLayout.qoutWallpaper.setImageResource(UtilLists.getRandomWallpaper())
             updateUi()
             btnClicks()
 
             binding.root.setOnClickListener {
-                binding.quotLayout.qoutWallpaper.setImageResource(UtilLists.getRandomWallpaper())
+                if (!infc.onMisTouch(param1)) {
+                    binding.quotLayout.qoutWallpaper.setImageResource(UtilLists.getRandomWallpaper())
+                }
+            }
+            binding.root.setOnLongClickListener {
+                if (!infc.onMisTouch(param1)) {
+                    UtilMiscs.copyToClip(requireContext(), param1?.Quote ?: "")
+                    UtilMiscs.showSnackBar(binding.constraintLayoutOptions, "Quote Copied!")
+                }
+                return@setOnLongClickListener true
             }
         }
         return binding.root
     }
     private fun btnClicks() {
         binding.btnFullScreen.setOnClickListener {
-            startActivity(Intent(requireActivity(),FullViewActivity::class.java).putExtra("mdl",param1))
+            startActivity(
+                Intent(requireActivity(), FullViewActivity::class.java).putExtra(
+                    "cat",
+                    param1?.Category
+                )
+            )
         }
         binding.btnFav.setOnClickListener {
             if (param1?.isFav==1){
@@ -87,8 +117,8 @@ class QuoteFragment : Fragment() {
         }
 
         binding.btnCopy.setOnClickListener {
-            UtilMiscs.copyToClip(requireContext(),param1?.Quote?:"")
-            UtilMiscs.showSnackBar(binding.root,"Quote Copied!")
+            UtilMiscs.copyToClip(requireContext(), param1?.Quote ?: "")
+            UtilMiscs.showSnackBar(binding.constraintLayoutOptions, "Quote Copied!")
         }
 
         binding.btnDown.setOnClickListener {
@@ -125,6 +155,7 @@ class QuoteFragment : Fragment() {
     }
 
     private fun updateUi(){
+        binding.constraintLayoutOptions.visibility = View.VISIBLE
         if (param1?.isFav==1){
             binding.btnFav.imageTintList= ColorStateList.valueOf(ResourcesCompat.getColor(resources,R.color.clr_blue,requireContext().theme))
         }

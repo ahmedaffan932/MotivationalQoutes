@@ -14,6 +14,7 @@ import com.example.motivational.qoutes.database.QuotModel
 import com.example.motivational.qoutes.database.QuotViewModel
 import com.example.motivational.qoutes.databinding.ActivityNewQuoteStudioBinding
 import com.example.motivational.qoutes.fragments.QuoteFragment
+import com.example.motivational.qoutes.interfaces.InterfaceMisClick
 import com.example.motivational.qoutes.utils.HorizontalMarginItemDecoration
 import com.example.motivational.qoutes.utils.UtilMiscs
 import kotlinx.coroutines.CoroutineScope
@@ -21,7 +22,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.Math.abs
 
-class NewQuoteStudioActivity : AppCompatActivity() {
+class NewQuoteStudioActivity : AppCompatActivity(), InterfaceMisClick {
     private lateinit var binding:ActivityNewQuoteStudioBinding
     private var cat = ""
     private lateinit var vMdl: QuotViewModel
@@ -47,6 +48,19 @@ class NewQuoteStudioActivity : AppCompatActivity() {
                 if (lstQuot.isNotEmpty()) {
                     activeQoute = lstQuot[0]
                 }
+                //adding ads in list
+                if (Ads.inBetweenQuotesNativeAdPosition>1) {
+                    for (i in 0 until lstQuot.size) {
+                        if (i >= Ads.inBetweenQuotesNativeAdStartingIndex) {
+                            if (i % Ads.inBetweenQuotesNativeAdPosition == 0) {
+                                lstQuot.add(i, null)
+                            }
+                        }
+                    }
+                }
+                runOnUiThread { binding.quotesViewPager.adapter=QuotesPagerAdapter(this@NewQuoteStudioActivity)
+                    binding.quotesViewPager.offscreenPageLimit = 1
+                    myLoader?.dismiss()}
             }
 
         }
@@ -129,6 +143,16 @@ class NewQuoteStudioActivity : AppCompatActivity() {
                 finish()
             }
         })
+    }
+
+    override fun onMisTouch(model: QuotModel?): Boolean {
+        if (binding.quotesViewPager.currentItem==lstQuot.indexOf(model)){
+            return false
+        }
+        else{
+            binding.quotesViewPager.currentItem=lstQuot.indexOf(model)
+            return true
+        }
     }
 
 }

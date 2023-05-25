@@ -29,13 +29,14 @@ import com.example.motivational.qoutes.databinding.ActivityMainBinding
 import com.example.motivational.qoutes.databinding.DialogRateBinding
 import com.example.motivational.qoutes.fragments.TrendingFragment
 import com.example.motivational.qoutes.interfaces.InterfaceCatClick
+import com.example.motivational.qoutes.interfaces.InterfaceUserInterfere
 import com.example.motivational.qoutes.utils.UtilMiscs
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
     private lateinit var binding: ActivityMainBinding
     private lateinit var vMdl:QuotViewModel
     private var arrListTrendingKerosil=ArrayList<QuotModel>()
@@ -206,6 +207,7 @@ class MainActivity : AppCompatActivity() {
         })
 
 
+
         //kerosil spinner
         kerosilSpinnerHandler= Handler(mainLooper)
         kerosilSpinnerHandler?.postDelayed(
@@ -214,10 +216,10 @@ class MainActivity : AppCompatActivity() {
                     // Call your function here
                     kerosilSpinner()
                     // Schedule the next execution after 2 seconds
-                    kerosilSpinnerHandler?.postDelayed(this, 2000)
+                    kerosilSpinnerHandler?.postDelayed(this, 6000)
                 }
             }
-            ,2000)
+            ,6000)
 
     }
 
@@ -277,6 +279,26 @@ class MainActivity : AppCompatActivity() {
                 )
             )
         }
+    }
+
+    override fun onInterfere() {
+        Log.d("logkey","Interference found")
+        resetHandler()
+    }
+
+
+    private fun resetHandler(){
+        kerosilSpinnerHandler?.removeCallbacksAndMessages(null)
+        kerosilSpinnerHandler?.postDelayed(
+            object : Runnable {
+                override fun run() {
+                    // Call your function here
+                    kerosilSpinner()
+                    // Schedule the next execution after 2 seconds
+                    kerosilSpinnerHandler?.postDelayed(this, 6000)
+                }
+            }
+            ,6000)
     }
 
 

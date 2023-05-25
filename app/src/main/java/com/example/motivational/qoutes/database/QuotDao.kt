@@ -17,7 +17,7 @@ interface QuotDao {
     @Query("SELECT * FROM quots ORDER BY id ASC")
     fun readAllVideos(): LiveData<List<QuotModel>>
 
-    @Query("SELECT * FROM quots WHERE Category =:cat")
+    @Query("SELECT * FROM quots WHERE Category =:cat ORDER BY Popularity DESC")
     suspend fun readByCat(cat:String): List<QuotModel>
 
     @Query("SELECT * FROM quots WHERE isFav = 1")

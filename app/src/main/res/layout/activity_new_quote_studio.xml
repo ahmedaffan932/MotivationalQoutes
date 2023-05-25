@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/clr_dark_grey"
-    tools:context=".activities.QoutStudioActivity">
+    android:background="@color/clr_dark_grey">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/toolpar"
         android:layout_width="match_parent"

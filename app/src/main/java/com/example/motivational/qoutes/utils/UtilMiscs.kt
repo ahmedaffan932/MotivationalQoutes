@@ -128,7 +128,7 @@ object UtilMiscs {
         )
         val view: View = snack.view
         val params = view.layoutParams as FrameLayout.LayoutParams
-        params.gravity = Gravity.TOP
+        params.gravity = Gravity.CENTER
         view.layoutParams = params
         snack.duration=2000
         snack.show()
@@ -136,10 +136,10 @@ object UtilMiscs {
     fun saveMediaToStorage(context: Context, bitmap: Bitmap?, name:String){
         //Generating a file name
         if (File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"$name.jpg").exists()){
-            return
+            Log.d("logkey",File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"$name.jpg").delete().toString())
         }
-        else{
-            val filename = "${name}.jpg"
+
+        val filename = "${name}.jpg"
 
             //Output stream
             var fos: OutputStream? = null
@@ -180,6 +180,6 @@ object UtilMiscs {
                 Toast.makeText(context,"Saved!",Toast.LENGTH_SHORT).show()
             }
 
-        }
+
     }
 }
