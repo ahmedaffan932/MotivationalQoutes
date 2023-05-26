@@ -6,12 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.motivational.qoutes.activities.FullViewActivity
 import com.example.motivational.qoutes.activities.MainActivity
 import com.example.motivational.qoutes.activities.NewQuoteStudioActivity
 import com.example.motivational.qoutes.database.QuotModel
 import com.example.motivational.qoutes.databinding.FragmentTrendingBinding
 import com.example.motivational.qoutes.interfaces.InterfaceUserInterfere
 import com.example.motivational.qoutes.utils.UtilLists
+import com.example.motivational.qoutes.utils.UtilSharedPerefs
 
 private const val ARG_PARAM1 = "param1"
 class TrendingFragment : Fragment() {
@@ -43,12 +45,23 @@ class TrendingFragment : Fragment() {
         binding.quotLayout.qoutData.text=param1?.Quote
         binding.quotLayout.qoutWallpaper.setImageResource(UtilLists.getRandomWallpaper())
         binding.root.setOnClickListener {
-            startActivity(
-                Intent(
-                    requireActivity(),
-                    NewQuoteStudioActivity::class.java
-                ).putExtra("cat", "")
-            )
+            if (UtilSharedPerefs.getIsFullQuote(requireContext())){
+                startActivity(
+                    Intent(
+                        requireActivity(),
+                        FullViewActivity::class.java
+                    ).putExtra("cat", "")
+                )
+            }
+            else{
+                startActivity(
+                    Intent(
+                        requireActivity(),
+                        NewQuoteStudioActivity::class.java
+                    ).putExtra("cat", "")
+                )
+            }
+
         }
 
 

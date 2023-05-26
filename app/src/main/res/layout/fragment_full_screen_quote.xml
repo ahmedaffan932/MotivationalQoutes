@@ -21,7 +21,6 @@
             layout="@layout/layout_qout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="@dimen/_10sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -30,9 +29,9 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayoutOptions"
             android:layout_width="match_parent"
-            android:visibility="gone"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_14sdp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -91,19 +90,18 @@
                 app:layout_constraintStart_toEndOf="@+id/btnGreen"
                 app:layout_constraintTop_toTopOf="parent" />
 
-           
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageView
-            android:id="@+id/btnFullScreen"
+            android:id="@+id/btnFullScreenClose"
             android:layout_width="@dimen/_32sdp"
             android:layout_height="@dimen/_32sdp"
-            android:layout_margin="@dimen/_2sdp"
-            android:background="@drawable/bg_transparent_ripple_circle"
             android:visibility="gone"
+            android:layout_margin="@dimen/_10sdp"
+            android:background="@drawable/bg_transparent_ripple_circle"
             android:padding="@dimen/_8sdp"
-            android:src="@drawable/round_open_in_full_24"
+            android:src="@drawable/round_close_fullscreen_24"
             app:layout_constraintEnd_toEndOf="@+id/quotLayout"
             app:layout_constraintTop_toTopOf="@+id/quotLayout" />
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -111,8 +109,7 @@
         android:id="@+id/adFrameLayout"
         android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="@dimen/_10sdp"
+        android:layout_height="@dimen/_240sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

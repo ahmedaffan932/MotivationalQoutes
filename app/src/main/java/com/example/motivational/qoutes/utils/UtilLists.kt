@@ -27,7 +27,6 @@ object UtilLists {
         R.drawable.cat14,
         R.drawable.cat15,
         R.drawable.cat16,
-        R.drawable.cat17,
         R.drawable.cat18,
         R.drawable.cat19,
         R.drawable.cat20,
@@ -72,7 +71,10 @@ object UtilLists {
         R.drawable.rp27,
         R.drawable.rp28,
         R.drawable.rp29,
-        R.drawable.rp30
+        R.drawable.rp30,
+        R.drawable.rp31,
+        R.drawable.rp32,
+        R.drawable.rp34
     )
     val cats = arrayOf(
         "life",
@@ -92,7 +94,6 @@ object UtilLists {
         "hope",
         "friendship",
         "writing",
-        "religion",
         "death",
         "romance",
         "success",

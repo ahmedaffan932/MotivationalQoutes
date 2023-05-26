@@ -22,6 +22,7 @@ import com.example.motivational.qoutes.ads.InterstitialCallback
 import com.example.motivational.qoutes.database.QuotModel
 import com.example.motivational.qoutes.database.QuotViewModel
 import com.example.motivational.qoutes.databinding.ActivityFullViewBinding
+import com.example.motivational.qoutes.fragments.FullScreenQuoteFragment
 import com.example.motivational.qoutes.fragments.QuoteFragment
 import com.example.motivational.qoutes.interfaces.InterfaceMisClick
 import com.example.motivational.qoutes.utils.UtilLists
@@ -114,7 +115,7 @@ class FullViewActivity : AppCompatActivity(),InterfaceMisClick {
 
         }
         override fun createFragment(position: Int): Fragment {
-            return QuoteFragment.newInstance(lstQuot[position])
+            return FullScreenQuoteFragment.newInstance(lstQuot[position])
         }
     }
 

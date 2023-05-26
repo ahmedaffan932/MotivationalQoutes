@@ -6,6 +6,8 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
@@ -16,6 +18,8 @@ import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.Toast
+import androidx.core.content.FileProvider
+import com.example.motivational.qoutes.BuildConfig
 import com.example.motivational.qoutes.database.QuotModel
 import com.example.motivational.qoutes.database.QuotViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -27,6 +31,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
+import java.util.Objects
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 
@@ -107,12 +112,19 @@ object UtilMiscs {
             return null
         }
 
-        return try {
-            val text = file.readText()
-            text
-        } catch (e: IOException) {
-            e.printStackTrace()
-            null
+        val bufferSize = 4096 // Adjust the buffer size according to your needs
+        val reader = file.bufferedReader(Charsets.UTF_8)
+        val stringBuilder = StringBuilder()
+        val buffer = CharArray(bufferSize)
+        var charsRead: Int
+
+        try {
+            while (reader.read(buffer).also { charsRead = it } != -1) {
+                stringBuilder.append(buffer, 0, charsRead)
+            }
+            return stringBuilder.toString()
+        } finally {
+            reader.close()
         }
     }
     fun copyToClip(context:Context, text:String){
@@ -174,12 +186,85 @@ object UtilMiscs {
                 fos = FileOutputStream(image)
             }
 
-            fos?.use {
-                //Finally writing the bitmap to the output stream that we opened
-                bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, it)
-                Toast.makeText(context,"Saved!",Toast.LENGTH_SHORT).show()
-            }
+        fos?.use {
+            //Finally writing the bitmap to the output stream that we opened
+            bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, it)
+            Toast.makeText(context, "Saved!", Toast.LENGTH_SHORT).show()
+        }
 
 
     }
+
+    private fun appInstalledOrNot(context: Context, uri: String): Boolean {
+        val pm = context.packageManager
+        try {
+            pm.getPackageInfo(uri, PackageManager.GET_ACTIVITIES)
+            return true
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+        }
+        return false
+    }
+
+    fun onShare(context: Context, model: File?) {
+        if (appInstalledOrNot(context, "com.whatsapp")) {
+            directOpenWhatsapp(context, false, model!!)
+        }
+
+    }
+
+    fun directOpenWhatsapp(context: Context, isBussiness: Boolean, model: File) {
+        if (isBussiness) {
+            val sendIntent = Intent()
+            sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            val files: java.util.ArrayList<Uri> = java.util.ArrayList<Uri>()
+
+            for (file in model.listFiles()) {
+
+                files.add(Objects.requireNonNull(context).let {
+                    FileProvider.getUriForFile(
+                        it,
+                        BuildConfig.APPLICATION_ID + ".provider",
+                        file
+                    )
+                }!!)
+            }
+
+            sendIntent.putParcelableArrayListExtra(
+                "android.intent.extra.STREAM",
+                files
+            )
+//            sendIntent.putExtra(
+//                Intent.EXTRA_TEXT,
+//                "This is downloaded by:-\nhttps://play.google.com/store/apps/details?id=" + applicationContext?.packageName
+//
+//            )
+            sendIntent.action = Intent.ACTION_SEND_MULTIPLE
+            sendIntent.setPackage("com.whatsapp.w4b")
+            sendIntent.type = "video/*"
+            context.startActivity(sendIntent)
+        } else {
+            val sendIntent = Intent("android.intent.action.MAIN")
+            sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            sendIntent.putExtra(
+                Intent.EXTRA_STREAM,
+                Objects.requireNonNull(context)?.let {
+                    FileProvider.getUriForFile(
+                        it,
+                        BuildConfig.APPLICATION_ID + ".provider",
+                        model
+                    )
+                })
+            sendIntent.putExtra(
+                Intent.EXTRA_TEXT,
+                "This is downloaded by:-\nhttps://play.google.com/store/apps/details?id=" + context.packageName
+
+            )
+            sendIntent.action = Intent.ACTION_SEND
+            sendIntent.setPackage("com.whatsapp")
+            sendIntent.type = "video/*"
+            context.startActivity(sendIntent)
+        }
+    }
+
 }

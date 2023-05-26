@@ -2,9 +2,12 @@ package com.example.motivational.qoutes.fragments
 
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,17 +15,18 @@ import androidx.core.app.ShareCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.drawToBitmap
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.motivational.qoutes.BuildConfig
 import com.example.motivational.qoutes.R
 import com.example.motivational.qoutes.activities.FullViewActivity
+import com.example.motivational.qoutes.activities.NewQuoteStudioActivity
 import com.example.motivational.qoutes.ads.Ads
 import com.example.motivational.qoutes.ads.NativeAd
 import com.example.motivational.qoutes.database.QuotModel
 import com.example.motivational.qoutes.database.QuotViewModel
-import com.example.motivational.qoutes.databinding.FragmentQuoteBinding
+import com.example.motivational.qoutes.databinding.FragmentFullScreenQuoteBinding
 import com.example.motivational.qoutes.interfaces.InterfaceMisClick
+import com.example.motivational.qoutes.utils.BottomSheetDialog
 import com.example.motivational.qoutes.utils.UtilLists
 import com.example.motivational.qoutes.utils.UtilMiscs
 import com.example.motivational.qoutes.utils.UtilSharedPerefs
@@ -33,13 +37,18 @@ import java.io.File
 
 private const val ARG_PARAM1 = "param1"
 
-class QuoteFragment : Fragment() {
+class FullScreenQuoteFragment : Fragment() {
+    private lateinit var binding: FragmentFullScreenQuoteBinding
     private var param1: QuotModel? = null
-    private lateinit var binding: FragmentQuoteBinding
     private lateinit var vMdl: QuotViewModel
     private lateinit var infc: InterfaceMisClick
 
-
+    override fun onPause() {
+        Log.d("logkey", "onPause: ${param1?.Popularity}")
+        binding.constraintLayoutOptions.visibility = View.GONE
+        binding.btnFullScreenClose.visibility = View.GONE
+        super.onPause()
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -47,22 +56,14 @@ class QuoteFragment : Fragment() {
         }
     }
 
-    override fun onPause() {
-        Log.d("logkey", "onPause: ${param1?.Popularity}")
-        binding.constraintLayoutOptions.visibility = View.GONE
-        binding.btnFullScreen.visibility = View.GONE
-        super.onPause()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentQuoteBinding.inflate(inflater, container, false)
+        binding= FragmentFullScreenQuoteBinding.inflate(inflater,container,false)
         vMdl = ViewModelProvider(this)[QuotViewModel::class.java]
         infc = activity as InterfaceMisClick
-
         Log.d("logkey", "param1: $param1")
         if (param1 == null) {
             binding.mView.visibility = View.GONE
@@ -98,10 +99,10 @@ class QuoteFragment : Fragment() {
         return binding.root
     }
     private fun btnClicks() {
-        binding.btnFullScreen.setOnClickListener {
-            UtilSharedPerefs.setIsFullQuote(requireContext(),true)
+        binding.btnFullScreenClose.setOnClickListener {
+            UtilSharedPerefs.setIsFullQuote(requireContext(),false)
             startActivity(
-                Intent(requireActivity(), FullViewActivity::class.java).putExtra(
+                Intent(requireActivity(), NewQuoteStudioActivity::class.java).putExtra(
                     "cat",
                     param1?.Category
                 )
@@ -132,8 +133,13 @@ class QuoteFragment : Fragment() {
             UtilMiscs.showSnackBar(binding.constraintLayoutOptions, "Quote Copied!")
         }
 
+//        binding.btnDown.setOnClickListener {
+//            downloadImg()
+//        }
 
         binding.btnShare.setOnClickListener {
+//            val bottomSheetDialog = BottomSheetDialog(requireContext(), param1!!)
+//            bottomSheetDialog.show(requireActivity().supportFragmentManager, "bottomSheet")
             downloadImg()
             val model=
                 File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"${param1?.Category} ${param1?.id}.jpg")
@@ -163,6 +169,8 @@ class QuoteFragment : Fragment() {
     }
 
     private fun updateUi(){
+        binding.constraintLayoutOptions.visibility = View.VISIBLE
+        binding.btnFullScreenClose.visibility = View.VISIBLE
         if (param1?.isFav==1){
             binding.btnFav.imageTintList= ColorStateList.valueOf(ResourcesCompat.getColor(resources,R.color.clr_blue,requireContext().theme))
         }
@@ -174,14 +182,11 @@ class QuoteFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         updateUi()
-        binding.constraintLayoutOptions.visibility = View.VISIBLE
-        binding.btnFullScreen.visibility=View.VISIBLE
     }
-
     companion object {
         @JvmStatic
         fun newInstance(param1: QuotModel?) =
-            QuoteFragment().apply {
+            FullScreenQuoteFragment().apply {
                 arguments = Bundle().apply {
                     putParcelable(ARG_PARAM1, param1)
                 }

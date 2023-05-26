@@ -11,6 +11,7 @@ import com.example.motivational.qoutes.ads.Ads
 import com.example.motivational.qoutes.ads.InterstitialAds
 import com.example.motivational.qoutes.ads.NativeAd
 import com.example.motivational.qoutes.databinding.ActivitySplashBinding
+import com.example.motivational.qoutes.utils.NotificationScheduler
 import com.example.motivational.qoutes.utils.UtilLists
 import com.example.motivational.qoutes.utils.UtilMiscs.setupRoomDb
 import com.example.motivational.qoutes.utils.UtilMiscs.unZipFolder
@@ -25,6 +26,7 @@ class SplashActivity : AppCompatActivity() {
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        NotificationScheduler.scheduleNotification(this)
         val quotOfSp = UtilSharedPerefs.getQuote(this)
         Log.d(
             "logkey",

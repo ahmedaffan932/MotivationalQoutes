@@ -16,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.motivational.qoutes.R
@@ -30,17 +32,23 @@ import com.example.motivational.qoutes.databinding.DialogRateBinding
 import com.example.motivational.qoutes.fragments.TrendingFragment
 import com.example.motivational.qoutes.interfaces.InterfaceCatClick
 import com.example.motivational.qoutes.interfaces.InterfaceUserInterfere
+import com.example.motivational.qoutes.utils.MainViewModel
 import com.example.motivational.qoutes.utils.UtilMiscs
+import com.example.motivational.qoutes.utils.UtilSharedPerefs
 import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
     private lateinit var binding: ActivityMainBinding
     private lateinit var vMdl:QuotViewModel
     private var arrListTrendingKerosil=ArrayList<QuotModel>()
     private var kerosilSpinnerHandler :Handler?=null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -156,12 +164,22 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
 
         binding.btnFav.setOnClickListener {
             binding.drawerLayout.closeDrawers()
-            startActivity(
-                Intent(this@MainActivity, NewQuoteStudioActivity::class.java).putExtra(
-                    "cat",
-                    "MFAV"
+            if (UtilSharedPerefs.getIsFullQuote(this)){
+                startActivity(
+                    Intent(this@MainActivity, FullViewActivity::class.java).putExtra(
+                        "cat",
+                        "MFAV"
+                    )
                 )
-            )
+            }
+            else{
+                startActivity(
+                    Intent(this@MainActivity, NewQuoteStudioActivity::class.java).putExtra(
+                        "cat",
+                        "MFAV"
+                    )
+                )
+            }
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
 //        binding.btnSettings.setOnClickListener {
@@ -196,12 +214,23 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
         binding.recyclerPopularCats.layoutManager = GridLayoutManager(this, 2)
         binding.recyclerPopularCats.adapter = AdapterCategories(this, object : InterfaceCatClick {
             override fun onClick(catName: String) {
-                startActivity(
-                    Intent(
-                        this@MainActivity,
-                        NewQuoteStudioActivity::class.java
-                    ).putExtra("cat", catName)
-                )
+                if (UtilSharedPerefs.getIsFullQuote(this@MainActivity)){
+                    startActivity(
+                        Intent(
+                            this@MainActivity,
+                            FullViewActivity::class.java
+                        ).putExtra("cat", catName)
+                    )
+                }
+                else{
+                    startActivity(
+                        Intent(
+                            this@MainActivity,
+                            NewQuoteStudioActivity::class.java
+                        ).putExtra("cat", catName)
+                    )
+                }
+
             }
 
         })

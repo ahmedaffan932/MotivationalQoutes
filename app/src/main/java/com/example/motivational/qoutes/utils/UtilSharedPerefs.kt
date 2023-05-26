@@ -41,4 +41,19 @@ object UtilSharedPerefs {
     fun getPurchasedStatus(context: Context):Boolean{
         return sharedPreferencesVar(context).getBoolean("isPurchased",false)
     }
+    fun setIsFullQuote(context: Context, b: Boolean) {
+        sharedPreferancesEditorVar(context).putBoolean("isFullQuote",b).apply()
+    }
+    fun getIsFullQuote(context: Context):Boolean{
+        return sharedPreferencesVar(context).getBoolean("isFullQuote",false)
+    }
+
+
+    fun getNotiQuote(context: Context):String{
+        return sharedPreferencesVar(context).getString("NotiQuote", "“Either you run the day or the day runs you.” — Jim Rohn")?:"“Either you run the day or the day runs you.” — Jim Rohn"
+    }
+
+    fun setNotiQuote(context: Context, data:String){
+        sharedPreferancesEditorVar(context).putString("NotiQuote",data).apply()
+    }
 }
