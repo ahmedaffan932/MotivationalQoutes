@@ -10,14 +10,11 @@ import java.lang.reflect.Type
 class CustomObjectConverter {
     @TypeConverter
     fun fromString(value: String): List<String> {
-        Log.d("logkey", "c")
         if (value!=null){
-            Log.d("logkey", "CIF")
             val listType: Type = object : TypeToken<List<String>>() {}.type
             return Gson().fromJson(value, listType)
         }
         else{
-            Log.d("logkey", "CELSE")
             return emptyList()
         }
     }

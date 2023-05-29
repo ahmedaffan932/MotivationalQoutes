@@ -3,6 +3,7 @@ package com.example.motivational.qoutes.ads
 import android.app.Activity
 import android.content.Context
 import android.util.Log
+import com.example.motivational.qoutes.utils.UtilSharedPerefs
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
@@ -17,6 +18,9 @@ object InterstitialAds {
     fun loadInterAdmob(context: Context) {
             Log.d("loadAdmob?", "Already loaded")
 
+        if (UtilSharedPerefs.getPurchasedStatus(context)){
+            return
+        }
             val admobRequest = AdRequest.Builder().build()
 
             com.google.android.gms.ads.interstitial.InterstitialAd.load(
@@ -50,19 +54,21 @@ object InterstitialAds {
             override fun onAdDismissedFullScreenContent() {
                 Log.d("interAdmobShow", "Ad was dismissed.")
                 callback?.onResult()
+                interAdmob = null
+                loadInterAdmob(context)
 
             }
 
             override fun onAdFailedToShowFullScreenContent(adError: AdError) {
                 Log.d("interAdmobShow", "Ad failed to show." + adError.message + adError.code)
                 callback?.onResult()
+                interAdmob = null
+                loadInterAdmob(context)
 
             }
 
             override fun onAdShowedFullScreenContent() {
                 Log.d("interAdmobShow", "Ad showed fullscreen content.")
-                interAdmob = null
-                loadInterAdmob(context)
             }
         }
 

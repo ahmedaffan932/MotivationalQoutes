@@ -43,7 +43,7 @@ class TrendingFragment : Fragment() {
             return@setOnTouchListener false
         }
         binding.quotLayout.qoutData.text=param1?.Quote
-        binding.quotLayout.qoutWallpaper.setImageResource(UtilLists.getRandomWallpaper())
+        binding.quotLayout.qoutWallpaper.setImageResource(UtilLists.wallpapers[param1!!.wall])
         binding.root.setOnClickListener {
             if (UtilSharedPerefs.getIsFullQuote(requireContext())){
                 startActivity(

@@ -47,7 +47,7 @@
                     android:id="@+id/ad_headline"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:maxLines="1"
                     android:maxLength="25"
                     android:ellipsize="end"
@@ -60,7 +60,7 @@
                     android:layout_height="wrap_content"
                     android:maxLength="99"
                     android:ellipsize="end"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="12sp" />
 
             </LinearLayout>
@@ -101,6 +101,7 @@
                 android:layout_height="@dimen/_40sdp"
                 android:gravity="center"
                 android:background="@drawable/bg_simple_btn_ripple"
+                android:backgroundTint="#2196F3"
                 android:letterSpacing="0.1"
                 android:textSize="@dimen/_13sdp"
                 android:textColor="@color/white"

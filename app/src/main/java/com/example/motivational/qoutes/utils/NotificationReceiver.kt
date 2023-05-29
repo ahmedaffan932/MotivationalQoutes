@@ -25,7 +25,7 @@ class NotificationReceiver: BroadcastReceiver() {
         val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_noti_icon)
             .setContentTitle(context.getString(R.string.app_name))
-            .setContentText(UtilSharedPerefs.getNotiQuote(context))
+            .setContentText(p1?.getStringExtra("quote"))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
         // Show the notification

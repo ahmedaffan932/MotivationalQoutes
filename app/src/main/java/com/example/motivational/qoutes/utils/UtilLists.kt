@@ -6,9 +6,6 @@ import java.util.Random
 
 object UtilLists {
 
-    fun getRandomWallpaper():Int{
-        return wallpapers[Random().nextInt(wallpapers.size)]
-    }
     val catWallpapers = intArrayOf(
         R.drawable.cat0,
         R.drawable.cat1,

@@ -39,7 +39,7 @@ class QuotViewModel(application: Application) : AndroidViewModel(application)  {
     suspend fun readAllFav(): List<QuotModel>{
         return repository.readAllFav()
     }
-    suspend fun getRandomObject(): QuotModel{
+    fun getRandomObject(): QuotModel{
         return repository.getRandomObject()
     }
 

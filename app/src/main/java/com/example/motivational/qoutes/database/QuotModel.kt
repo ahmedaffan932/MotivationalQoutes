@@ -5,6 +5,9 @@ import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
+import com.example.motivational.qoutes.utils.UtilLists
+import com.example.motivational.qoutes.utils.UtilMiscs
+import java.util.Random
 
 @Entity(tableName = "quots")
 data class QuotModel(
@@ -15,7 +18,8 @@ data class QuotModel(
     val Quote: String,
     @TypeConverters(CustomObjectConverter::class)
     val Tags: List<String>,
-    var isFav:Int=0
+    var isFav:Int=0,
+    var wall:Int= UtilMiscs.getRandom()
 ):Parcelable{
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
@@ -24,6 +28,7 @@ data class QuotModel(
         parcel.readDouble(),
         parcel.readString()!!,
         parcel.createStringArrayList()!!,
+        parcel.readInt(),
         parcel.readInt()
     ) {
     }
@@ -36,6 +41,7 @@ data class QuotModel(
         parcel.writeString(Quote)
         parcel.writeStringList(Tags)
         parcel.writeInt(isFav)
+        parcel.writeInt(wall)
     }
 
     override fun describeContents(): Int {

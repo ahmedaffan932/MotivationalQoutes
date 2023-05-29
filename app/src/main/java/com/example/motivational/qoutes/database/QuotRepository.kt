@@ -21,7 +21,7 @@ class QuotRepository(private val myDao: QuotDao) {
     suspend fun readAllFav(): List<QuotModel>{
         return myDao.readAllFav()
     }
-    suspend fun getRandomObject(): QuotModel{
+    fun getRandomObject(): QuotModel{
         return myDao.getRandomObject()
     }
 

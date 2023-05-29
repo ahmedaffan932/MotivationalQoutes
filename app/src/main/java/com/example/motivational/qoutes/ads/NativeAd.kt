@@ -10,6 +10,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.motivational.qoutes.R
+import com.example.motivational.qoutes.utils.UtilSharedPerefs
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
@@ -74,6 +75,9 @@ object NativeAd {
         context: Context,
         call: NativeAdsCallBack? = null
     ) {
+        if (UtilSharedPerefs.getPurchasedStatus(context)){
+            return
+        }
 
             Log.e("interstitial_ad_id: ", Ads.admob_native_id)
             val adLoader = AdLoader.Builder(
@@ -97,7 +101,6 @@ object NativeAd {
                 override fun onAdImpression() {
                     super.onAdImpression()
                     amInner = null
-                    loadAdmobNativePreFetch(context, call)
                 }
             }).withNativeAdOptions(NativeAdOptions.Builder().build()).build()
             adLoader.loadAd(AdRequest.Builder().build())
@@ -234,9 +237,11 @@ object NativeAd {
             }
 
             adView.setNativeAd(amInner!!)
+            loadAdmobNativePreFetch(context, call)
         } else {
             call?.onNativeFailed()
             amLayout.visibility = View.GONE
+            loadAdmobNativePreFetch(context, call)
         }
     }
 

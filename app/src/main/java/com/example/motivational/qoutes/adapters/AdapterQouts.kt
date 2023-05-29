@@ -11,6 +11,7 @@ import com.example.motivational.qoutes.databinding.ItemQuotBinding
 import com.example.motivational.qoutes.interfaces.InterfaceCatClick
 import com.example.motivational.qoutes.interfaces.InterfaceQuotClick
 import com.example.motivational.qoutes.utils.UtilLists
+import com.example.motivational.qoutes.utils.UtilMiscs
 
 class AdapterQouts(var context: Context,
                    var myList:List<QuotModel>,
@@ -30,7 +31,7 @@ class AdapterQouts(var context: Context,
 
     override fun onBindViewHolder(holder: ViewHolderClass, position: Int) {
         try {
-            holder.binding.catImage.setImageResource(UtilLists.getRandomWallpaper())
+            holder.binding.catImage.setImageResource(UtilLists.wallpapers[myList[position].wall])
             holder.binding.catText.text=myList[position].Quote
             holder.binding.root.setOnClickListener {
                 clickListener.onClick(myList[position])

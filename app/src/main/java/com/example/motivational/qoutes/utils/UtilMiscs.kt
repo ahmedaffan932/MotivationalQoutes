@@ -13,12 +13,14 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
+import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.core.content.FileProvider
+import androidx.core.view.drawToBitmap
 import com.example.motivational.qoutes.BuildConfig
 import com.example.motivational.qoutes.database.QuotModel
 import com.example.motivational.qoutes.database.QuotViewModel
@@ -31,7 +33,9 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
+import java.util.Locale
 import java.util.Objects
+import java.util.Random
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 
@@ -39,6 +43,7 @@ import java.util.zip.ZipInputStream
 object UtilMiscs {
     var clipboard: ClipboardManager?=null
     var clip: ClipData?=null
+    private var rndmNmbr=0
 
     fun showProgressD(context: Context):ProgressDialog{
         val progress = ProgressDialog(context)
@@ -189,13 +194,12 @@ object UtilMiscs {
         fos?.use {
             //Finally writing the bitmap to the output stream that we opened
             bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, it)
-            Toast.makeText(context, "Saved!", Toast.LENGTH_SHORT).show()
         }
 
 
     }
 
-    private fun appInstalledOrNot(context: Context, uri: String): Boolean {
+    fun appInstalledOrNot(context: Context, uri: String): Boolean {
         val pm = context.packageManager
         try {
             pm.getPackageInfo(uri, PackageManager.GET_ACTIVITIES)
@@ -264,6 +268,29 @@ object UtilMiscs {
             sendIntent.setPackage("com.whatsapp")
             sendIntent.type = "video/*"
             context.startActivity(sendIntent)
+        }
+    }
+
+
+    fun downloadImg(context: Context,bitmap: Bitmap?, param1:QuotModel?) {
+        saveMediaToStorage(context,bitmap,"${param1?.Category} ${param1?.id}")
+    }
+
+    fun getRandom():Int{
+        if (rndmNmbr>=33){
+            rndmNmbr=0
+        }
+        else{
+            rndmNmbr+=1
+        }
+        return rndmNmbr
+    }
+    fun getNextWallpaper(indx:Int):Int{
+        if (indx>=32){
+            return 0
+        }
+        else{
+            return indx+1
         }
     }
 

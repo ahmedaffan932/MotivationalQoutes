@@ -27,6 +27,6 @@ interface QuotDao {
     suspend fun updateQoute(qoute: QuotModel)
 
     @Query("SELECT * FROM quots ORDER BY RANDOM() LIMIT 1")
-    suspend fun getRandomObject(): QuotModel
+    fun getRandomObject(): QuotModel
 
 }

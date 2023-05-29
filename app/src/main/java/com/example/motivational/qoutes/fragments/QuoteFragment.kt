@@ -23,6 +23,7 @@ import com.example.motivational.qoutes.database.QuotModel
 import com.example.motivational.qoutes.database.QuotViewModel
 import com.example.motivational.qoutes.databinding.FragmentQuoteBinding
 import com.example.motivational.qoutes.interfaces.InterfaceMisClick
+import com.example.motivational.qoutes.utils.BottomSheetDialog
 import com.example.motivational.qoutes.utils.UtilLists
 import com.example.motivational.qoutes.utils.UtilMiscs
 import com.example.motivational.qoutes.utils.UtilSharedPerefs
@@ -78,13 +79,18 @@ class QuoteFragment : Fragment() {
             binding.mView.visibility = View.VISIBLE
             binding.adFrameLayout.visibility = View.GONE
             binding.quotLayout.qoutData.text = param1?.Quote
-            binding.quotLayout.qoutWallpaper.setImageResource(UtilLists.getRandomWallpaper())
+            binding.quotLayout.qoutWallpaper.setImageResource(UtilLists.wallpapers[param1!!.wall])
             updateUi()
             btnClicks()
 
             binding.root.setOnClickListener {
                 if (!infc.onMisTouch(param1)) {
-                    binding.quotLayout.qoutWallpaper.setImageResource(UtilLists.getRandomWallpaper())
+                    binding.quotLayout.qoutWallpaper.setImageResource(UtilLists.wallpapers[UtilMiscs.getNextWallpaper(param1!!.wall)])
+                    binding.quotLayout.qoutWallpaper.destroyDrawingCache()
+                    param1?.wall=UtilMiscs.getNextWallpaper(param1!!.wall)
+                    CoroutineScope(Dispatchers.IO).launch {
+                        vMdl.updateQoute(param1!!)
+                    }
                 }
             }
             binding.root.setOnLongClickListener {
@@ -134,24 +140,10 @@ class QuoteFragment : Fragment() {
 
 
         binding.btnShare.setOnClickListener {
-            downloadImg()
-            val model=
-                File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"${param1?.Category} ${param1?.id}.jpg")
+            val bottomSheetDialog = BottomSheetDialog(requireActivity(), param1!!,binding.quotLayout.root.drawToBitmap())
+            bottomSheetDialog.show(requireActivity().supportFragmentManager, "bottomSheet")
 
-            Log.d("logkey","Model Path: ${model.absolutePath}")
-            val intentBuilder: ShareCompat.IntentBuilder =
-                ShareCompat.IntentBuilder.from(requireActivity())
-                    .setType("image/*")
-            intentBuilder.addStream(
-                FileProvider.getUriForFile(
-                    requireContext(),
-                    BuildConfig.APPLICATION_ID + ".provider",
-                    model
-                )
-            )
-            val intent = intentBuilder.intent.setAction(Intent.ACTION_SEND)
-                .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            startActivity(Intent.createChooser(intent, "Send to "))
+
         }
 
     }

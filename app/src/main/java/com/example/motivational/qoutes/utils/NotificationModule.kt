@@ -24,7 +24,7 @@ object NotificationModule {
     ): NotificationCompat.Builder {
         return NotificationCompat.Builder(context, "Main Channel ID")
             .setContentTitle(context.getString(R.string.app_name))
-            .setContentText(UtilSharedPerefs.getNotiQuote(context))
+            .setContentText("“Either you run the day or the day runs you.” — Jim Rohn")
             .setSmallIcon(R.drawable.logo)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
     }

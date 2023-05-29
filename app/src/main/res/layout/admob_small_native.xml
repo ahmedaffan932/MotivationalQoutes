@@ -4,7 +4,7 @@
     android:id="@+id/small_ad_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/black">
+    android:background="@color/white">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -57,7 +57,7 @@
                         android:lines="1"
                         android:singleLine="true"
                         android:text="This is title"
-                        android:textColor="@color/white"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/_11sdp"
                         android:textStyle="bold" />
 
@@ -68,7 +68,7 @@
                         android:lines="1"
                         android:singleLine="true"
                         android:text="This is ad body area"
-                        android:textColor="@color/white"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/_10sdp" />
 
                     <LinearLayout
@@ -83,7 +83,7 @@
                             android:gravity="bottom"
                             android:singleLine="true"
                             android:text="Ad Advertiser"
-                            android:textColor="@color/white"
+                            android:textColor="@color/black"
                             android:textSize="@dimen/_10sdp" />
 
                         <RatingBar
@@ -110,7 +110,7 @@
                             android:layout_height="wrap_content"
                             android:singleLine="true"
                             android:text="Store"
-                            android:textColor="@color/white"
+                            android:textColor="@color/black"
                             android:textSize="@dimen/_10sdp" />
 
                         <TextView
@@ -119,7 +119,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/_4sdp"
                             android:text="Price"
-                            android:textColor="@color/white"
+                            android:textColor="@color/black"
                             android:textSize="@dimen/_10sdp" />
                     </LinearLayout>
                 </LinearLayout>
@@ -149,7 +149,7 @@
                 android:paddingEnd="@dimen/_6sdp"
                 android:paddingBottom="@dimen/_2sdp"
                 android:text="AD"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textStyle="bold" />
 
             <Button

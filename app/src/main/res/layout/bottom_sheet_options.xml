@@ -14,9 +14,12 @@
         android:layout_height="@dimen/_40sdp">
 
         <ImageView
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
+            android:id="@+id/btnClose"
+            android:layout_width="@dimen/_26sdp"
+            android:layout_height="@dimen/_26sdp"
             android:src="@drawable/round_close_24"
+            android:padding="@dimen/_6sdp"
+            android:background="@drawable/bg_transparent_ripple_circle"
             android:layout_margin="@dimen/_10sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -41,8 +44,8 @@
 
             <ImageView
                 android:id="@+id/imageView4"
-                android:layout_width="@dimen/_30sdp"
-                android:layout_height="@dimen/_30sdp"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
                 android:src="@drawable/btn_red"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -72,8 +75,8 @@
 
             <ImageView
                 android:id="@+id/imageView5"
-                android:layout_width="@dimen/_30sdp"
-                android:layout_height="@dimen/_30sdp"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
                 android:src="@drawable/ic_btn_blue"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -103,8 +106,8 @@
 
             <ImageView
                 android:id="@+id/imageView6"
-                android:layout_width="@dimen/_30sdp"
-                android:layout_height="@dimen/_30sdp"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
                 android:src="@drawable/ic_green"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -134,8 +137,8 @@
 
             <ImageView
                 android:id="@+id/imageView7"
-                android:layout_width="@dimen/_30sdp"
-                android:layout_height="@dimen/_30sdp"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
                 android:src="@drawable/ic_btn_black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -165,8 +168,8 @@
 
             <ImageView
                 android:id="@+id/imageView8"
-                android:layout_width="@dimen/_30sdp"
-                android:layout_height="@dimen/_30sdp"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
                 android:src="@drawable/ic_sparrow"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -187,11 +190,17 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@color/grey_300"/>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/moreOptCont"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_10sdp"
+        android:paddingTop="@dimen/_10sdp"
+        android:background="#3A3A3A"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -204,60 +213,144 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
-            <ImageView
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/btnSetWallpaper"
-                android:layout_width="@dimen/_32sdp"
-                android:layout_height="@dimen/_32sdp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_2sdp"
-                android:background="@drawable/bg_transparent_ripple_circle"
-                android:padding="@dimen/_8sdp"
                 app:layout_constraintHorizontal_chainStyle="packed"
-                android:src="@drawable/ic_wallpaper"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/btnDownload"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/white" />
-            <ImageView
+                 >
+
+                <ImageView
+                    android:id="@+id/img1"
+                    android:layout_width="@dimen/_32sdp"
+                    android:layout_height="@dimen/_32sdp"
+                    android:background="@drawable/bg_transparent_ripple_circle"
+                    android:padding="@dimen/_8sdp"
+                    android:src="@drawable/ic_wallpaper"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/white" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Set Wallpaper"
+                    android:textAlignment="center"
+                    android:textSize="9sp"
+                    android:textColor="@color/clr_txt1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/img1" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/btnDownload"
-                android:layout_width="@dimen/_32sdp"
-                android:layout_height="@dimen/_32sdp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_2sdp"
-                android:background="@drawable/bg_transparent_ripple_circle"
-                android:padding="@dimen/_8sdp"
                 app:layout_constraintHorizontal_chainStyle="packed"
-                android:src="@drawable/ic_download"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/btnPlaySound"
                 app:layout_constraintStart_toEndOf="@+id/btnSetWallpaper"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/white" />
+                >
 
-            <ImageView
+                <ImageView
+                    android:id="@+id/img2"
+                    android:layout_width="@dimen/_32sdp"
+                    android:layout_height="@dimen/_32sdp"
+                    android:background="@drawable/bg_transparent_ripple_circle"
+                    android:padding="@dimen/_8sdp"
+                    android:src="@drawable/ic_download"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/white" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Download"
+                    android:textSize="9sp"
+                    android:textColor="@color/clr_txt1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/img2" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/btnPlaySound"
-                android:layout_width="@dimen/_32sdp"
-                android:layout_height="@dimen/_32sdp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_2sdp"
-                android:background="@drawable/bg_transparent_ripple_circle"
-                android:padding="@dimen/_8sdp"
-                android:src="@drawable/ic_vol"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/btnMoreOpts"
                 app:layout_constraintStart_toEndOf="@+id/btnDownload"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent" >
 
-            <ImageView
+                <ImageView
+                    android:id="@+id/img3"
+                    android:layout_width="@dimen/_32sdp"
+                    android:layout_height="@dimen/_32sdp"
+                    android:background="@drawable/bg_transparent_ripple_circle"
+                    android:padding="@dimen/_8sdp"
+                    android:src="@drawable/ic_vol"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/white" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Speak"
+                    android:textSize="9sp"
+                    android:textColor="@color/clr_txt1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/img3" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/btnMoreOpts"
-                android:layout_width="@dimen/_32sdp"
-                android:layout_height="@dimen/_32sdp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_2sdp"
-                android:background="@drawable/bg_transparent_ripple_circle"
-                android:padding="@dimen/_8sdp"
-                android:src="@drawable/ic_more_opts"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/btnPlaySound"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/img4"
+                    android:layout_width="@dimen/_32sdp"
+                    android:layout_height="@dimen/_32sdp"
+                    android:background="@drawable/bg_transparent_ripple_circle"
+                    android:padding="@dimen/_8sdp"
+                    android:src="@drawable/ic_more_opts"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/white" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="More Options"
+                    android:textSize="9sp"
+                    android:textColor="@color/clr_txt1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/img4" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

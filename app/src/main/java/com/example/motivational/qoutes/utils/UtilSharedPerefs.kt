@@ -45,15 +45,7 @@ object UtilSharedPerefs {
         sharedPreferancesEditorVar(context).putBoolean("isFullQuote",b).apply()
     }
     fun getIsFullQuote(context: Context):Boolean{
-        return sharedPreferencesVar(context).getBoolean("isFullQuote",false)
+        return sharedPreferencesVar(context).getBoolean("isFullQuote",true)
     }
 
-
-    fun getNotiQuote(context: Context):String{
-        return sharedPreferencesVar(context).getString("NotiQuote", "“Either you run the day or the day runs you.” — Jim Rohn")?:"“Either you run the day or the day runs you.” — Jim Rohn"
-    }
-
-    fun setNotiQuote(context: Context, data:String){
-        sharedPreferancesEditorVar(context).putString("NotiQuote",data).apply()
-    }
 }

@@ -26,7 +26,7 @@ class SplashActivity : AppCompatActivity() {
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        NotificationScheduler.scheduleNotification(this)
+        NotificationScheduler.scheduleNotification(application)
         val quotOfSp = UtilSharedPerefs.getQuote(this)
         Log.d(
             "logkey",
