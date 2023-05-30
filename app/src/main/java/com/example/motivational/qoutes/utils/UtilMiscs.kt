@@ -1,6 +1,8 @@
 package com.example.motivational.qoutes.utils
 
+import android.app.Activity
 import android.app.Application
+import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -9,6 +11,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -17,13 +21,16 @@ import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.Gravity
 import android.view.View
+import android.view.Window
 import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.core.view.drawToBitmap
 import com.example.motivational.qoutes.BuildConfig
+import com.example.motivational.qoutes.R
 import com.example.motivational.qoutes.database.QuotModel
 import com.example.motivational.qoutes.database.QuotViewModel
+import com.example.motivational.qoutes.databinding.DialogRateBinding
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
@@ -44,14 +51,21 @@ object UtilMiscs {
     var clipboard: ClipboardManager?=null
     var clip: ClipData?=null
     private var rndmNmbr=0
+    var wallpaperInt=0
 
-    fun showProgressD(context: Context):ProgressDialog{
-        val progress = ProgressDialog(context)
-        progress.setTitle("Loading")
-        progress.setCancelable(false)
-        progress.show()
-        return progress
+
+    fun showProgressD(context: Context):CustomDialog{
+        val customDialog = CustomDialog(context)
+        customDialog.show()
+        return customDialog
     }
+
+    fun showGuide(context: Context, animationName:String, data: String):GuidesDialog{
+        val customDialog = GuidesDialog(context, animationName, data)
+        customDialog.show()
+        return customDialog
+    }
+
     fun Context.unZipFolder() {
         val outputDirectory = filesDir.absolutePath
         if (!File(outputDirectory, "quotes.json").exists()) {

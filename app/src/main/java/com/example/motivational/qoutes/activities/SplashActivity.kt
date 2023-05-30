@@ -69,6 +69,7 @@ class SplashActivity : AppCompatActivity() {
                 .build()
         )
         remoteConfig.fetchAndActivate().addOnCompleteListener(this) { task ->
+
             if (task.isSuccessful && !BuildConfig.DEBUG) {
                 remoteConfig.activate()
                 FirebaseRemoteConfig.getInstance().activate()
@@ -85,25 +86,26 @@ class SplashActivity : AppCompatActivity() {
                 Ads.backQuoteStudioIntAm=remoteConfig.getString("backQuoteStudioIntAm").trim()
                 Ads.dashboardIntAm=remoteConfig.getString("dashboardIntAm").trim()
                 Ads.dashboardNativeAm=remoteConfig.getString("dashboardNativeAm").trim()
+                Ads.quoteStudioNativeAm=remoteConfig.getString("quoteStudioNativeAm").trim()
                 Ads.inBetweenQuotesNativeAm=remoteConfig.getString("inBetweenQuotesNativeAm").trim()
                 Ads.proLifeTimeKey=remoteConfig.getString("proLifeTimeKey").trim()
                 Ads.proMonthlyKey=remoteConfig.getString("proMonthlyKey").trim()
                 Ads.proLifeTimePrice=remoteConfig.getString("proLifeTimePrice").trim()
                 Ads.proMonthlyPrice=remoteConfig.getString("proMonthlyPrice").trim()
+
                 try {
-                    Ads.inBetweenQuotesNativeAdPosition=remoteConfig.getString("inBetweenQuotesNativeAdPosition") as Int
+                    Ads.inBetweenQuotesNativeAdPosition=remoteConfig.getString("inBetweenQuotesNativeAdPosition").toInt()
                 }catch (exc:Exception){
                     Ads.inBetweenQuotesNativeAdPosition=0
                     exc.printStackTrace()
                 }
                 try {
-                    Ads.inBetweenQuotesNativeAdStartingIndex=remoteConfig.getString("inBetweenQuotesNativeAdStartingIndex") as Int
+                    Ads.inBetweenQuotesNativeAdStartingIndex=remoteConfig.getString("inBetweenQuotesNativeAdStartingIndex").toInt()
                 }
                 catch (exc:Exception){
                     Ads.inBetweenQuotesNativeAdStartingIndex=0
                     exc.printStackTrace()
                 }
-
 
 
                 loadAds()

@@ -3,7 +3,7 @@ package com.example.motivational.qoutes.ads
 import com.example.motivational.qoutes.BuildConfig
 
 object Ads {
-    var inBetweenQuotesNativeAdPosition=3
+    var inBetweenQuotesNativeAdPosition=0
     var inBetweenQuotesNativeAdStartingIndex=2
     var inBetweenQuotesNativeAm="am_hctr"
     var proLifeTimeKey="android.test.purchased"
@@ -11,7 +11,6 @@ object Ads {
     var proLifeTimePrice=""
     var proMonthlyPrice=""
 
-    const val PURCHASE = "Purchase"
 
     const val admob = "am"
     const val admobHctr = "am_hctr"
@@ -26,5 +25,6 @@ object Ads {
     var backQuoteStudioIntAm="am"
     var dashboardIntAm="am"
     var dashboardNativeAm="am"
+    var quoteStudioNativeAm="am"
 
 }

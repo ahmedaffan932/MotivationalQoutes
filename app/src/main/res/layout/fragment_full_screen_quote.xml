@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/clr_dark_grey"
     tools:context=".fragments.QuoteFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,7 +17,7 @@
 
         <include
             android:id="@+id/quotLayout"
-            layout="@layout/layout_qout"
+            layout="@layout/layout_qout_ii"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -59,19 +58,19 @@
                 android:padding="@dimen/_8sdp"
                 android:src="@drawable/ic_fav"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/btnGreen"
+                app:layout_constraintEnd_toStartOf="@+id/btnSpk"
                 app:layout_constraintStart_toEndOf="@+id/btnShare"
                 app:layout_constraintTop_toTopOf="parent"
                 app:tint="@color/white" />
 
             <ImageView
-                android:id="@+id/btnGreen"
+                android:id="@+id/btnSpk"
                 android:layout_width="@dimen/_32sdp"
                 android:layout_height="@dimen/_32sdp"
                 android:layout_margin="@dimen/_2sdp"
                 android:background="@drawable/bg_transparent_ripple_circle"
-                android:padding="@dimen/_6sdp"
-                android:src="@drawable/ic_green"
+                android:padding="@dimen/_8sdp"
+                android:src="@drawable/ic_vol"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/btnCopy"
                 app:layout_constraintStart_toEndOf="@+id/btnFav"
@@ -87,7 +86,7 @@
                 android:src="@drawable/ic_copy"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/btnGreen"
+                app:layout_constraintStart_toEndOf="@+id/btnSpk"
                 app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -114,5 +113,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
+
+    <include
+        android:id="@+id/bottom_sheet_qualities"
+        layout="@layout/bottom_sheet_options"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

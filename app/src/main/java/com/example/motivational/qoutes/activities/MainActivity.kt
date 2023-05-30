@@ -1,8 +1,10 @@
 package com.example.motivational.qoutes.activities
 
+import android.Manifest
 import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -13,6 +15,7 @@ import android.view.View
 import android.view.Window
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -24,10 +27,12 @@ import com.example.motivational.qoutes.R
 import com.example.motivational.qoutes.adapters.AdapterCategories
 import com.example.motivational.qoutes.ads.Ads
 import com.example.motivational.qoutes.ads.InterstitialAds
+import com.example.motivational.qoutes.ads.InterstitialCallback
 import com.example.motivational.qoutes.ads.NativeAd
 import com.example.motivational.qoutes.database.QuotModel
 import com.example.motivational.qoutes.database.QuotViewModel
 import com.example.motivational.qoutes.databinding.ActivityMainBinding
+import com.example.motivational.qoutes.databinding.DialogExitBinding
 import com.example.motivational.qoutes.databinding.DialogRateBinding
 import com.example.motivational.qoutes.fragments.TrendingFragment
 import com.example.motivational.qoutes.interfaces.InterfaceCatClick
@@ -55,7 +60,17 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        InterstitialAds.showInterstitialAdmob(this,this, Ads.dashboardIntAm,null)
+        InterstitialAds.showInterstitialAdmob(this,this, Ads.dashboardIntAm,object :InterstitialCallback{
+            override fun onResult() {
+                if (ContextCompat.checkSelfPermission(
+                        this@MainActivity,
+                        Manifest.permission.POST_NOTIFICATIONS
+                    ) != PackageManager.PERMISSION_GRANTED){
+                    requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS),1)
+                }
+            }
+
+        })
         NativeAd.showPreFetch(this,Ads.dashboardNativeAm,binding.adFrameLayout,null)
         vMdl=QuotViewModel(application)
 
@@ -169,7 +184,7 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
                     Intent(this@MainActivity, FullViewActivity::class.java).putExtra(
                         "cat",
                         "MFAV"
-                    )
+                    ).putExtra("pos",0)
                 )
             }
             else{
@@ -177,7 +192,7 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
                     Intent(this@MainActivity, NewQuoteStudioActivity::class.java).putExtra(
                         "cat",
                         "MFAV"
-                    )
+                    ).putExtra("pos",0)
                 )
             }
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
@@ -219,7 +234,7 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
                         Intent(
                             this@MainActivity,
                             FullViewActivity::class.java
-                        ).putExtra("cat", catName)
+                        ).putExtra("cat", catName).putExtra("pos",0)
                     )
                 }
                 else{
@@ -227,7 +242,7 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
                         Intent(
                             this@MainActivity,
                             NewQuoteStudioActivity::class.java
-                        ).putExtra("cat", catName)
+                        ).putExtra("cat", catName).putExtra("pos",0)
                     )
                 }
 
@@ -328,6 +343,29 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
                 }
             }
             ,6000)
+    }
+
+
+    override fun onBackPressed() {
+        val alert = Dialog(this)
+        val customLayoutBinding =
+            DialogExitBinding.bind(layoutInflater.inflate(R.layout.dialog_exit, null))
+        alert.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        alert.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        alert.setCancelable(true)
+        alert.setCanceledOnTouchOutside(true)
+        alert.setContentView(customLayoutBinding.root)
+        alert.show()
+        customLayoutBinding.btnNotNow.setOnClickListener {
+            alert.dismiss()
+        }
+        customLayoutBinding.btnNo.setOnClickListener {
+            alert.dismiss()
+        }
+        customLayoutBinding.btnYes.setOnClickListener {
+            alert.dismiss()
+            finishAffinity()
+        }
     }
 
 

@@ -48,4 +48,11 @@ object UtilSharedPerefs {
         return sharedPreferencesVar(context).getBoolean("isFullQuote",true)
     }
 
+    fun setIsGuideAllowedToShow(context: Context, b: Boolean) {
+        sharedPreferancesEditorVar(context).putBoolean("IsGuideAllowedToShow",b).apply()
+    }
+    fun getIsGuideAllowedToShow(context: Context):Boolean{
+        return sharedPreferencesVar(context).getBoolean("IsGuideAllowedToShow",true)
+    }
+
 }

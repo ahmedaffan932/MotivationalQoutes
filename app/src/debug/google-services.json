@@ -9,6 +9,35 @@
       "client_info": {
         "mobilesdk_app_id": "1:414836482477:android:f3f31030b5d3f57c6b8124",
         "android_client_info": {
+          "package_name": "com.example.batterymanagersoftbots"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "414836482477-qrcorfs05dtprfpt7kmvcaug43hehbt3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbpMYeLtmL7RqHiBSZX2-kHHuulbAH-48"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "414836482477-qrcorfs05dtprfpt7kmvcaug43hehbt3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:414836482477:android:7244aa008bcd16da6b8124",
+        "android_client_info": {
           "package_name": "com.example.motivational.qoutes"
         }
       },

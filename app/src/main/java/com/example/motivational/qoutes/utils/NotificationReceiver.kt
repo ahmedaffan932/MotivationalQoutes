@@ -2,6 +2,7 @@ package com.example.motivational.qoutes.utils
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -10,6 +11,8 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.motivational.qoutes.R
+import com.example.motivational.qoutes.activities.MainActivity
+
 
 class NotificationReceiver: BroadcastReceiver() {
     companion object {
@@ -27,6 +30,11 @@ class NotificationReceiver: BroadcastReceiver() {
             .setContentTitle(context.getString(R.string.app_name))
             .setContentText(p1?.getStringExtra("quote"))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(
+                PendingIntent.getActivity(
+                    context, 0,
+                    Intent(context, MainActivity::class.java), PendingIntent.FLAG_MUTABLE
+                ))
 
         // Show the notification
         val notificationManager = NotificationManagerCompat.from(context)
