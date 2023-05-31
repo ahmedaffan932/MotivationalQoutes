@@ -51,6 +51,7 @@ class FullScreenQuoteFragment : Fragment() {
         binding.btnFullScreenClose.visibility = View.GONE
         super.onPause()
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -63,7 +64,7 @@ class FullScreenQuoteFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding= FragmentFullScreenQuoteBinding.inflate(inflater,container,false)
+        binding = FragmentFullScreenQuoteBinding.inflate(inflater, container, false)
         vMdl = ViewModelProvider(this)[QuotViewModel::class.java]
         infc = activity as InterfaceMisClick
         Log.d("logkey", "param1: $param1")
@@ -76,8 +77,7 @@ class FullScreenQuoteFragment : Fragment() {
                 binding.adFrameLayout,
                 null
             )
-        }
-        else {
+        } else {
             binding.mView.visibility = View.VISIBLE
             binding.adFrameLayout.visibility = View.GONE
             binding.quotLayout.qoutData.text = param1?.Quote
@@ -87,9 +87,13 @@ class FullScreenQuoteFragment : Fragment() {
 
             binding.root.setOnClickListener {
                 if (!infc.onMisTouch(param1)) {
-                    binding.quotLayout.qoutWallpaper.setImageResource(UtilLists.wallpapers[UtilMiscs.getNextWallpaper(param1!!.wall)])
+                    binding.quotLayout.qoutWallpaper.setImageResource(
+                        UtilLists.wallpapers[UtilMiscs.getNextWallpaper(
+                            param1!!.wall
+                        )]
+                    )
                     binding.quotLayout.qoutWallpaper.destroyDrawingCache()
-                    param1?.wall=UtilMiscs.getNextWallpaper(param1!!.wall)
+                    param1?.wall = UtilMiscs.getNextWallpaper(param1!!.wall)
                     CoroutineScope(Dispatchers.IO).launch {
                         vMdl.updateQoute(param1!!)
                     }
@@ -105,9 +109,10 @@ class FullScreenQuoteFragment : Fragment() {
         }
         return binding.root
     }
+
     private fun btnClicks() {
         binding.btnFullScreenClose.setOnClickListener {
-            UtilSharedPerefs.setIsFullQuote(requireContext(),false)
+            UtilSharedPerefs.setIsFullQuote(requireContext(), false)
             startActivity(
                 Intent(requireActivity(), NewQuoteStudioActivity::class.java).putExtra(
                     "cat",
@@ -117,17 +122,19 @@ class FullScreenQuoteFragment : Fragment() {
             activity?.finish()
         }
         binding.btnGreen.setOnClickListener {
-            UtilMiscs.downloadImg(requireContext(),binding.quotLayout.root.drawToBitmap(),param1)
-            val model=
-                File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"${param1?.Category} ${param1?.id}.jpg")
-            UtilMiscs.onShare(requireContext(),model)
+            UtilMiscs.downloadImg(requireContext(), binding.quotLayout.root.drawToBitmap(), param1)
+            val model =
+                File(
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                    "${param1?.Category} ${param1?.id}.jpg"
+                )
+            UtilMiscs.onShare(requireContext(), model)
         }
         binding.btnFav.setOnClickListener {
-            if (param1?.isFav==1){
-                param1?.isFav=0
-            }
-            else{
-                param1?.isFav=1
+            if (param1?.isFav == 1) {
+                param1?.isFav = 0
+            } else {
+                param1?.isFav = 1
             }
             CoroutineScope(Dispatchers.IO).launch {
                 vMdl.updateQoute(param1!!)
@@ -145,8 +152,12 @@ class FullScreenQuoteFragment : Fragment() {
 //        }
 
         binding.btnShare.setOnClickListener {
-                val bottomSheetDialog = BottomSheetDialog(requireActivity(), param1!!,binding.quotLayout.root.drawToBitmap())
-                bottomSheetDialog.show(requireActivity().supportFragmentManager, "bottomSheet")
+            val bottomSheetDialog = BottomSheetDialog(
+                requireActivity(),
+                param1!!,
+                binding.quotLayout.root.drawToBitmap()
+            )
+            bottomSheetDialog.show(requireActivity().supportFragmentManager, "bottomSheet")
 
 
         }
@@ -154,16 +165,25 @@ class FullScreenQuoteFragment : Fragment() {
     }
 
 
-
-
-    private fun updateUi(){
+    private fun updateUi() {
         binding.constraintLayoutOptions.visibility = View.VISIBLE
         binding.btnFullScreenClose.visibility = View.VISIBLE
-        if (param1?.isFav==1){
-            binding.btnFav.imageTintList= ColorStateList.valueOf(ResourcesCompat.getColor(resources,R.color.clr_blue,requireContext().theme))
-        }
-        else{
-            binding.btnFav.imageTintList= ColorStateList.valueOf(ResourcesCompat.getColor(resources,R.color.white,requireContext().theme))
+        if (param1?.isFav == 1) {
+            binding.btnFav.imageTintList = ColorStateList.valueOf(
+                ResourcesCompat.getColor(
+                    resources,
+                    R.color.clr_blue,
+                    requireContext().theme
+                )
+            )
+        } else {
+            binding.btnFav.imageTintList = ColorStateList.valueOf(
+                ResourcesCompat.getColor(
+                    resources,
+                    R.color.white,
+                    requireContext().theme
+                )
+            )
         }
     }
 
@@ -171,6 +191,7 @@ class FullScreenQuoteFragment : Fragment() {
         super.onResume()
         updateUi()
     }
+
     companion object {
         @JvmStatic
         fun newInstance(param1: QuotModel?) =

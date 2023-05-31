@@ -45,9 +45,9 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var vMdl:QuotViewModel
-    private var arrListTrendingKerosil=ArrayList<QuotModel>()
-    private var kerosilSpinnerHandler :Handler?=null
+    private lateinit var vMdl: QuotViewModel
+    private var arrListTrendingKerosil = ArrayList<QuotModel>()
+    private var kerosilSpinnerHandler: Handler? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,27 +55,31 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        InterstitialAds.showInterstitialAdmob(this,this, Ads.dashboardIntAm,null)
-        NativeAd.showPreFetch(this,Ads.dashboardNativeAm,binding.adFrameLayout,null)
-        vMdl=QuotViewModel(application)
+        InterstitialAds.showInterstitialAdmob(this, this, Ads.dashboardIntAm, null)
+        NativeAd.showPreFetch(this, Ads.dashboardNativeAm, binding.adFrameLayout, null)
+        vMdl = QuotViewModel(application)
 
         //initialize kerosil list
         arrListTrendingKerosil.clear()
         CoroutineScope(Dispatchers.IO).launch {
             val trndLst = vMdl.readByCat("")
-            if (trndLst.size>0){
-                binding.quotesViewPager.visibility=View.VISIBLE
-                for(i in 0 until 6){
+            if (trndLst.size > 0) {
+                binding.quotesViewPager.visibility = View.VISIBLE
+                for (i in 0 until 6) {
                     arrListTrendingKerosil.add(trndLst[i])
                 }
-            }
-            else{
-                binding.quotesViewPager.visibility=View.GONE
+            } else {
+                binding.quotesViewPager.visibility = View.GONE
             }
 
-            runOnUiThread { binding.quotesViewPager.adapter=QuotesPagerAdapter(this@MainActivity)
-                TabLayoutMediator(binding.tabLayoutOnBoardingScreen, binding.quotesViewPager) { tab, position ->
-                }.attach() }
+            runOnUiThread {
+                binding.quotesViewPager.adapter = QuotesPagerAdapter(this@MainActivity)
+                TabLayoutMediator(
+                    binding.tabLayoutOnBoardingScreen,
+                    binding.quotesViewPager
+                ) { tab, position ->
+                }.attach()
+            }
 
 
         }
@@ -91,7 +95,7 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
         }
 
         binding.btnPro.setOnClickListener {
-            startActivity(Intent(this,InAppActivity::class.java))
+            startActivity(Intent(this, InAppActivity::class.java))
         }
 
         binding.btnShare.setOnClickListener {
@@ -164,15 +168,14 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
 
         binding.btnFav.setOnClickListener {
             binding.drawerLayout.closeDrawers()
-            if (UtilSharedPerefs.getIsFullQuote(this)){
+            if (UtilSharedPerefs.getIsFullQuote(this)) {
                 startActivity(
                     Intent(this@MainActivity, FullViewActivity::class.java).putExtra(
                         "cat",
                         "MFAV"
                     )
                 )
-            }
-            else{
+            } else {
                 startActivity(
                     Intent(this@MainActivity, NewQuoteStudioActivity::class.java).putExtra(
                         "cat",
@@ -209,20 +212,18 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
 //        }
 
 
-
 //        binding.recyclerPopularCats.isNestedScrollingEnabled = false
         binding.recyclerPopularCats.layoutManager = GridLayoutManager(this, 2)
         binding.recyclerPopularCats.adapter = AdapterCategories(this, object : InterfaceCatClick {
             override fun onClick(catName: String) {
-                if (UtilSharedPerefs.getIsFullQuote(this@MainActivity)){
+                if (UtilSharedPerefs.getIsFullQuote(this@MainActivity)) {
                     startActivity(
                         Intent(
                             this@MainActivity,
                             FullViewActivity::class.java
                         ).putExtra("cat", catName)
                     )
-                }
-                else{
+                } else {
                     startActivity(
                         Intent(
                             this@MainActivity,
@@ -236,9 +237,8 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
         })
 
 
-
         //kerosil spinner
-        kerosilSpinnerHandler= Handler(mainLooper)
+        kerosilSpinnerHandler = Handler(mainLooper)
         kerosilSpinnerHandler?.postDelayed(
             object : Runnable {
                 override fun run() {
@@ -247,17 +247,15 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
                     // Schedule the next execution after 2 seconds
                     kerosilSpinnerHandler?.postDelayed(this, 6000)
                 }
-            }
-            ,6000)
+            }, 6000)
 
     }
 
     private fun kerosilSpinner() {
-        if (binding.quotesViewPager.currentItem>=5){
-            binding.quotesViewPager.currentItem=0
-        }
-        else{
-            binding.quotesViewPager.currentItem+=1
+        if (binding.quotesViewPager.currentItem >= 5) {
+            binding.quotesViewPager.currentItem = 0
+        } else {
+            binding.quotesViewPager.currentItem += 1
         }
     }
 
@@ -282,8 +280,9 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
         override fun getItemCount(): Int {
             return arrListTrendingKerosil.size
         }
+
         override fun createFragment(position: Int): Fragment {
-            Log.d("logkey","createFragment")
+            Log.d("logkey", "createFragment")
             return TrendingFragment.newInstance(arrListTrendingKerosil[position])
         }
     }
@@ -311,12 +310,12 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
     }
 
     override fun onInterfere() {
-        Log.d("logkey","Interference found")
+        Log.d("logkey", "Interference found")
         resetHandler()
     }
 
 
-    private fun resetHandler(){
+    private fun resetHandler() {
         kerosilSpinnerHandler?.removeCallbacksAndMessages(null)
         kerosilSpinnerHandler?.postDelayed(
             object : Runnable {
@@ -326,8 +325,7 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
                     // Schedule the next execution after 2 seconds
                     kerosilSpinnerHandler?.postDelayed(this, 6000)
                 }
-            }
-            ,6000)
+            }, 6000)
     }
 
 

@@ -60,7 +60,6 @@ class SplashActivity : AppCompatActivity() {
     }
 
 
-
     private fun setupRemoteConfig() {
         val remoteConfig = FirebaseRemoteConfig.getInstance()
         remoteConfig.setConfigSettingsAsync(
@@ -79,28 +78,30 @@ class SplashActivity : AppCompatActivity() {
 //                    remoteConfig.getString(("admob_interstitial_id")).trim()
 //                Ads.admob_native_id = remoteConfig.getString(("admob_native_id")).trim()
 
-                Ads.settingIntAm=remoteConfig.getString("settingIntAm").trim()
-                Ads.quoteStudioIntAm=remoteConfig.getString("quoteStudioIntAm").trim()
-                Ads.backSettingIntAm=remoteConfig.getString("backSettingIntAm").trim()
-                Ads.backQuoteStudioIntAm=remoteConfig.getString("backQuoteStudioIntAm").trim()
-                Ads.dashboardIntAm=remoteConfig.getString("dashboardIntAm").trim()
-                Ads.dashboardNativeAm=remoteConfig.getString("dashboardNativeAm").trim()
-                Ads.inBetweenQuotesNativeAm=remoteConfig.getString("inBetweenQuotesNativeAm").trim()
-                Ads.proLifeTimeKey=remoteConfig.getString("proLifeTimeKey").trim()
-                Ads.proMonthlyKey=remoteConfig.getString("proMonthlyKey").trim()
-                Ads.proLifeTimePrice=remoteConfig.getString("proLifeTimePrice").trim()
-                Ads.proMonthlyPrice=remoteConfig.getString("proMonthlyPrice").trim()
+                Ads.settingIntAm = remoteConfig.getString("settingIntAm").trim()
+                Ads.quoteStudioIntAm = remoteConfig.getString("quoteStudioIntAm").trim()
+                Ads.backSettingIntAm = remoteConfig.getString("backSettingIntAm").trim()
+                Ads.backQuoteStudioIntAm = remoteConfig.getString("backQuoteStudioIntAm").trim()
+                Ads.dashboardIntAm = remoteConfig.getString("dashboardIntAm").trim()
+                Ads.dashboardNativeAm = remoteConfig.getString("dashboardNativeAm").trim()
+                Ads.inBetweenQuotesNativeAm =
+                    remoteConfig.getString("inBetweenQuotesNativeAm").trim()
+                Ads.proLifeTimeKey = remoteConfig.getString("proLifeTimeKey").trim()
+                Ads.proMonthlyKey = remoteConfig.getString("proMonthlyKey").trim()
+                Ads.proLifeTimePrice = remoteConfig.getString("proLifeTimePrice").trim()
+                Ads.proMonthlyPrice = remoteConfig.getString("proMonthlyPrice").trim()
                 try {
-                    Ads.inBetweenQuotesNativeAdPosition=remoteConfig.getString("inBetweenQuotesNativeAdPosition") as Int
-                }catch (exc:Exception){
-                    Ads.inBetweenQuotesNativeAdPosition=0
+                    Ads.inBetweenQuotesNativeAdPosition =
+                        remoteConfig.getString("inBetweenQuotesNativeAdPosition") as Int
+                } catch (exc: Exception) {
+                    Ads.inBetweenQuotesNativeAdPosition = 0
                     exc.printStackTrace()
                 }
                 try {
-                    Ads.inBetweenQuotesNativeAdStartingIndex=remoteConfig.getString("inBetweenQuotesNativeAdStartingIndex") as Int
-                }
-                catch (exc:Exception){
-                    Ads.inBetweenQuotesNativeAdStartingIndex=0
+                    Ads.inBetweenQuotesNativeAdStartingIndex =
+                        remoteConfig.getString("inBetweenQuotesNativeAdStartingIndex") as Int
+                } catch (exc: Exception) {
+                    Ads.inBetweenQuotesNativeAdStartingIndex = 0
                     exc.printStackTrace()
                 }
 
