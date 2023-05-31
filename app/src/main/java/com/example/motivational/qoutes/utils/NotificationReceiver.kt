@@ -30,6 +30,8 @@ class NotificationReceiver: BroadcastReceiver() {
             .setContentTitle(context.getString(R.string.app_name))
             .setContentText(p1?.getStringExtra("quote"))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setStyle(NotificationCompat.BigTextStyle()
+                .bigText(p1?.getStringExtra("quote")))
             .setContentIntent(
                 PendingIntent.getActivity(
                     context, 0,

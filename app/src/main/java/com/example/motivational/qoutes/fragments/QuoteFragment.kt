@@ -30,6 +30,7 @@ import com.example.motivational.qoutes.interfaces.InterfaceMisClick
 import com.example.motivational.qoutes.utils.CustomDialog
 import com.example.motivational.qoutes.utils.UtilLists
 import com.example.motivational.qoutes.utils.UtilMiscs
+import com.example.motivational.qoutes.utils.UtilMiscs.getName
 import com.example.motivational.qoutes.utils.UtilSharedPerefs
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.CoroutineScope
@@ -209,7 +210,7 @@ class QuoteFragment : Fragment() {
                     BottomSheetBehavior.STATE_COLLAPSED
                 UtilMiscs.downloadImg(requireContext(),binding.quotLayout.root.drawToBitmap(), param1)
                 val model=
-                    File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"${param1?.Category} ${param1?.id}.jpg")
+                    File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"${getName(param1?.Category,param1?.id)}.jpg")
 
                 Log.d("logkey","Model Path: ${model.absolutePath}")
                 val intentBuilder: ShareCompat.IntentBuilder =
@@ -229,7 +230,7 @@ class QuoteFragment : Fragment() {
             }
             binding.bottomSheetQualities.btnRed.setOnClickListener {
                 UtilMiscs.downloadImg(requireContext(),binding.quotLayout.root.drawToBitmap(), param1)
-                val model=File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"${param1?.Category} ${param1?.id}.jpg")
+                val model=File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"${getName(param1?.Category,param1?.id)}.jpg")
                 val intent = Intent(Intent.ACTION_SEND)
                 intent.type = "image/*"
                 intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(
@@ -249,7 +250,7 @@ class QuoteFragment : Fragment() {
             binding.bottomSheetQualities.btnBlack.setOnClickListener {
                 UtilMiscs.downloadImg(requireContext(),binding.quotLayout.root.drawToBitmap(), param1)
 
-                val model=File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"${param1?.Category} ${param1?.id}.jpg")
+                val model=File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"${getName(param1?.Category,param1?.id)}.jpg")
                 val intent = Intent(Intent.ACTION_SEND)
                 intent.type = "image/*"
                 intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(
@@ -268,7 +269,7 @@ class QuoteFragment : Fragment() {
             }
             binding.bottomSheetQualities.btnBlue.setOnClickListener {
                 UtilMiscs.downloadImg(requireContext(),binding.quotLayout.root.drawToBitmap(), param1)
-                val model=File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"${param1?.Category} ${param1?.id}.jpg")
+                val model=File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"${getName(param1?.Category,param1?.id)}.jpg")
                 val intent = Intent(Intent.ACTION_SEND)
                 intent.type = "image/*"
                 intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(
@@ -288,12 +289,12 @@ class QuoteFragment : Fragment() {
             binding.bottomSheetQualities.btnGreen.setOnClickListener {
                 UtilMiscs.downloadImg(requireContext(),binding.quotLayout.root.drawToBitmap(), param1)
                 val model=
-                    File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"${param1?.Category} ${param1?.id}.jpg")
+                    File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"${getName(param1?.Category,param1?.id)}.jpg")
                 UtilMiscs.onShare(requireContext(),model)
             }
             binding.bottomSheetQualities.btnSparrow.setOnClickListener {
                 UtilMiscs.downloadImg(requireContext(),binding.quotLayout.root.drawToBitmap(), param1)
-                val model=File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"${param1?.Category} ${param1?.id}.jpg")
+                val model=File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"${getName(param1?.Category,param1?.id)}.jpg")
                 val intent = Intent(Intent.ACTION_SEND)
                 intent.type = "image/*"
                 intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(
@@ -317,7 +318,7 @@ class QuoteFragment : Fragment() {
 
 
     private fun downloadImg() {
-        UtilMiscs.saveMediaToStorage(requireContext(),binding.quotLayout.root.drawToBitmap(),"${param1?.Category} ${param1?.id}")
+        UtilMiscs.saveMediaToStorage(requireContext(),binding.quotLayout.root.drawToBitmap(),"${getName(param1?.Category,param1?.id)}")
 
     }
 

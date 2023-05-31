@@ -32,6 +32,7 @@ import com.example.motivational.qoutes.interfaces.InterfaceMisClick
 import com.example.motivational.qoutes.utils.CustomDialog
 import com.example.motivational.qoutes.utils.UtilLists
 import com.example.motivational.qoutes.utils.UtilMiscs
+import com.example.motivational.qoutes.utils.UtilMiscs.getName
 import com.example.motivational.qoutes.utils.UtilMiscs.wallpaperInt
 import com.example.motivational.qoutes.utils.UtilSharedPerefs
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -223,6 +224,8 @@ class FullScreenQuoteFragment : Fragment() {
 
             }
             binding.bottomSheetQualities.btnMoreOpts.setOnClickListener {
+                binding.quotLayout.qoutWallpaper.visibility = View.VISIBLE
+                Handler(Looper.getMainLooper()).postDelayed({
                 BottomSheetBehavior.from(binding.bottomSheetQualities.frameLayout).state =
                     BottomSheetBehavior.STATE_COLLAPSED
                 UtilMiscs.downloadImg(
@@ -230,10 +233,11 @@ class FullScreenQuoteFragment : Fragment() {
                     binding.quotLayout.root.drawToBitmap(),
                     param1
                 )
-                val model =
+                    binding.quotLayout.qoutWallpaper.visibility = View.GONE
+                    val model =
                     File(
                         Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                        "${param1?.Category} ${param1?.id}.jpg"
+                        "${getName(param1?.Category,param1?.id)}.jpg"
                     )
 
                 Log.d("logkey", "Model Path: ${model.absolutePath}")
@@ -250,6 +254,7 @@ class FullScreenQuoteFragment : Fragment() {
                 val intent = intentBuilder.intent.setAction(Intent.ACTION_SEND)
                     .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 startActivity(Intent.createChooser(intent, "Send to "))
+                }, 100)
 
             }
             binding.bottomSheetQualities.btnRed.setOnClickListener {
@@ -263,7 +268,7 @@ class FullScreenQuoteFragment : Fragment() {
                     binding.quotLayout.qoutWallpaper.visibility = View.GONE
                 val model = File(
                     Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                    "${param1?.Category} ${param1?.id}.jpg"
+                    "${getName(param1?.Category,param1?.id)}.jpg"
                 )
                 val intent = Intent(Intent.ACTION_SEND)
                 intent.type = "image/*"
@@ -296,7 +301,7 @@ class FullScreenQuoteFragment : Fragment() {
 
                 val model = File(
                     Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                    "${param1?.Category} ${param1?.id}.jpg"
+                    "${getName(param1?.Category,param1?.id)}.jpg"
                 )
                 val intent = Intent(Intent.ACTION_SEND)
                 intent.type = "image/*"
@@ -329,7 +334,7 @@ class FullScreenQuoteFragment : Fragment() {
 
                     val model = File(
                     Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                    "${param1?.Category} ${param1?.id}.jpg"
+                    "${getName(param1?.Category,param1?.id)}.jpg"
                 )
                 val intent = Intent(Intent.ACTION_SEND)
                 intent.type = "image/*"
@@ -362,7 +367,7 @@ class FullScreenQuoteFragment : Fragment() {
                     val model =
                         File(
                             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                            "${param1?.Category} ${param1?.id}.jpg"
+                            "${getName(param1?.Category,param1?.id)}.jpg"
                         )
                     UtilMiscs.onShare(requireContext(), model)
                 }, 100)
@@ -379,7 +384,7 @@ class FullScreenQuoteFragment : Fragment() {
 
                     val model = File(
                     Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                    "${param1?.Category} ${param1?.id}.jpg"
+                    "${getName(param1?.Category,param1?.id)}.jpg"
                 )
                 val intent = Intent(Intent.ACTION_SEND)
                 intent.type = "image/*"

@@ -287,7 +287,7 @@ object UtilMiscs {
 
 
     fun downloadImg(context: Context,bitmap: Bitmap?, param1:QuotModel?) {
-        saveMediaToStorage(context,bitmap,"${param1?.Category} ${param1?.id}")
+        saveMediaToStorage(context,bitmap, getName(param1?.Category,param1?.id))
     }
 
     fun getRandom():Int{
@@ -306,6 +306,10 @@ object UtilMiscs {
         else{
             return indx+1
         }
+    }
+
+    fun getName(cat:String?, id:Int?):String{
+        return "${cat}_${id}"
     }
 
 }
