@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/_36sdp"
     android:background="@drawable/bg_ripple_square"
-    android:backgroundTint="@color/grey_300">
+    android:backgroundTint="@color/grey_800">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Exit"
-            android:textColor="@color/clr_txt2"
+            android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -38,7 +38,7 @@
             android:layout_marginHorizontal="@dimen/_22sdp"
             android:gravity="center"
             android:text="Are you sure you want to exit?"
-            android:textColor="@color/grey_800"
+            android:textColor="@color/grey_100"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -59,6 +59,7 @@
             android:layout_width="@dimen/_50sdp"
             android:layout_height="@dimen/_50sdp"
             android:layout_marginHorizontal="@dimen/_20sdp"
+            android:layout_marginVertical="@dimen/_10sdp"
             android:background="@drawable/bg_transparent_ripple_circle"
             android:backgroundTint="@color/grey_300"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -109,6 +110,7 @@
         android:layout_margin="@dimen/_20sdp"
         android:text=" Not Now "
         android:textColor="@color/grey_900"
+        android:visibility="gone"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

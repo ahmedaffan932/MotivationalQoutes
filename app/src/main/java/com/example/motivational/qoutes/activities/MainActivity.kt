@@ -38,6 +38,7 @@ import com.example.motivational.qoutes.fragments.TrendingFragment
 import com.example.motivational.qoutes.interfaces.InterfaceCatClick
 import com.example.motivational.qoutes.interfaces.InterfaceUserInterfere
 import com.example.motivational.qoutes.utils.MainViewModel
+import com.example.motivational.qoutes.utils.NotificationScheduler
 import com.example.motivational.qoutes.utils.UtilMiscs
 import com.example.motivational.qoutes.utils.UtilSharedPerefs
 import com.google.android.material.tabs.TabLayoutMediator
@@ -50,47 +51,57 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var vMdl:QuotViewModel
-    private var arrListTrendingKerosil=ArrayList<QuotModel>()
-    private var kerosilSpinnerHandler :Handler?=null
-
+    private lateinit var vMdl: QuotViewModel
+    private var arrListTrendingKerosil = ArrayList<QuotModel>()
+    private var kerosilSpinnerHandler: Handler? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        InterstitialAds.showInterstitialAdmob(this,this, Ads.dashboardIntAm,object :InterstitialCallback{
-            override fun onResult() {
-                if (ContextCompat.checkSelfPermission(
-                        this@MainActivity,
-                        Manifest.permission.POST_NOTIFICATIONS
-                    ) != PackageManager.PERMISSION_GRANTED){
-                    requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS),1)
-                }
-            }
+        NotificationScheduler.scheduleNotification(application)
 
-        })
-        NativeAd.showPreFetch(this,Ads.dashboardNativeAm,binding.adFrameLayout,null)
-        vMdl=QuotViewModel(application)
+        InterstitialAds.showInterstitialAdmob(
+            this,
+            this,
+            Ads.dashboardIntAm,
+            object : InterstitialCallback {
+                override fun onResult() {
+                    if (ContextCompat.checkSelfPermission(
+                            this@MainActivity,
+                            Manifest.permission.POST_NOTIFICATIONS
+                        ) != PackageManager.PERMISSION_GRANTED
+                    ) {
+                        requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 1)
+                    }
+                }
+
+            })
+        NativeAd.showPreFetch(this, Ads.dashboardNativeAm, binding.adFrameLayout, null)
+        vMdl = QuotViewModel(application)
 
         //initialize kerosil list
         arrListTrendingKerosil.clear()
         CoroutineScope(Dispatchers.IO).launch {
             val trndLst = vMdl.readByCat("")
-            if (trndLst.size>0){
-                binding.quotesViewPager.visibility=View.VISIBLE
-                for(i in 0 until 6){
+            if (trndLst.size > 0) {
+                binding.quotesViewPager.visibility = View.VISIBLE
+                for (i in 0 until 6) {
                     arrListTrendingKerosil.add(trndLst[i])
                 }
-            }
-            else{
-                binding.quotesViewPager.visibility=View.GONE
+            } else {
+                binding.quotesViewPager.visibility = View.GONE
             }
 
-            runOnUiThread { binding.quotesViewPager.adapter=QuotesPagerAdapter(this@MainActivity)
-                TabLayoutMediator(binding.tabLayoutOnBoardingScreen, binding.quotesViewPager) { tab, position ->
-                }.attach() }
+            runOnUiThread {
+                binding.quotesViewPager.adapter = QuotesPagerAdapter(this@MainActivity)
+                TabLayoutMediator(
+                    binding.tabLayoutOnBoardingScreen,
+                    binding.quotesViewPager
+                ) { tab, position ->
+                }.attach()
+            }
 
 
         }
@@ -106,7 +117,7 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
         }
 
         binding.btnPro.setOnClickListener {
-            startActivity(Intent(this,InAppActivity::class.java))
+            startActivity(Intent(this, InAppActivity::class.java))
         }
 
         binding.btnShare.setOnClickListener {
@@ -179,20 +190,19 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
 
         binding.btnFav.setOnClickListener {
             binding.drawerLayout.closeDrawers()
-            if (UtilSharedPerefs.getIsFullQuote(this)){
+            if (UtilSharedPerefs.getIsFullQuote(this)) {
                 startActivity(
                     Intent(this@MainActivity, FullViewActivity::class.java).putExtra(
                         "cat",
                         "MFAV"
-                    ).putExtra("pos",0)
+                    ).putExtra("pos", 0)
                 )
-            }
-            else{
+            } else {
                 startActivity(
                     Intent(this@MainActivity, NewQuoteStudioActivity::class.java).putExtra(
                         "cat",
                         "MFAV"
-                    ).putExtra("pos",0)
+                    ).putExtra("pos", 0)
                 )
             }
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
@@ -224,25 +234,23 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
 //        }
 
 
-
 //        binding.recyclerPopularCats.isNestedScrollingEnabled = false
         binding.recyclerPopularCats.layoutManager = GridLayoutManager(this, 2)
         binding.recyclerPopularCats.adapter = AdapterCategories(this, object : InterfaceCatClick {
             override fun onClick(catName: String) {
-                if (UtilSharedPerefs.getIsFullQuote(this@MainActivity)){
+                if (UtilSharedPerefs.getIsFullQuote(this@MainActivity)) {
                     startActivity(
                         Intent(
                             this@MainActivity,
                             FullViewActivity::class.java
-                        ).putExtra("cat", catName).putExtra("pos",0)
+                        ).putExtra("cat", catName).putExtra("pos", 0)
                     )
-                }
-                else{
+                } else {
                     startActivity(
                         Intent(
                             this@MainActivity,
                             NewQuoteStudioActivity::class.java
-                        ).putExtra("cat", catName).putExtra("pos",0)
+                        ).putExtra("cat", catName).putExtra("pos", 0)
                     )
                 }
 
@@ -251,9 +259,8 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
         })
 
 
-
         //kerosil spinner
-        kerosilSpinnerHandler= Handler(mainLooper)
+        kerosilSpinnerHandler = Handler(mainLooper)
         kerosilSpinnerHandler?.postDelayed(
             object : Runnable {
                 override fun run() {
@@ -262,17 +269,15 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
                     // Schedule the next execution after 2 seconds
                     kerosilSpinnerHandler?.postDelayed(this, 6000)
                 }
-            }
-            ,6000)
+            }, 6000)
 
     }
 
     private fun kerosilSpinner() {
-        if (binding.quotesViewPager.currentItem>=5){
-            binding.quotesViewPager.currentItem=0
-        }
-        else{
-            binding.quotesViewPager.currentItem+=1
+        if (binding.quotesViewPager.currentItem >= 5) {
+            binding.quotesViewPager.currentItem = 0
+        } else {
+            binding.quotesViewPager.currentItem += 1
         }
     }
 
@@ -297,8 +302,8 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
         override fun getItemCount(): Int {
             return arrListTrendingKerosil.size
         }
+
         override fun createFragment(position: Int): Fragment {
-            Log.d("logkey","createFragment")
             return TrendingFragment.newInstance(arrListTrendingKerosil[position])
         }
     }
@@ -326,12 +331,12 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
     }
 
     override fun onInterfere() {
-        Log.d("logkey","Interference found")
+        Log.d("logkey", "Interference found")
         resetHandler()
     }
 
 
-    private fun resetHandler(){
+    private fun resetHandler() {
         kerosilSpinnerHandler?.removeCallbacksAndMessages(null)
         kerosilSpinnerHandler?.postDelayed(
             object : Runnable {
@@ -341,30 +346,33 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
                     // Schedule the next execution after 2 seconds
                     kerosilSpinnerHandler?.postDelayed(this, 6000)
                 }
-            }
-            ,6000)
+            }, 6000)
     }
 
 
     override fun onBackPressed() {
-        val alert = Dialog(this)
-        val customLayoutBinding =
-            DialogExitBinding.bind(layoutInflater.inflate(R.layout.dialog_exit, null))
-        alert.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        alert.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        alert.setCancelable(true)
-        alert.setCanceledOnTouchOutside(true)
-        alert.setContentView(customLayoutBinding.root)
-        alert.show()
-        customLayoutBinding.btnNotNow.setOnClickListener {
-            alert.dismiss()
-        }
-        customLayoutBinding.btnNo.setOnClickListener {
-            alert.dismiss()
-        }
-        customLayoutBinding.btnYes.setOnClickListener {
-            alert.dismiss()
-            finishAffinity()
+        if (binding.drawerLayout.isDrawerOpen(binding.navView)) {
+            binding.drawerLayout.closeDrawers()
+        } else {
+            val alert = Dialog(this)
+            val customLayoutBinding =
+                DialogExitBinding.bind(layoutInflater.inflate(R.layout.dialog_exit, null))
+            alert.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            alert.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            alert.setCancelable(true)
+            alert.setCanceledOnTouchOutside(true)
+            alert.setContentView(customLayoutBinding.root)
+            alert.show()
+            customLayoutBinding.btnNotNow.setOnClickListener {
+                alert.dismiss()
+            }
+            customLayoutBinding.btnNo.setOnClickListener {
+                alert.dismiss()
+            }
+            customLayoutBinding.btnYes.setOnClickListener {
+                alert.dismiss()
+                finishAffinity()
+            }
         }
     }
 

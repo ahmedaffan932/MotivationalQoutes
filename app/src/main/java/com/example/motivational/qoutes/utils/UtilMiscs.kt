@@ -70,7 +70,7 @@ object UtilMiscs {
         val outputDirectory = filesDir.absolutePath
         if (!File(outputDirectory, "quotes.json").exists()) {
             val zipFileName = "archive.zip"
-            Log.d("logkey", "PTH: $outputDirectory")
+            Log.d("logKey", "PTH: $outputDirectory")
             unzipFromAssets(this, zipFileName, outputDirectory)
         }
     }

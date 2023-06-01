@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.example.motivational.qoutes.database.QuotViewModel
+import com.google.gson.Gson
 import java.util.Calendar
 
 class NotificationScheduler {
@@ -17,7 +18,7 @@ class NotificationScheduler {
         private const val NOTIFICATION_ID4 = 3
 
         fun scheduleNotification(application: Application) {
-            Log.d("logkey", "Sheduling")
+            Log.d("logKey", "Scheduling")
             val alarmManager = application.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
             // Set the notification time to 7 am
@@ -45,20 +46,63 @@ class NotificationScheduler {
                 set(Calendar.SECOND, 0)
             }
 
+            val obj1 = Gson().toJson(QuotViewModel(application).getRandomObject())
+            val obj2 = Gson().toJson(QuotViewModel(application).getRandomObject())
+            val obj3 = Gson().toJson(QuotViewModel(application).getRandomObject())
+            val obj4 = Gson().toJson(QuotViewModel(application).getRandomObject())
+
+            Log.d("logKey", "$obj1 obj1")
             // Create an intent for the BroadcastReceiver
             val intent1 = Intent(application, NotificationReceiver::class.java)
-            try{intent1.putExtra("quote",QuotViewModel(application).getRandomObject().Quote)}catch(ec:Exception){ec.printStackTrace()}
+            try {
+                intent1.putExtra("quote", obj1)
+            } catch (ec: Exception) {
+                Log.e("logKey", "Crashed")
+                ec.printStackTrace()
+            }
             val intent2 = Intent(application, NotificationReceiver::class.java)
-            try{intent2.putExtra("quote",QuotViewModel(application).getRandomObject().Quote)}catch(ec:Exception){ec.printStackTrace()}
+            try {
+                intent2.putExtra("quote", obj2)
+            } catch (ec: Exception) {
+                ec.printStackTrace()
+            }
             val intent3 = Intent(application, NotificationReceiver::class.java)
-            try{intent3.putExtra("quote",QuotViewModel(application).getRandomObject().Quote)}catch(ec:Exception){ec.printStackTrace()}
+            try {
+                intent3.putExtra("quote", obj3)
+            } catch (ec: Exception) {
+                ec.printStackTrace()
+            }
             val intent4 = Intent(application, NotificationReceiver::class.java)
-            try{intent4.putExtra("quote",QuotViewModel(application).getRandomObject().Quote)}catch(ec:Exception){ec.printStackTrace()}
+            try {
+                intent4.putExtra("quote", obj4)
+            } catch (ec: Exception) {
+                ec.printStackTrace()
+            }
 
-            val pendingIntent1 = PendingIntent.getBroadcast(application,NOTIFICATION_ID1,intent1,PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
-            val pendingIntent2 = PendingIntent.getBroadcast(application,NOTIFICATION_ID2,intent2,PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
-            val pendingIntent3 = PendingIntent.getBroadcast(application,NOTIFICATION_ID3,intent3,PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
-            val pendingIntent4 = PendingIntent.getBroadcast(application,NOTIFICATION_ID4,intent4,PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+            val pendingIntent1 = PendingIntent.getBroadcast(
+                application,
+                NOTIFICATION_ID1,
+                intent1,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+            )
+            val pendingIntent2 = PendingIntent.getBroadcast(
+                application,
+                NOTIFICATION_ID2,
+                intent2,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+            )
+            val pendingIntent3 = PendingIntent.getBroadcast(
+                application,
+                NOTIFICATION_ID3,
+                intent3,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+            )
+            val pendingIntent4 = PendingIntent.getBroadcast(
+                application,
+                NOTIFICATION_ID4,
+                intent4,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+            )
 
             alarmManager.cancel(pendingIntent1)
             alarmManager.cancel(pendingIntent2)

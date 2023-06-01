@@ -24,9 +24,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MotivationalQoutes" >
         <activity
-            android:name=".TempSplashActivity"
-            android:exported="false" />
-        <activity
             android:name=".activities.InAppActivity"
             android:exported="false" />
         <activity

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_simple_btn_ripple"
-    android:backgroundTint="@color/grey_300"
+    android:backgroundTint="@color/grey_800"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="@dimen/_24sdp"
     android:layout_gravity="center">
@@ -15,7 +15,7 @@
         android:layout_margin="@dimen/_10sdp"
         android:textAlignment="center"
         android:text="@string/handClickString"
-        android:textColor="@color/clr_txt2"
+        android:textColor="@color/grey_300"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

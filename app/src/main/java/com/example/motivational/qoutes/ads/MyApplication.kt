@@ -9,8 +9,6 @@ import dagger.hilt.android.HiltAndroidApp
 class MyApplication: Application() {
     override fun onCreate() {
         super.onCreate()
-        MobileAds.initialize(this) {
-            Log.d("logkey","Admob Initialized status: $it")
-        }
+        MobileAds.initialize(this) {}
     }
 }

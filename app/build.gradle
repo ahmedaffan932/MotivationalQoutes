@@ -8,14 +8,6 @@ plugins {
 }
 
 android {
-//    signingConfigs {
-//        release {
-//            storeFile file('D:\\JKS\'s\\quotes.jks')
-//            storePassword '123456'
-//            keyAlias 'key0'
-//            keyPassword '123456'
-//        }
-//    }
     namespace 'com.example.motivational.qoutes'
     compileSdk 33
 
@@ -23,8 +15,8 @@ android {
         applicationId "com"
         minSdk 26
         targetSdk 33
-        versionCode 8
-        versionName "1.7"
+        versionCode 10
+        versionName "1.9"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -86,6 +78,4 @@ dependencies {
     implementation "com.android.billingclient:billing-ktx:5.1.0"
     implementation "com.google.dagger:hilt-android:2.44"
     kapt "com.google.dagger:hilt-compiler:2.44"
-
-
 }

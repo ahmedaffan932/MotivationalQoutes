@@ -45,6 +45,7 @@ object InterstitialAds {
     fun showInterstitialAdmob(activity: Activity, context: Context,remote: String,callback: InterstitialCallback?) {
         if (interAdmob != null && remote == "am") {
             interAdmob?.show(activity)
+//            callback?.onResult()
         } else {
             Log.d("interAdmobShow", "The interstitial ad wasn't ready yet.")
             callback?.onResult()
