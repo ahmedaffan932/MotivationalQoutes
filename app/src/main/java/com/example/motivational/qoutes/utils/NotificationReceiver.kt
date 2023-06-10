@@ -18,14 +18,12 @@ import com.example.motivational.qoutes.database.QuotModel
 import com.google.gson.Gson
 
 
-class NotificationReceiver: BroadcastReceiver() {
-    companion object {
-        private const val CHANNEL_ID = "my_channel_id"
-        var NOTIFICATION_ID = 1
-    }
+class NotificationReceiver : BroadcastReceiver() {
+    private val CHANNEL_ID = "my_channel_id"
+    var NOTIFICATION_ID = 1
 
     override fun onReceive(context: Context?, p1: Intent?) {
-        Log.d("logKey","Broad Received")
+        Log.d("logKey", "Broad Received")
         createNotificationChannel(context!!)
 
         val objQuote = Gson().fromJson(p1?.getStringExtra("quote"), QuotModel::class.java)
@@ -39,13 +37,16 @@ class NotificationReceiver: BroadcastReceiver() {
             .setContentText(objQuote.Quote)
             .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setStyle(NotificationCompat.BigTextStyle()
-                .bigText(objQuote.Quote))
+            .setStyle(
+                NotificationCompat.BigTextStyle()
+                    .bigText(objQuote.Quote)
+            )
             .setContentIntent(
                 PendingIntent.getActivity(
                     context, 0,
                     intent, PendingIntent.FLAG_MUTABLE
-                ))
+                )
+            )
 
         // Show the notification
         NOTIFICATION_ID = System.currentTimeMillis().toInt()
@@ -54,16 +55,14 @@ class NotificationReceiver: BroadcastReceiver() {
     }
 
     private fun createNotificationChannel(context: Context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = "My Channel"
-            val descriptionText = "Sample Notification Channel"
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
-                description = descriptionText
-            }
-            val notificationManager =
-                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
+        val name = "My Channel"
+        val descriptionText = "Sample Notification Channel"
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
+            description = descriptionText
         }
+        val notificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
     }
 }

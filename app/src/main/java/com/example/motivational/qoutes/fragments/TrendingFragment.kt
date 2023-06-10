@@ -16,10 +16,11 @@ import com.example.motivational.qoutes.utils.UtilLists
 import com.example.motivational.qoutes.utils.UtilSharedPerefs
 
 private const val ARG_PARAM1 = "param1"
+
 class TrendingFragment : Fragment() {
     private lateinit var binding: FragmentTrendingBinding
     private var param1: QuotModel? = null
-    private lateinit var infc:InterfaceUserInterfere
+    private lateinit var infc: InterfaceUserInterfere
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +34,7 @@ class TrendingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding=FragmentTrendingBinding.inflate(inflater,container,false)
+        binding = FragmentTrendingBinding.inflate(inflater, container, false)
         if (activity is MainActivity) {
             infc = activity as InterfaceUserInterfere
         }
@@ -42,25 +43,25 @@ class TrendingFragment : Fragment() {
             infc.onInterfere()
             return@setOnTouchListener false
         }
-        binding.quotLayout.qoutData.text=param1?.Quote
+        binding.quotLayout.qoutData.text = param1?.Quote
         binding.quotLayout.qoutWallpaper.setImageResource(UtilLists.wallpapers[param1!!.wall])
         binding.root.setOnClickListener {
-            if (UtilSharedPerefs.getIsFullQuote(requireContext())){
-                startActivity(
-                    Intent(
-                        requireActivity(),
-                        FullViewActivity::class.java
-                    ).putExtra("cat", "")
-                )
-            }
-            else{
-                startActivity(
-                    Intent(
-                        requireActivity(),
-                        NewQuoteStudioActivity::class.java
-                    ).putExtra("cat", "")
-                )
-            }
+//            if (UtilSharedPerefs.getIsFullQuote(requireContext())){
+            startActivity(
+                Intent(
+                    requireActivity(),
+                    FullViewActivity::class.java
+                ).putExtra("cat", "")
+            )
+//            }
+//            else{
+//                startActivity(
+//                    Intent(
+//                        requireActivity(),
+//                        NewQuoteStudioActivity::class.java
+//                    ).putExtra("cat", "")
+//                )
+//            }
 
         }
 

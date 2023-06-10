@@ -1,32 +1,18 @@
 package com.example.motivational.qoutes.activities
 
-import android.app.ProgressDialog
 import android.content.Intent
-import android.content.res.ColorStateList
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Environment
-import android.util.Log
 import android.view.View
-import androidx.core.app.ShareCompat
-import androidx.core.content.FileProvider
-import androidx.core.content.res.ResourcesCompat
-import androidx.core.view.drawToBitmap
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.motivational.qoutes.BuildConfig
 import com.example.motivational.qoutes.R
-import com.example.motivational.qoutes.ads.Ads
-import com.example.motivational.qoutes.ads.InterstitialAds
-import com.example.motivational.qoutes.ads.InterstitialCallback
-import com.example.motivational.qoutes.ads.NativeAd
+import com.example.motivational.qoutes.ads.*
 import com.example.motivational.qoutes.database.QuotModel
 import com.example.motivational.qoutes.database.QuotViewModel
 import com.example.motivational.qoutes.databinding.ActivityFullViewBinding
 import com.example.motivational.qoutes.fragments.FullScreenQuoteFragment
-import com.example.motivational.qoutes.fragments.QuoteFragment
 import com.example.motivational.qoutes.interfaces.InterfaceMisClick
 import com.example.motivational.qoutes.utils.CustomDialog
 import com.example.motivational.qoutes.utils.UtilLists
@@ -36,7 +22,6 @@ import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.io.File
 
 class FullViewActivity : AppCompatActivity(), InterfaceMisClick {
     private lateinit var binding: ActivityFullViewBinding
@@ -62,7 +47,32 @@ class FullViewActivity : AppCompatActivity(), InterfaceMisClick {
             lstQuot.add(0, objQuote)
         }
 
-        NativeAd.showPreFetch(this, Ads.quoteStudioNativeAm, binding.adFrameLayout, null)
+        if(!Ads.quoteStudioCollapsingBannerAm.contains("am")) {
+            NativeAd.showNativeAd(this, Ads.quoteStudioNativeAm, binding.adFrameLayout, null)
+        }
+
+        BannerAd.loadCollapsibleBanner(
+            Ads.quoteStudioCollapsingBannerAm,
+            binding.adViewOne,
+            object : BannerAd.bannerAdsCallBack {
+                override fun onFailed() {
+                    BannerAd.loadCollapsibleBanner(
+                        Ads.dashboardCollapsibleAm,
+                        binding.adViewTwo,
+                        object : BannerAd.bannerAdsCallBack {
+                            override fun onFailed() {
+                                BannerAd.loadCollapsibleBanner(
+                                    Ads.dashboardCollapsibleAm,
+                                    binding.adViewThree
+                                )
+                            }
+                        }
+                    )
+                }
+            }
+        )
+
+        BannerAd.show(Ads.quoteStudioBannerAm, binding.bannerTop)
 
         InterstitialAds.showInterstitialAdmob(
             this,
@@ -114,6 +124,7 @@ class FullViewActivity : AppCompatActivity(), InterfaceMisClick {
                                     binding.emptyFlag.visibility = View.GONE
                                 } else {
                                     binding.emptyFlag.visibility = View.VISIBLE
+                                    binding.emptyLottie.visibility = View.VISIBLE
                                 }
                             }
 
@@ -152,14 +163,14 @@ class FullViewActivity : AppCompatActivity(), InterfaceMisClick {
                                     binding.emptyFlag.visibility = View.GONE
                                 } else {
                                     binding.emptyFlag.visibility = View.VISIBLE
+                                    binding.emptyLottie.visibility = View.VISIBLE
                                 }
                             }
-
                         }
                     }
                 }
-
-            })
+            }
+        )
 
 
         binding.btnBack.setOnClickListener {
@@ -182,7 +193,12 @@ class FullViewActivity : AppCompatActivity(), InterfaceMisClick {
         InterstitialAds.showInterstitialAdmob(this, this, Ads.backQuoteStudioIntAm, object :
             InterstitialCallback {
             override fun onResult() {
-                finish()
+                if (intent.getStringExtra("quote") != null){
+                    startActivity(Intent(this@FullViewActivity, MainActivity::class.java))
+                    finish()
+                }else {
+                    finish()
+                }
             }
         })
     }

@@ -19,16 +19,11 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.motivational.qoutes.R
 import com.example.motivational.qoutes.adapters.AdapterCategories
-import com.example.motivational.qoutes.ads.Ads
-import com.example.motivational.qoutes.ads.InterstitialAds
-import com.example.motivational.qoutes.ads.InterstitialCallback
-import com.example.motivational.qoutes.ads.NativeAd
+import com.example.motivational.qoutes.ads.*
 import com.example.motivational.qoutes.database.QuotModel
 import com.example.motivational.qoutes.database.QuotViewModel
 import com.example.motivational.qoutes.databinding.ActivityMainBinding
@@ -37,16 +32,13 @@ import com.example.motivational.qoutes.databinding.DialogRateBinding
 import com.example.motivational.qoutes.fragments.TrendingFragment
 import com.example.motivational.qoutes.interfaces.InterfaceCatClick
 import com.example.motivational.qoutes.interfaces.InterfaceUserInterfere
-import com.example.motivational.qoutes.utils.MainViewModel
 import com.example.motivational.qoutes.utils.NotificationScheduler
 import com.example.motivational.qoutes.utils.UtilMiscs
-import com.example.motivational.qoutes.utils.UtilSharedPerefs
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
@@ -60,13 +52,11 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        NotificationScheduler.scheduleNotification(application)
+        NotificationScheduler().scheduleNotification(application)
 
         InterstitialAds.showInterstitialAdmob(
             this,
-            this,
-            Ads.dashboardIntAm,
-            object : InterstitialCallback {
+            this, Ads.dashboardIntAm, object : InterstitialCallback {
                 override fun onResult() {
                     if (ContextCompat.checkSelfPermission(
                             this@MainActivity,
@@ -78,7 +68,29 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
                 }
 
             })
-        NativeAd.showPreFetch(this, Ads.dashboardNativeAm, binding.adFrameLayout, null)
+
+        BannerAd.loadCollapsibleBanner(
+            Ads.dashboardCollapsibleAm,
+            binding.adViewOne,
+            object : BannerAd.bannerAdsCallBack {
+                override fun onFailed() {
+                    BannerAd.loadCollapsibleBanner(
+                        Ads.dashboardCollapsibleAm,
+                        binding.adViewTwo,
+                        object : BannerAd.bannerAdsCallBack {
+                            override fun onFailed() {
+                                BannerAd.loadCollapsibleBanner(
+                                    Ads.dashboardCollapsibleAm,
+                                    binding.adViewThree
+                                )
+                            }
+                        }
+                    )
+                }
+            }
+        )
+
+        NativeAd.showNativeAd(this, Ads.dashboardNativeAm, binding.adFrameLayout, null)
         vMdl = QuotViewModel(application)
 
         //initialize kerosil list
@@ -180,7 +192,7 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
             }
             customLayoutBinding.btnThumbUp.setOnClickListener {
                 alert.dismiss()
-                goToStrore()
+                goToStore()
             }
         }
 
@@ -190,21 +202,21 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
 
         binding.btnFav.setOnClickListener {
             binding.drawerLayout.closeDrawers()
-            if (UtilSharedPerefs.getIsFullQuote(this)) {
-                startActivity(
-                    Intent(this@MainActivity, FullViewActivity::class.java).putExtra(
-                        "cat",
-                        "MFAV"
-                    ).putExtra("pos", 0)
-                )
-            } else {
-                startActivity(
-                    Intent(this@MainActivity, NewQuoteStudioActivity::class.java).putExtra(
-                        "cat",
-                        "MFAV"
-                    ).putExtra("pos", 0)
-                )
-            }
+//            if (UtilSharedPerefs.getIsFullQuote(this)) {
+            startActivity(
+                Intent(this@MainActivity, FullViewActivity::class.java).putExtra(
+                    "cat",
+                    "MFAV"
+                ).putExtra("pos", 0)
+            )
+//            } else {
+//                startActivity(
+//                    Intent(this@MainActivity, NewQuoteStudioActivity::class.java).putExtra(
+//                        "cat",
+//                        "MFAV"
+//                    ).putExtra("pos", 0)
+//                )
+//            }
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
 //        binding.btnSettings.setOnClickListener {
@@ -238,26 +250,23 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
         binding.recyclerPopularCats.layoutManager = GridLayoutManager(this, 2)
         binding.recyclerPopularCats.adapter = AdapterCategories(this, object : InterfaceCatClick {
             override fun onClick(catName: String) {
-                if (UtilSharedPerefs.getIsFullQuote(this@MainActivity)) {
-                    startActivity(
-                        Intent(
-                            this@MainActivity,
-                            FullViewActivity::class.java
-                        ).putExtra("cat", catName).putExtra("pos", 0)
-                    )
-                } else {
-                    startActivity(
-                        Intent(
-                            this@MainActivity,
-                            NewQuoteStudioActivity::class.java
-                        ).putExtra("cat", catName).putExtra("pos", 0)
-                    )
-                }
-
+//                if (UtilSharedPerefs.getIsFullQuote(this@MainActivity)) {
+                startActivity(
+                    Intent(
+                        this@MainActivity,
+                        FullViewActivity::class.java
+                    ).putExtra("cat", catName).putExtra("pos", 0)
+                )
+//                } else {
+//                    startActivity(
+//                        Intent(
+//                            this@MainActivity,
+//                            NewQuoteStudioActivity::class.java
+//                        ).putExtra("cat", catName).putExtra("pos", 0)
+//                    )
+//                }
             }
-
         })
-
 
         //kerosil spinner
         kerosilSpinnerHandler = Handler(mainLooper)
@@ -269,7 +278,8 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
                     // Schedule the next execution after 2 seconds
                     kerosilSpinnerHandler?.postDelayed(this, 6000)
                 }
-            }, 6000)
+            }, 6000
+        )
 
     }
 
@@ -281,23 +291,6 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-//        Log.d("logkey","Total Size Of DB: ${vMdl.readAllData.value?.size}")
-
-//        try {
-//            if (!vMdl.readAllFav().isNotEmpty()){
-//                binding.btnFav.visibility= View.GONE
-//            }
-//            else{
-//                binding.btnFav.visibility= View.VISIBLE
-//            }
-//        }catch (exc:Exception){
-//            exc.printStackTrace()
-//        }
-    }
-
-
     private inner class QuotesPagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
         override fun getItemCount(): Int {
             return arrListTrendingKerosil.size
@@ -308,7 +301,7 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
         }
     }
 
-    private fun goToStrore() {
+    private fun goToStore() {
         val uri =
             Uri.parse("market://details?id=" + applicationContext.packageName)
         val goToMarket = Intent(Intent.ACTION_VIEW, uri)
@@ -346,7 +339,8 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
                     // Schedule the next execution after 2 seconds
                     kerosilSpinnerHandler?.postDelayed(this, 6000)
                 }
-            }, 6000)
+            }, 6000
+        )
     }
 
 
@@ -375,6 +369,5 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
             }
         }
     }
-
 
 }

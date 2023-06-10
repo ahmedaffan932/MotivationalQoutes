@@ -111,7 +111,7 @@ class FullScreenQuoteFragment : Fragment() {
         if (param1 == null && NativeAd.amInner != null) {
             binding.mView.visibility = View.GONE
             binding.adFrameLayout.visibility = View.VISIBLE
-            NativeAd.showPreFetch(
+            NativeAd.showNativeAd(
                 requireContext(),
                 Ads.inBetweenQuotesNativeAm,
                 binding.adFrameLayout,
@@ -152,17 +152,18 @@ class FullScreenQuoteFragment : Fragment() {
         }
         return binding.root
     }
+
     private fun btnClicks() {
-        binding.btnFullScreenClose.setOnClickListener {
-            UtilSharedPerefs.setIsFullQuote(requireContext(), false)
-            startActivity(
-                Intent(requireActivity(), NewQuoteStudioActivity::class.java).putExtra(
-                    "cat",
-                    param1?.Category
-                ).putExtra("pos", param2 ?: 0)
-            )
-            activity?.finish()
-        }
+//        binding.btnFullScreenClose.setOnClickListener {
+//            UtilSharedPerefs.setIsFullQuote(requireContext(), false)
+//            startActivity(
+//                Intent(requireActivity(), NewQuoteStudioActivity::class.java).putExtra(
+//                    "cat",
+//                    param1?.Category
+//                ).putExtra("pos", param2 ?: 0)
+//            )
+//            activity?.finish()
+//        }
         binding.btnSpk.setOnClickListener {
             textToSpeechEngine.speak(param1?.Quote, TextToSpeech.QUEUE_FLUSH, null, "tts1")
         }
@@ -193,19 +194,23 @@ class FullScreenQuoteFragment : Fragment() {
             binding.bottomSheetQualities.btnSetWallpaper.setOnClickListener {
                 BottomSheetBehavior.from(binding.bottomSheetQualities.frameLayout).state =
                     BottomSheetBehavior.STATE_COLLAPSED
-                CoroutineScope(Dispatchers.IO).launch {
-                    var dlg: CustomDialog? = null
-                    requireActivity().runOnUiThread {
-                        dlg = UtilMiscs.showProgressD(requireContext())
+                binding.quotLayout.qoutWallpaper.visibility = View.VISIBLE
+                Handler(Looper.getMainLooper()).postDelayed({
+                    CoroutineScope(Dispatchers.IO).launch {
+                        var dlg: CustomDialog? = null
+                        requireActivity().runOnUiThread {
+                            dlg = UtilMiscs.showProgressD(requireContext())
+                        }
+                        WallpaperManager.getInstance(requireContext())
+                            .setBitmap(binding.quotLayout.root.drawToBitmap())
+                        requireActivity().runOnUiThread {
+                            binding.quotLayout.qoutWallpaper.visibility = View.GONE
+                            Toast.makeText(requireContext(), "Wallpaper Updated!", Toast.LENGTH_SHORT)
+                                .show()
+                            dlg?.dismiss()
+                        }
                     }
-                    WallpaperManager.getInstance(requireContext())
-                        .setBitmap(binding.quotLayout.root.drawToBitmap())
-                    requireActivity().runOnUiThread {
-                        Toast.makeText(requireContext(), "Wallpaper Updated!", Toast.LENGTH_SHORT)
-                            .show()
-                        dlg?.dismiss()
-                    }
-                }
+                }, 10)
             }
             binding.bottomSheetQualities.btnDownload.setOnClickListener {
                 BottomSheetBehavior.from(binding.bottomSheetQualities.frameLayout).state =
@@ -226,133 +231,136 @@ class FullScreenQuoteFragment : Fragment() {
             binding.bottomSheetQualities.btnMoreOpts.setOnClickListener {
                 binding.quotLayout.qoutWallpaper.visibility = View.VISIBLE
                 Handler(Looper.getMainLooper()).postDelayed({
-                BottomSheetBehavior.from(binding.bottomSheetQualities.frameLayout).state =
-                    BottomSheetBehavior.STATE_COLLAPSED
-                UtilMiscs.downloadImg(
-                    requireContext(),
-                    binding.quotLayout.root.drawToBitmap(),
-                    param1
-                )
+                    BottomSheetBehavior.from(binding.bottomSheetQualities.frameLayout).state =
+                        BottomSheetBehavior.STATE_COLLAPSED
+                    UtilMiscs.downloadImg(
+                        requireContext(),
+                        binding.quotLayout.root.drawToBitmap(),
+                        param1
+                    )
                     binding.quotLayout.qoutWallpaper.visibility = View.GONE
                     val model =
-                    File(
-                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                        "${getName(param1?.Category,param1?.id)}.jpg"
-                    )
+                        File(
+                            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                            "${getName(param1?.Category, param1?.id)}.jpg"
+                        )
 
-                Log.d("logkey", "Model Path: ${model.absolutePath}")
-                val intentBuilder: ShareCompat.IntentBuilder =
-                    ShareCompat.IntentBuilder.from(requireActivity())
-                        .setType("image/*")
-                intentBuilder.addStream(
-                    FileProvider.getUriForFile(
-                        requireContext(),
-                        BuildConfig.APPLICATION_ID + ".provider",
-                        model
+                    Log.d("logkey", "Model Path: ${model.absolutePath}")
+                    val intentBuilder: ShareCompat.IntentBuilder =
+                        ShareCompat.IntentBuilder.from(requireActivity())
+                            .setType("image/*")
+                    intentBuilder.addStream(
+                        FileProvider.getUriForFile(
+                            requireContext(),
+                            BuildConfig.APPLICATION_ID + ".provider",
+                            model
+                        )
                     )
-                )
-                val intent = intentBuilder.intent.setAction(Intent.ACTION_SEND)
-                    .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                startActivity(Intent.createChooser(intent, "Send to "))
+                    val intent = intentBuilder.intent.setAction(Intent.ACTION_SEND)
+                        .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    startActivity(Intent.createChooser(intent, "Send to "))
                 }, 100)
 
             }
             binding.bottomSheetQualities.btnRed.setOnClickListener {
                 binding.quotLayout.qoutWallpaper.visibility = View.VISIBLE
                 Handler(Looper.getMainLooper()).postDelayed({
-                UtilMiscs.downloadImg(
-                    requireContext(),
-                    binding.quotLayout.root.drawToBitmap(),
-                    param1
-                )
-                    binding.quotLayout.qoutWallpaper.visibility = View.GONE
-                val model = File(
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                    "${getName(param1?.Category,param1?.id)}.jpg"
-                )
-                val intent = Intent(Intent.ACTION_SEND)
-                intent.type = "image/*"
-                intent.putExtra(
-                    Intent.EXTRA_STREAM, FileProvider.getUriForFile(
+                    UtilMiscs.downloadImg(
                         requireContext(),
-                        BuildConfig.APPLICATION_ID + ".provider",
-                        model
+                        binding.quotLayout.root.drawToBitmap(),
+                        param1
                     )
-                )
-                intent.setPackage("com.instagram.android") // Specify Instagram's package name
+                    binding.quotLayout.qoutWallpaper.visibility = View.GONE
+                    val model = File(
+                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                        "${getName(param1?.Category, param1?.id)}.jpg"
+                    )
+                    val intent = Intent(Intent.ACTION_SEND)
+                    intent.type = "image/*"
+                    intent.putExtra(
+                        Intent.EXTRA_STREAM, FileProvider.getUriForFile(
+                            requireContext(),
+                            BuildConfig.APPLICATION_ID + ".provider",
+                            model
+                        )
+                    )
+                    intent.setPackage("com.instagram.android") // Specify Instagram's package name
 
-                try {
-                    startActivity(intent)
-                } catch (e: ActivityNotFoundException) {
-                    // Instagram not installed on the device
-                    Toast.makeText(context, "Instagram is not installed", Toast.LENGTH_SHORT).show()
-                }
+                    try {
+                        startActivity(intent)
+                    } catch (e: ActivityNotFoundException) {
+                        // Instagram not installed on the device
+                        Toast.makeText(context, "Instagram is not installed", Toast.LENGTH_SHORT)
+                            .show()
+                    }
                 }, 100)
             }
             binding.bottomSheetQualities.btnBlack.setOnClickListener {
                 binding.quotLayout.qoutWallpaper.visibility = View.VISIBLE
                 Handler(Looper.getMainLooper()).postDelayed({
-                UtilMiscs.downloadImg(
-                    requireContext(),
-                    binding.quotLayout.root.drawToBitmap(),
-                    param1
-                )
+                    UtilMiscs.downloadImg(
+                        requireContext(),
+                        binding.quotLayout.root.drawToBitmap(),
+                        param1
+                    )
                     binding.quotLayout.qoutWallpaper.visibility = View.GONE
 
-                val model = File(
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                    "${getName(param1?.Category,param1?.id)}.jpg"
-                )
-                val intent = Intent(Intent.ACTION_SEND)
-                intent.type = "image/*"
-                intent.putExtra(
-                    Intent.EXTRA_STREAM, FileProvider.getUriForFile(
-                        requireContext(),
-                        BuildConfig.APPLICATION_ID + ".provider",
-                        model
+                    val model = File(
+                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                        "${getName(param1?.Category, param1?.id)}.jpg"
                     )
-                )
-                intent.setPackage("com.zhiliaoapp.musically") // Specify Instagram's package name
+                    val intent = Intent(Intent.ACTION_SEND)
+                    intent.type = "image/*"
+                    intent.putExtra(
+                        Intent.EXTRA_STREAM, FileProvider.getUriForFile(
+                            requireContext(),
+                            BuildConfig.APPLICATION_ID + ".provider",
+                            model
+                        )
+                    )
+                    intent.setPackage("com.zhiliaoapp.musically") // Specify Instagram's package name
 
-                try {
-                    startActivity(intent)
-                } catch (e: ActivityNotFoundException) {
-                    // Instagram not installed on the device
-                    Toast.makeText(context, "Tiktok is not installed", Toast.LENGTH_SHORT).show()
-                }
+                    try {
+                        startActivity(intent)
+                    } catch (e: ActivityNotFoundException) {
+                        // Instagram not installed on the device
+                        Toast.makeText(context, "Tiktok is not installed", Toast.LENGTH_SHORT)
+                            .show()
+                    }
                 }, 100)
             }
             binding.bottomSheetQualities.btnBlue.setOnClickListener {
                 binding.quotLayout.qoutWallpaper.visibility = View.VISIBLE
                 Handler(Looper.getMainLooper()).postDelayed({
-                UtilMiscs.downloadImg(
-                    requireContext(),
-                    binding.quotLayout.root.drawToBitmap(),
-                    param1
-                )
+                    UtilMiscs.downloadImg(
+                        requireContext(),
+                        binding.quotLayout.root.drawToBitmap(),
+                        param1
+                    )
                     binding.quotLayout.qoutWallpaper.visibility = View.GONE
 
                     val model = File(
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                    "${getName(param1?.Category,param1?.id)}.jpg"
-                )
-                val intent = Intent(Intent.ACTION_SEND)
-                intent.type = "image/*"
-                intent.putExtra(
-                    Intent.EXTRA_STREAM, FileProvider.getUriForFile(
-                        requireContext(),
-                        BuildConfig.APPLICATION_ID + ".provider",
-                        model
+                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                        "${getName(param1?.Category, param1?.id)}.jpg"
                     )
-                )
-                intent.setPackage("com.facebook.katana") // Specify Instagram's package name
+                    val intent = Intent(Intent.ACTION_SEND)
+                    intent.type = "image/*"
+                    intent.putExtra(
+                        Intent.EXTRA_STREAM, FileProvider.getUriForFile(
+                            requireContext(),
+                            BuildConfig.APPLICATION_ID + ".provider",
+                            model
+                        )
+                    )
+                    intent.setPackage("com.facebook.katana") // Specify Instagram's package name
 
-                try {
-                    startActivity(intent)
-                } catch (e: ActivityNotFoundException) {
-                    // Instagram not installed on the device
-                    Toast.makeText(context, "Facebook is not installed", Toast.LENGTH_SHORT).show()
-                }
+                    try {
+                        startActivity(intent)
+                    } catch (e: ActivityNotFoundException) {
+                        // Instagram not installed on the device
+                        Toast.makeText(context, "Facebook is not installed", Toast.LENGTH_SHORT)
+                            .show()
+                    }
                 }, 100)
             }
             binding.bottomSheetQualities.btnGreen.setOnClickListener {
@@ -367,7 +375,7 @@ class FullScreenQuoteFragment : Fragment() {
                     val model =
                         File(
                             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                            "${getName(param1?.Category,param1?.id)}.jpg"
+                            "${getName(param1?.Category, param1?.id)}.jpg"
                         )
                     UtilMiscs.onShare(requireContext(), model)
                 }, 100)
@@ -375,34 +383,35 @@ class FullScreenQuoteFragment : Fragment() {
             binding.bottomSheetQualities.btnSparrow.setOnClickListener {
                 binding.quotLayout.qoutWallpaper.visibility = View.VISIBLE
                 Handler(Looper.getMainLooper()).postDelayed({
-                UtilMiscs.downloadImg(
-                    requireContext(),
-                    binding.quotLayout.root.drawToBitmap(),
-                    param1
-                )
+                    UtilMiscs.downloadImg(
+                        requireContext(),
+                        binding.quotLayout.root.drawToBitmap(),
+                        param1
+                    )
                     binding.quotLayout.qoutWallpaper.visibility = View.GONE
 
                     val model = File(
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                    "${getName(param1?.Category,param1?.id)}.jpg"
-                )
-                val intent = Intent(Intent.ACTION_SEND)
-                intent.type = "image/*"
-                intent.putExtra(
-                    Intent.EXTRA_STREAM, FileProvider.getUriForFile(
-                        requireContext(),
-                        BuildConfig.APPLICATION_ID + ".provider",
-                        model
+                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                        "${getName(param1?.Category, param1?.id)}.jpg"
                     )
-                )
-                intent.setPackage("com.twitter.android") // Specify Instagram's package name
+                    val intent = Intent(Intent.ACTION_SEND)
+                    intent.type = "image/*"
+                    intent.putExtra(
+                        Intent.EXTRA_STREAM, FileProvider.getUriForFile(
+                            requireContext(),
+                            BuildConfig.APPLICATION_ID + ".provider",
+                            model
+                        )
+                    )
+                    intent.setPackage("com.twitter.android") // Specify Instagram's package name
 
-                try {
-                    startActivity(intent)
-                } catch (e: ActivityNotFoundException) {
-                    // Instagram not installed on the device
-                    Toast.makeText(context, "Twitter is not installed", Toast.LENGTH_SHORT).show()
-                }
+                    try {
+                        startActivity(intent)
+                    } catch (e: ActivityNotFoundException) {
+                        // Instagram not installed on the device
+                        Toast.makeText(context, "Twitter is not installed", Toast.LENGTH_SHORT)
+                            .show()
+                    }
                 }, 100)
             }
 
@@ -416,12 +425,10 @@ class FullScreenQuoteFragment : Fragment() {
     }
 
 
-
-
-    private fun updateUi(){
+    private fun updateUi() {
         binding.constraintLayoutOptions.visibility = View.VISIBLE
-        binding.btnFullScreenClose.visibility = View.VISIBLE
-        if (param1?.isFav==1){
+//        binding.btnFullScreenClose.visibility = View.VISIBLE
+        if (param1?.isFav == 1) {
             binding.btnFav.setImageDrawable(
                 ResourcesCompat.getDrawable(
                     requireActivity().resources,
@@ -429,9 +436,14 @@ class FullScreenQuoteFragment : Fragment() {
                     requireContext().theme
                 )
             )
-            binding.btnFav.imageTintList= ColorStateList.valueOf(ResourcesCompat.getColor(resources,R.color.clr_blue,requireContext().theme))
-        }
-        else{
+            binding.btnFav.imageTintList = ColorStateList.valueOf(
+                ResourcesCompat.getColor(
+                    resources,
+                    R.color.clr_blue,
+                    requireContext().theme
+                )
+            )
+        } else {
             binding.btnFav.setImageDrawable(
                 ResourcesCompat.getDrawable(
                     requireActivity().resources,
@@ -439,7 +451,13 @@ class FullScreenQuoteFragment : Fragment() {
                     requireContext().theme
                 )
             )
-            binding.btnFav.imageTintList= ColorStateList.valueOf(ResourcesCompat.getColor(resources,R.color.white,requireContext().theme))
+            binding.btnFav.imageTintList = ColorStateList.valueOf(
+                ResourcesCompat.getColor(
+                    resources,
+                    R.color.white,
+                    requireContext().theme
+                )
+            )
         }
     }
 
@@ -447,6 +465,7 @@ class FullScreenQuoteFragment : Fragment() {
         super.onResume()
         updateUi()
     }
+
     companion object {
         @JvmStatic
         fun newInstance(param1: QuotModel?, position: Int) =

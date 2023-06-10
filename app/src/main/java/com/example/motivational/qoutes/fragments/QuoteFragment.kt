@@ -92,7 +92,7 @@ class QuoteFragment : Fragment() {
         if (param1 == null) {
             binding.mView.visibility = View.GONE
             binding.adFrameLayout.visibility = View.VISIBLE
-            NativeAd.showPreFetch(
+            NativeAd.showNativeAd(
                 requireContext(),
                 Ads.inBetweenQuotesNativeAm,
                 binding.adFrameLayout,

@@ -1,6 +1,5 @@
 package com.example.motivational.qoutes.activities
 
-import android.app.ProgressDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -42,7 +41,7 @@ class NewQuoteStudioActivity : AppCompatActivity(), InterfaceMisClick {
         binding = ActivityNewQuoteStudioBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        NativeAd.showPreFetch(this, Ads.quoteStudioNativeAm, binding.adFrameLayout, null)
+        NativeAd.showNativeAd(this, Ads.quoteStudioNativeAm, binding.adFrameLayout, null)
 
         vMdl = QuotViewModel(application)
         cat = intent.getStringExtra("cat") ?: ""

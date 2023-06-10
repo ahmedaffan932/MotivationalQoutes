@@ -5,44 +5,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/clr_dark_grey">
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/qoutWallpaper"
+
+    <FrameLayout
+        android:id="@+id/bannerTop"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/rp1"
-        android:layout_marginBottom="@dimen/_6sdp"
-        app:layout_constraintBottom_toTopOf="@+id/adFrameLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.8sdp" />
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/quotes_view_pager"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:layout_marginBottom="@dimen/_6sdp"
-        app:layout_constraintBottom_toTopOf="@+id/adFrameLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/toolpar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_50sdp"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/_32sdp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/bannerTop">
 
         <ImageView
             android:id="@+id/btnBack"
             android:layout_width="@dimen/_36sdp"
             android:layout_height="@dimen/_36sdp"
-            android:src="@drawable/ic_back"
             android:background="@drawable/bg_transparent_ripple_circle"
             android:padding="@dimen/_6sdp"
-            android:layout_margin="@dimen/_6sdp"
+            android:src="@drawable/ic_back"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -60,13 +45,96 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-    <FrameLayout
-        android:id="@+id/adFrameLayout"
+
+    <ImageView
+        android:id="@+id/qoutWallpaper"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/_6sdp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/rp1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bannerTop" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/quotes_view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/_6sdp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/clAd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bannerTop" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clAd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <FrameLayout
+            android:id="@+id/adFrameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adViewOne"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="50dp"
+            app:adUnitId="ca-app-pub-6814505709397727/9252959204"
+            app:adSize="BANNER"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adViewTwo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="50dp"
+            app:adUnitId="ca-app-pub-6814505709397727/7061113975"
+            app:adSize="BANNER"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adViewThree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="50dp"
+            app:adUnitId="ca-app-pub-6814505709397727/2687550856"
+            app:adSize="BANNER"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/emptyLottie"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_100sdp"
+        android:layout_marginHorizontal="24dp"
+        app:layout_constraintBottom_toTopOf="@id/emptyFlag"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"
+        app:lottie_autoPlay="true"
+        app:lottie_fileName="no_favorite.json"
+        app:lottie_loop="true" />
+
     <TextView
         android:id="@+id/emptyFlag"
         android:layout_width="wrap_content"
@@ -77,13 +145,13 @@
         android:shadowColor="@color/black"
         android:shadowDx="3"
         android:shadowDy="3"
-        android:textStyle="bold"
         android:shadowRadius="6"
-        android:visibility="gone"
-        android:text="Empty"
+        android:text="Sorry! You have no favorite Quote."
         android:textAlignment="center"
         android:textColor="@color/clr_txt1"
-        android:textSize="28sp"
+        android:textSize="@dimen/_12sdp"
+        android:textStyle="bold"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
