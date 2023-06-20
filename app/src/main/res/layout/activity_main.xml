@@ -70,10 +70,11 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp">
+                android:layout_height="0dp"
+                android:animateLayoutChanges="true">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constraintLayout2"
+                    android:id="@+id/clViewPager"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/_10sdp"
@@ -121,7 +122,7 @@
                     android:id="@+id/adFrameLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/constraintLayout2"
+                    app:layout_constraintTop_toBottomOf="@id/clViewPager"
                     android:layout_marginHorizontal="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_4sdp"
                     android:background="@drawable/bg_simple_btn_ripple"
@@ -136,8 +137,8 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/_10sdp"
                     app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginVertical="@dimen/_10sdp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/adFrameLayout">
 
@@ -145,13 +146,57 @@
                         android:id="@+id/textView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/_10sdp"
-                        android:text="Popular Categories"
-                        android:textColor="@color/clr_txt1"
                         android:textSize="16sp"
                         android:textStyle="bold"
+                        android:textColor="@color/clr_txt1"
+                        android:text="@string/categories"
+                        app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:layout_marginHorizontal="@dimen/_10sdp"
+                        app:layout_constraintBottom_toBottomOf="@id/clSearch" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/clSearch"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/_10sdp"
+                        android:background="@drawable/bg_simple_btn_ripple"
+                        android:backgroundTint="@color/grey_800"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/textView">
+
+                        <EditText
+                            android:id="@+id/etSearch"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:hint="Search Category"
+                            android:textColor="@color/white"
+                            android:maxLines="1"
+                            android:textStyle="bold"
+                            android:imeOptions="actionDone"
+                            android:textSize="13sp"
+                            android:textCursorDrawable="@null"
+                            android:textColorHint="@color/grey_300"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:layout_marginHorizontal="@dimen/_4sdp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/ivSearch"
+                            android:background="#00ff00ff"/>
+
+
+                        <ImageView
+                            android:id="@+id/ivSearch"
+                            android:layout_width="@dimen/_32sdp"
+                            android:layout_height="@dimen/_24sdp"
+                            android:padding="@dimen/_4sdp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:src="@drawable/ic_round_search_24" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyclerPopularCats"

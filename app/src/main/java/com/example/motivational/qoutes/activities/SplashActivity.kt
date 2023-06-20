@@ -12,13 +12,19 @@ import com.example.motivational.qoutes.ads.Ads
 import com.example.motivational.qoutes.ads.BannerAd
 import com.example.motivational.qoutes.ads.InterstitialAds
 import com.example.motivational.qoutes.ads.NativeAd
+import com.example.motivational.qoutes.database.QuotModel
 import com.example.motivational.qoutes.databinding.ActivitySplashBinding
+import com.example.motivational.qoutes.utils.CustomDialog
 import com.example.motivational.qoutes.utils.UtilLists
+import com.example.motivational.qoutes.utils.UtilMiscs
 import com.example.motivational.qoutes.utils.UtilMiscs.setupRoomDb
 import com.example.motivational.qoutes.utils.UtilMiscs.unZipFolder
 import com.example.motivational.qoutes.utils.UtilSharedPerefs
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
+import com.google.gson.Gson
 
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {
@@ -29,6 +35,12 @@ class SplashActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         loadAds()
+        if (UtilSharedPerefs.getIsFirstTime(this)) {
+            Firebase.analytics.logEvent("FirstTimeUser", null)
+        } else {
+            Firebase.analytics.logEvent("RetainedUser", null)
+            UtilSharedPerefs.setIsFirstTime(this, false)
+        }
 
         val quotOfSp = UtilSharedPerefs.getQuote(this)
         Log.d(
@@ -46,26 +58,53 @@ class SplashActivity : AppCompatActivity() {
         setupRemoteConfig()
         unZipFolder()
         setupRoomDb(application)
-//
-//
-        object : CountDownTimer(6000, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                // This method is called every second during the countdown
-                // You can update UI or perform any task here if needed
-            }
 
-            override fun onFinish() {
-                // This method is called after the countdown finishes
-                startActivity(Intent(this@SplashActivity, MainActivity::class.java))
-                finish()
-            }
-        }.start()
+        if (intent.getStringExtra("quote") != null) {
+            val myLoader: CustomDialog = UtilMiscs.showProgressD(this)
+
+            object : CountDownTimer(3000, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    // This method is called every second during the countdown
+                    // You can update UI or perform any task here if needed
+                }
+
+                override fun onFinish() {
+                    // This method is called after the countdown finishes
+                    myLoader.dismiss()
+                    val quoteExtra = intent.getStringExtra("quote")
+                    val objQuote = Gson().fromJson(quoteExtra, QuotModel::class.java)
+                    Log.d("logKeyQuoteSplash", objQuote.Quote)
+                    Firebase.analytics.logEvent("UserFromNotification", null)
+
+                    val intent = Intent(this@SplashActivity, FullViewActivity::class.java)
+                    intent.putExtra("quote", quoteExtra)
+                    startActivity(intent)
+                    finish()
+                }
+            }.start()
+        } else {
+            object : CountDownTimer(6000, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    // This method is called every second during the countdown
+                    // You can update UI or perform any task here if needed
+                }
+
+                override fun onFinish() {
+                    // This method is called after the countdown finishes
+                    Firebase.analytics.logEvent("UserFromSplash", null)
+                    startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+                    finish()
+                }
+            }.start()
+        }
     }
 
 
     private fun setupRemoteConfig() {
         val remoteConfig = FirebaseRemoteConfig.getInstance()
-        remoteConfig.setConfigSettingsAsync(FirebaseRemoteConfigSettings.Builder().setMinimumFetchIntervalInSeconds(1).build())
+        remoteConfig.setConfigSettingsAsync(
+            FirebaseRemoteConfigSettings.Builder().setMinimumFetchIntervalInSeconds(1).build()
+        )
         remoteConfig.fetchAndActivate().addOnCompleteListener(this) { task ->
 
             if (task.isSuccessful && !BuildConfig.DEBUG) {

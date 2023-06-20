@@ -30,9 +30,6 @@
             android:name=".activities.FullViewActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.NewQuoteStudioActivity"
-            android:exported="false" />
-        <activity
             android:name=".activities.SettingsActivity"
             android:exported="false" />
 

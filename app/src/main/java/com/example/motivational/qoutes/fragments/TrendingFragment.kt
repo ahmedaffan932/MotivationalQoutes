@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.motivational.qoutes.activities.FullViewActivity
 import com.example.motivational.qoutes.activities.MainActivity
-import com.example.motivational.qoutes.activities.NewQuoteStudioActivity
 import com.example.motivational.qoutes.database.QuotModel
 import com.example.motivational.qoutes.databinding.FragmentTrendingBinding
 import com.example.motivational.qoutes.interfaces.InterfaceUserInterfere
@@ -43,25 +42,16 @@ class TrendingFragment : Fragment() {
             infc.onInterfere()
             return@setOnTouchListener false
         }
+
         binding.quotLayout.qoutData.text = param1?.Quote
         binding.quotLayout.qoutWallpaper.setImageResource(UtilLists.wallpapers[param1!!.wall])
         binding.root.setOnClickListener {
-//            if (UtilSharedPerefs.getIsFullQuote(requireContext())){
             startActivity(
                 Intent(
                     requireActivity(),
                     FullViewActivity::class.java
                 ).putExtra("cat", "")
             )
-//            }
-//            else{
-//                startActivity(
-//                    Intent(
-//                        requireActivity(),
-//                        NewQuoteStudioActivity::class.java
-//                    ).putExtra("cat", "")
-//                )
-//            }
 
         }
 

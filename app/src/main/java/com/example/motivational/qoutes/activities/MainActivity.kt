@@ -3,6 +3,7 @@ package com.example.motivational.qoutes.activities
 import android.Manifest
 import android.app.Dialog
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -10,9 +11,15 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
 import android.view.Window
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import android.widget.TextView.OnEditorActionListener
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -24,6 +31,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.motivational.qoutes.R
 import com.example.motivational.qoutes.adapters.AdapterCategories
 import com.example.motivational.qoutes.ads.*
+import com.example.motivational.qoutes.database.Category
 import com.example.motivational.qoutes.database.QuotModel
 import com.example.motivational.qoutes.database.QuotViewModel
 import com.example.motivational.qoutes.databinding.ActivityMainBinding
@@ -33,12 +41,15 @@ import com.example.motivational.qoutes.fragments.TrendingFragment
 import com.example.motivational.qoutes.interfaces.InterfaceCatClick
 import com.example.motivational.qoutes.interfaces.InterfaceUserInterfere
 import com.example.motivational.qoutes.utils.NotificationScheduler
+import com.example.motivational.qoutes.utils.UtilLists
 import com.example.motivational.qoutes.utils.UtilMiscs
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
+
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
@@ -52,7 +63,50 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setCategoriesRecyclerView()
+
+        KeyboardVisibilityEvent.setEventListener(
+            this
+        ) { isOpen ->
+            if (isOpen) {
+                binding.clViewPager.visibility = View.GONE
+            } else {
+                binding.clViewPager.visibility = View.VISIBLE
+            }
+        }
+
+        binding.etSearch.setOnEditorActionListener(
+            OnEditorActionListener { v, actionId, event ->
+                if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE || (event.action == KeyEvent.ACTION_DOWN && event.keyCode == KeyEvent.KEYCODE_ENTER)
+                ) {
+                    // Check if no view has focus:
+                    val view = this.currentFocus
+                    if (view != null) {
+                        val imm: InputMethodManager =
+                            getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        imm.hideSoftInputFromWindow(view.windowToken, 0)
+                    }
+                    return@OnEditorActionListener true
+                }
+                false
+            })
         NotificationScheduler().scheduleNotification(application)
+
+        binding.etSearch.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {}
+            override fun beforeTextChanged(
+                s: CharSequence?, start: Int,
+                count: Int, after: Int
+            ) {
+            }
+
+            override fun onTextChanged(
+                s: CharSequence?, start: Int,
+                before: Int, count: Int
+            ) {
+                setCategoriesRecyclerView(binding.etSearch.text.toString())
+            }
+        })
 
         InterstitialAds.showInterstitialAdmob(
             this,
@@ -66,8 +120,8 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
                         requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 1)
                     }
                 }
-
-            })
+            }
+        )
 
         BannerAd.loadCollapsibleBanner(
             Ads.dashboardCollapsibleAm,
@@ -114,10 +168,7 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
                 ) { tab, position ->
                 }.attach()
             }
-
-
         }
-
 
         binding.btnMenu.setOnClickListener {
             if (binding.drawerLayout.isDrawerVisible(
@@ -202,71 +253,17 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
 
         binding.btnFav.setOnClickListener {
             binding.drawerLayout.closeDrawers()
-//            if (UtilSharedPerefs.getIsFullQuote(this)) {
             startActivity(
                 Intent(this@MainActivity, FullViewActivity::class.java).putExtra(
                     "cat",
                     "MFAV"
                 ).putExtra("pos", 0)
             )
-//            } else {
-//                startActivity(
-//                    Intent(this@MainActivity, NewQuoteStudioActivity::class.java).putExtra(
-//                        "cat",
-//                        "MFAV"
-//                    ).putExtra("pos", 0)
-//                )
-//            }
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
-//        binding.btnSettings.setOnClickListener {
-//            startActivity(Intent(this,SettingsActivity::class.java))
-//        }
 
-//        val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-//        if (UtilSharedPerefs.getDate(this)!=currentDate){
-//            UtilSharedPerefs.setDate(this,currentDate)
-//            try {
-//                UtilSharedPerefs.setQuote(this,vMdl.getRandomObject().Quote)
-//            }
-//            catch (exc:Exception){
-//                exc.printStackTrace()
-//            }
-//        }
-
-//        binding.qoutOfDay.qoutData.text=UtilSharedPerefs.getQuote(this)
-//        binding.qoutOfDay.qoutWallpaper.setImageResource(UtilLists.getRandomWallpaper())
-//        binding.qoutOfDay.root.setOnClickListener {
-//            startActivity(
-//                Intent(this@MainActivity, NewQuoteStudioActivity::class.java).putExtra(
-//                    "cat",
-//                    "QOD"
-//                )
-//            )
-//        }
-
-
-//        binding.recyclerPopularCats.isNestedScrollingEnabled = false
         binding.recyclerPopularCats.layoutManager = GridLayoutManager(this, 2)
-        binding.recyclerPopularCats.adapter = AdapterCategories(this, object : InterfaceCatClick {
-            override fun onClick(catName: String) {
-//                if (UtilSharedPerefs.getIsFullQuote(this@MainActivity)) {
-                startActivity(
-                    Intent(
-                        this@MainActivity,
-                        FullViewActivity::class.java
-                    ).putExtra("cat", catName).putExtra("pos", 0)
-                )
-//                } else {
-//                    startActivity(
-//                        Intent(
-//                            this@MainActivity,
-//                            NewQuoteStudioActivity::class.java
-//                        ).putExtra("cat", catName).putExtra("pos", 0)
-//                    )
-//                }
-            }
-        })
+
 
         //kerosil spinner
         kerosilSpinnerHandler = Handler(mainLooper)
@@ -368,6 +365,28 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
                 finishAffinity()
             }
         }
+    }
+
+    private fun setCategoriesRecyclerView(search: String = "") {
+        val arrCategories = ArrayList<Category>()
+        for (i in 0 until UtilLists.cats.size) {
+            if (UtilLists.cats[i].contains(search)) {
+                arrCategories.add(Category(UtilLists.cats[i], UtilLists.catWallpapers[i]))
+            }
+        }
+
+        binding.recyclerPopularCats.adapter =
+            AdapterCategories(this, arrCategories, object : InterfaceCatClick {
+                override fun onClick(catName: String) {
+                    startActivity(
+                        Intent(
+                            this@MainActivity,
+                            FullViewActivity::class.java
+                        ).putExtra("cat", catName).putExtra("pos", 0)
+                    )
+                }
+            })
+
     }
 
 }

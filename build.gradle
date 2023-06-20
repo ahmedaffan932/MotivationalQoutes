@@ -3,6 +3,8 @@ buildscript {
         classpath 'com.google.gms:google-services:4.3.15'
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.5'
         classpath "com.google.dagger:hilt-android-gradle-plugin:2.44"
+        classpath 'com.android.tools.build:gradle:3.6.3'  //Minimum supported Gradle version is 4.6.
+//        classpath 'com.android.tools.build:gradle:3.0.0'
     }
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {

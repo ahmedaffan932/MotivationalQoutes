@@ -3,13 +3,16 @@ package com.example.motivational.qoutes.ads
 import com.example.motivational.qoutes.BuildConfig
 
 object Ads {
-    var quoteStudioBannerAm: String = ""
-    var dashboardCollapsibleAm: String = ""
-    var quoteStudioCollapsingBannerAm: String = ""
+    var quoteStudioBannerAm: String = "am"
+    var dashboardCollapsibleAm: String = "am"
+    var quoteStudioCollapsingBannerAm: String = "am"
 
-    var bannerAdIdOne = if (BuildConfig.DEBUG) "ca-app-pub-3940256099942544/6300978111" else "ca-app-pub-6814505709397727/7172277692"
-    var bannerAdIdTwo = if (BuildConfig.DEBUG) "ca-app-pub-3940256099942544/6300978111" else "ca-app-pub-6814505709397727/6295090542"
-    var bannerAdIdThree = if (BuildConfig.DEBUG) "ca-app-pub-3940256099942544/6300978111" else "ca-app-pub-6814505709397727/3312907822"
+    var bannerAdIdOne =
+        if (BuildConfig.DEBUG) "ca-app-pub-3940256099942544/6300978111" else "ca-app-pub-6814505709397727/7172277692"
+    var bannerAdIdTwo =
+        if (BuildConfig.DEBUG) "ca-app-pub-3940256099942544/6300978111" else "ca-app-pub-6814505709397727/6295090542"
+    var bannerAdIdThree =
+        if (BuildConfig.DEBUG) "ca-app-pub-3940256099942544/6300978111" else "ca-app-pub-6814505709397727/3312907822"
 
     var inBetweenQuotesNativeAdPosition = 0
     var inBetweenQuotesNativeAdStartingIndex = 2
@@ -54,7 +57,7 @@ object Ads {
         "ca-app-pub-6814505709397727/3474018916"
     }
 
-    var appOpenAdIdThree  = if (BuildConfig.DEBUG) {
+    var appOpenAdIdThree = if (BuildConfig.DEBUG) {
         "ca-app-pub-3940256099942544/3419835294"
     } else {
         "ca-app-pub-6814505709397727/7110011599"

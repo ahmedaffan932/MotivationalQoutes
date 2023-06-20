@@ -22,6 +22,8 @@ import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.Window
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.core.content.FileProvider
@@ -52,6 +54,14 @@ object UtilMiscs {
     var clip: ClipData?=null
     private var rndmNmbr=0
     var wallpaperInt=0
+
+    fun zoomInView(view: View, context: Context, duration: Int) {
+        view.visibility = View.VISIBLE
+        val a: Animation =
+            AnimationUtils.loadAnimation(context, R.anim.zoom_in)
+        a.duration = duration.toLong()
+        view.startAnimation(a)
+    }
 
 
     fun showProgressD(context: Context):CustomDialog{

@@ -12,7 +12,9 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import com.example.motivational.qoutes.utils.UtilSharedPerefs
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.appopen.AppOpenAd
+import com.google.firebase.FirebaseApp
 import dagger.hilt.android.HiltAndroidApp
+import com.example.motivational.qoutes.fcm.services.FcmFireBaseID
 
 @HiltAndroidApp
 class App : Application(), Application.ActivityLifecycleCallbacks, LifecycleObserver {
@@ -23,6 +25,8 @@ class App : Application(), Application.ActivityLifecycleCallbacks, LifecycleObse
         super.onCreate()
         MobileAds.initialize(this) {}
         registerActivityLifecycleCallbacks(this)
+        FirebaseApp.initializeApp(this)
+        FcmFireBaseID.subscribeToTopic()
 
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
         appOpenAdManager = AppOpenAdManager()

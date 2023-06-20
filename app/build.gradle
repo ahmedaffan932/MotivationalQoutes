@@ -15,8 +15,8 @@ android {
         applicationId "com"
         minSdk 26
         targetSdk 33
-        versionCode 11
-        versionName "1.10"
+        versionCode 14
+        versionName "1.13"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -81,5 +81,11 @@ dependencies {
 
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
     implementation 'androidx.lifecycle:lifecycle-process:2.5.1'
+
+    implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:3.0.0-RC3'
+
+    implementation 'com.google.firebase:firebase-messaging'
+
+    implementation 'com.squareup.picasso:picasso:2.71828'
 
 }

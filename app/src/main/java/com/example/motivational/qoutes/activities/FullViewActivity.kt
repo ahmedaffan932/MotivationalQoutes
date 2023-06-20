@@ -3,6 +3,7 @@ package com.example.motivational.qoutes.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -44,6 +45,7 @@ class FullViewActivity : AppCompatActivity(), InterfaceMisClick {
         if (intent.getStringExtra("quote") != null) {
             val objQuote = Gson().fromJson(intent.getStringExtra("quote"), QuotModel::class.java)
             cat = objQuote.Category
+            Log.d("logKeyQuote", objQuote.Quote)
             lstQuot.add(0, objQuote)
         }
 
@@ -71,9 +73,15 @@ class FullViewActivity : AppCompatActivity(), InterfaceMisClick {
                 }
             }
         )
-
-        BannerAd.show(Ads.quoteStudioBannerAm, binding.bannerTop)
-
+        if(BannerAd.adView == null){
+            BannerAd.load(this, callBack = object : BannerAd.bannerAdsCallBack{
+                override fun onLoaded() {
+                    BannerAd.show(Ads.quoteStudioBannerAm, binding.bannerTop)
+                }
+            })
+        }else {
+            BannerAd.show(Ads.quoteStudioBannerAm, binding.bannerTop)
+        }
         InterstitialAds.showInterstitialAdmob(
             this,
             this,
@@ -97,6 +105,7 @@ class FullViewActivity : AppCompatActivity(), InterfaceMisClick {
                     }
 
                     if (cat == "MFAV") {
+                        binding.tvHeading.text = "Favourite"
                         CoroutineScope(Dispatchers.IO).launch {
                             for (i in vMdl.readAllFav()) {
                                 lstQuot.add(i)
@@ -131,6 +140,7 @@ class FullViewActivity : AppCompatActivity(), InterfaceMisClick {
                         }
 
                     } else {
+                        binding.tvHeading.text = cat
                         CoroutineScope(Dispatchers.IO).launch {
                             for (i in vMdl.readByCat(cat)) {
                                 lstQuot.add(i)
@@ -172,7 +182,6 @@ class FullViewActivity : AppCompatActivity(), InterfaceMisClick {
             }
         )
 
-
         binding.btnBack.setOnClickListener {
             onBackPressed()
         }
@@ -204,11 +213,11 @@ class FullViewActivity : AppCompatActivity(), InterfaceMisClick {
     }
 
     override fun onMisTouch(model: QuotModel?): Boolean {
-        if (binding.quotesViewPager.currentItem == lstQuot.indexOf(model)) {
-            return false
+        return if (binding.quotesViewPager.currentItem == lstQuot.indexOf(model)) {
+            false
         } else {
             binding.quotesViewPager.currentItem = lstQuot.indexOf(model)
-            return true
+            true
         }
     }
 

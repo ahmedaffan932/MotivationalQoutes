@@ -1,5 +1,6 @@
 package com.example.motivational.qoutes.fragments
 
+import android.annotation.SuppressLint
 import android.app.WallpaperManager
 import android.content.ActivityNotFoundException
 import android.content.Intent
@@ -22,19 +23,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.motivational.qoutes.BuildConfig
 import com.example.motivational.qoutes.R
-import com.example.motivational.qoutes.activities.NewQuoteStudioActivity
 import com.example.motivational.qoutes.ads.Ads
 import com.example.motivational.qoutes.ads.NativeAd
 import com.example.motivational.qoutes.database.QuotModel
 import com.example.motivational.qoutes.database.QuotViewModel
 import com.example.motivational.qoutes.databinding.FragmentFullScreenQuoteBinding
 import com.example.motivational.qoutes.interfaces.InterfaceMisClick
-import com.example.motivational.qoutes.utils.CustomDialog
-import com.example.motivational.qoutes.utils.UtilLists
-import com.example.motivational.qoutes.utils.UtilMiscs
+import com.example.motivational.qoutes.utils.*
 import com.example.motivational.qoutes.utils.UtilMiscs.getName
 import com.example.motivational.qoutes.utils.UtilMiscs.wallpaperInt
-import com.example.motivational.qoutes.utils.UtilSharedPerefs
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -78,6 +75,7 @@ class FullScreenQuoteFragment : Fragment() {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility", "SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -89,6 +87,8 @@ class FullScreenQuoteFragment : Fragment() {
             peekHeight = 0
             this.state = BottomSheetBehavior.STATE_COLLAPSED
         }
+
+
         BottomSheetBehavior.from(binding.bottomSheetQualities.frameLayout)
             .addBottomSheetCallback(object :
                 BottomSheetBehavior.BottomSheetCallback() {
@@ -125,6 +125,7 @@ class FullScreenQuoteFragment : Fragment() {
                 binding.quotLayout.qoutData.text = "Either you run the day or the day runs you"
             }
             binding.quotLayout.qoutWallpaper.setImageResource(UtilLists.wallpapers[wallpaperInt])
+
             updateUi()
             btnClicks()
 
@@ -154,16 +155,8 @@ class FullScreenQuoteFragment : Fragment() {
     }
 
     private fun btnClicks() {
-//        binding.btnFullScreenClose.setOnClickListener {
-//            UtilSharedPerefs.setIsFullQuote(requireContext(), false)
-//            startActivity(
-//                Intent(requireActivity(), NewQuoteStudioActivity::class.java).putExtra(
-//                    "cat",
-//                    param1?.Category
-//                ).putExtra("pos", param2 ?: 0)
-//            )
-//            activity?.finish()
-//        }
+        binding.btnFullScreenClose.setOnClickListener {
+        }
         binding.btnSpk.setOnClickListener {
             textToSpeechEngine.speak(param1?.Quote, TextToSpeech.QUEUE_FLUSH, null, "tts1")
         }
@@ -205,7 +198,11 @@ class FullScreenQuoteFragment : Fragment() {
                             .setBitmap(binding.quotLayout.root.drawToBitmap())
                         requireActivity().runOnUiThread {
                             binding.quotLayout.qoutWallpaper.visibility = View.GONE
-                            Toast.makeText(requireContext(), "Wallpaper Updated!", Toast.LENGTH_SHORT)
+                            Toast.makeText(
+                                requireContext(),
+                                "Wallpaper Updated!",
+                                Toast.LENGTH_SHORT
+                            )
                                 .show()
                             dlg?.dismiss()
                         }

@@ -6,6 +6,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import com.example.motivational.qoutes.BuildConfig
 import com.example.motivational.qoutes.database.QuotViewModel
 import com.google.gson.Gson
 import java.util.*
@@ -23,25 +24,24 @@ class NotificationScheduler {
         calendar.timeInMillis = milliseconds
 
         val hour = calendar[Calendar.HOUR_OF_DAY]
+        val min = calendar[Calendar.MINUTE]
 
         // Set the notification 1 hour after opening the app.
-        val notificationTime1 = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, hour)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
+        val notificationTime1 = if (BuildConfig.DEBUG) {
+            Calendar.getInstance().apply {
+                set(Calendar.HOUR_OF_DAY, hour)
+                set(Calendar.MINUTE, min)
+                set(Calendar.SECOND, 0)
+            }
+        } else {
+            Calendar.getInstance().apply {
+                set(Calendar.HOUR_OF_DAY, hour + 1)
+                set(Calendar.MINUTE, 0)
+                set(Calendar.SECOND, 0)
+            }
         }
 
-        val obj1 = Gson().toJson(QuotViewModel(application).getRandomObject())
-
-        Log.d("logKey", "$obj1 obj1")
-        // Create an intent for the BroadcastReceiver
         val intent1 = Intent(application, NotificationReceiver::class.java)
-        try {
-            intent1.putExtra("quote", obj1)
-        } catch (ec: Exception) {
-            Log.e("logKey", "Crashed")
-            ec.printStackTrace()
-        }
 
         val pendingIntent1 = PendingIntent.getBroadcast(
             application,

@@ -5,4 +5,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="handClickString">Tap on screen to change the wallpaer</string>
     <string name="slideString">Slide down or up for other quotes</string>
+    <string name="categories">Categories</string>
+    <string name="ad">Ad</string>
 </resources>

@@ -23,11 +23,11 @@ object BannerAd {
         fun onLoaded(){}
     }
 
-    private var adView: AdView? = null
+    var adView: AdView? = null
 
     private var isLoaded = false
 
-    fun load(context: Activity, adId: String = Ads.bannerAdIdOne) {
+    fun load(context: Activity, adId: String = Ads.bannerAdIdOne, callBack: bannerAdsCallBack? = null) {
         adView = AdView(context)
         adView?.adUnitId = adId
         val adSize = getAdSize(context)
@@ -38,6 +38,7 @@ object BannerAd {
         adView!!.adListener = object : AdListener() {
             override fun onAdLoaded() {
                 isLoaded = true
+                callBack?.onLoaded()
             }
 
             override fun onAdFailedToLoad(adError: LoadAdError) {
