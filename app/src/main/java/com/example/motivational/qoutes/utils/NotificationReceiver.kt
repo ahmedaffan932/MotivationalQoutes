@@ -1,9 +1,7 @@
 package com.example.motivational.qoutes.utils
 
-import android.app.Application
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.annotation.SuppressLint
+import android.app.*
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -14,7 +12,6 @@ import androidx.core.app.NotificationCompat
 import com.example.motivational.qoutes.BuildConfig
 import com.example.motivational.qoutes.R
 import com.example.motivational.qoutes.activities.SplashActivity
-import com.example.motivational.qoutes.database.QuotModel
 import com.example.motivational.qoutes.database.QuotViewModel
 import com.google.gson.Gson
 
@@ -36,8 +33,8 @@ class NotificationReceiver : BroadcastReceiver() {
         Log.d("logKeyQuoteReceiver", objQuote.Quote)
         val intent = Intent(context, SplashActivity::class.java)
         intent.putExtra("quote", Gson().toJson(objQuote))
-        customNotification(objQuote.Category, objQuote.Quote, intent, 123456)
 
+        customNotification(objQuote.Category, objQuote.Quote, intent, 123456)
     }
 
     private fun createNotificationChannel(context: Context) {
@@ -53,6 +50,7 @@ class NotificationReceiver : BroadcastReceiver() {
     }
 
     //custom view
+    @SuppressLint("RemoteViewLayout")
     private fun customNotification(
         category: String, quote: String, intent: Intent, notificationID: Int
     ) {
@@ -66,11 +64,26 @@ class NotificationReceiver : BroadcastReceiver() {
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
 
+        val uiModeManager = mContext.getSystemService(Context.UI_MODE_SERVICE) as UiModeManager
+        val uiModeNight = uiModeManager.nightMode
+
+        // Check if system UI is in night mode
         val remoteViews =
-            RemoteViews(BuildConfig.APPLICATION_ID, R.layout.custom_notification_layout)
+        if (uiModeNight == UiModeManager.MODE_NIGHT_YES) {
+            RemoteViews(BuildConfig.APPLICATION_ID, R.layout.custom_notification_layout_dark)
+        } else {
+            RemoteViews(BuildConfig.APPLICATION_ID, R.layout.custom_notification_layout_light)
+        }
 
         val remoteViewSmall =
-            RemoteViews(BuildConfig.APPLICATION_ID, R.layout.small_custom_notification_layout)
+            if (uiModeNight == UiModeManager.MODE_NIGHT_YES) {
+                RemoteViews(BuildConfig.APPLICATION_ID, R.layout.small_custom_notification_layout_dark)
+            } else {
+                RemoteViews(BuildConfig.APPLICATION_ID, R.layout.small_custom_notification_layout_light)
+            }
+
+
+
 
         remoteViews.setTextViewText(
             R.id.tv_title,

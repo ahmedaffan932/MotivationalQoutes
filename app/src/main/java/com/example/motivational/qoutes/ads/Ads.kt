@@ -3,9 +3,9 @@ package com.example.motivational.qoutes.ads
 import com.example.motivational.qoutes.BuildConfig
 
 object Ads {
-    var quoteStudioBannerAm: String = "am"
+    var quoteStudioBannerAm: String = ""
     var dashboardCollapsibleAm: String = "am"
-    var quoteStudioCollapsingBannerAm: String = "am"
+    var quoteStudioCollapsingBannerAm: String = ""
 
     var bannerAdIdOne =
         if (BuildConfig.DEBUG) "ca-app-pub-3940256099942544/6300978111" else "ca-app-pub-6814505709397727/7172277692"
@@ -17,12 +17,12 @@ object Ads {
     var inBetweenQuotesNativeAdPosition = 0
     var inBetweenQuotesNativeAdStartingIndex = 2
     var inBetweenQuotesNativeAm = "am_hctr"
-    var proLifeTimeKey = "android.test.purchased"
-    var proMonthlyKey = "android.test.purchased"
-    var proLifeTimePrice = ""
     var proMonthlyPrice = ""
-
+    var proLifeTimePrice = ""
     const val admob = "am"
+
+    var proMonthlyKey = "android.test.purchased"
+    var proLifeTimeKey = "android.test.purchased"
     const val admobSmallHctr = "am_small_hctr"
     const val admobHctr = "am_hctr"
     const val admobLctr = "am_lctr"
@@ -68,7 +68,7 @@ object Ads {
     var backSettingIntAm = "am"
     var backQuoteStudioIntAm = "am"
     var dashboardIntAm = "am"
-    var dashboardNativeAm = "am_small_hctr"
+    var dashboardNativeAm = "am"
     var quoteStudioNativeAm = "am"
 
 }

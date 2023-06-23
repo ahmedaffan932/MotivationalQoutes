@@ -47,6 +47,18 @@
                 app:layout_constraintStart_toEndOf="@+id/btnMenu" />
 
             <ImageView
+                android:id="@+id/btnFav"
+                android:layout_width="@dimen/_22sdp"
+                android:layout_height="@dimen/_22sdp"
+                android:layout_margin="@dimen/_10sdp"
+                android:background="@drawable/bg_transparent_ripple_circle"
+                android:padding="@dimen/_1sdp"
+                android:src="@drawable/ic_baseline_favorite_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/btnPro"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
                 android:id="@+id/btnPro"
                 android:layout_width="@dimen/_32sdp"
                 android:layout_height="@dimen/_32sdp"
@@ -63,8 +75,8 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginBottom="@dimen/_6sdp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="@dimen/_2sdp"
+            app:layout_constraintBottom_toTopOf="@id/clCollapsingBanner"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolpar">
 
@@ -297,39 +309,29 @@
                 app:layout_constraintStart_toStartOf="@+id/shapeableImageView"
                 app:layout_constraintTop_toBottomOf="@+id/shapeableImageView" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/btnFav"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_36sdp"
-                android:layout_margin="@dimen/_28sdp"
-                android:background="@drawable/bg_simple_btn_ripple"
-                android:backgroundTint="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView3">
+<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                android:id="@+id/btnFav"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="@dimen/_36sdp"-->
+<!--                android:layout_margin="@dimen/_28sdp"-->
+<!--                android:background="@drawable/bg_simple_btn_ripple"-->
+<!--                android:backgroundTint="@color/white"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/textView3">-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Favorite"
-                    android:textStyle="bold"
-                    android:textColor="@color/clr_txt2"
-                    android:textSize="16sp"
-                    android:layout_margin="@dimen/_10sdp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-                <ImageView
-                    android:layout_width="@dimen/_22sdp"
-                    android:layout_height="@dimen/_22sdp"
-                    android:layout_margin="@dimen/_10sdp"
-                    android:background="@drawable/bg_transparent_ripple_circle"
-                    android:padding="@dimen/_1sdp"
-                    android:src="@drawable/ic_my_fav"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Favorite"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:textColor="@color/clr_txt2"-->
+<!--                    android:textSize="16sp"-->
+<!--                    android:layout_margin="@dimen/_10sdp"-->
+<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent" />-->
+<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/btnRateUs"
@@ -340,7 +342,7 @@
                 android:background="@drawable/bg_transparent_ripple_square"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnFav">
+                app:layout_constraintTop_toBottomOf="@+id/textView3">
 
                 <ImageView
                     android:id="@+id/txt1"

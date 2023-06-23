@@ -7,17 +7,18 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        >
 
         <com.google.android.gms.ads.nativead.MediaView
             android:id="@+id/ad_media"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_gravity="center_horizontal"
-            app:layout_constraintBottom_toBottomOf="@id/bottom_small_admob"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/guide_vertical"
-            app:layout_constraintTop_toTopOf="@id/details_small_admob" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
             android:id="@+id/details_small_admob"
@@ -40,6 +41,7 @@
                     android:layout_width="@dimen/_32sdp"
                     android:layout_height="@dimen/_32sdp"
                     android:layout_gravity="center_vertical"
+                    android:visibility="gone"
                     android:layout_marginStart="@dimen/_2sdp"
                     android:layout_marginEnd="@dimen/_2sdp" />
 
@@ -47,33 +49,53 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:paddingStart="@dimen/_4sdp">
-
-                    <TextView
-                        android:id="@+id/ad_headline"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:lines="1"
-                        android:singleLine="true"
-                        android:text="This is title"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/_11sdp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/ad_body"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:lines="1"
-                        android:singleLine="true"
-                        android:text="This is ad body area"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/_10sdp" />
+                    android:paddingStart="@dimen/_2sdp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:visibility="invisible">
+                        android:gravity="center">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:background="@drawable/bg_ad"
+                            android:textSize="10sp"
+                            android:paddingVertical="@dimen/_2sdp"
+                            android:paddingHorizontal="@dimen/_4sdp"
+                            android:text="AD"
+                            android:textColor="@color/black" />
+                        <TextView
+                            android:id="@+id/ad_headline"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:lines="1"
+                            android:paddingStart="@dimen/_2sdp"
+                            android:singleLine="true"
+
+                            android:text="This is title"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_9sdp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+
+                    <TextView
+                        android:id="@+id/ad_body"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:lines="2"
+                        android:ellipsize="end"
+                        android:text="This is ad body area"
+                        android:textColor="@color/grey_700"
+                        android:textSize="@dimen/_8sdp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone">
 
                         <TextView
                             android:id="@+id/advertiser_small_admob"
@@ -101,7 +123,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:orientation="horizontal"
-                        android:visibility="invisible">
+                        android:visibility="gone">
 
                         <TextView
                             android:id="@+id/store_small_admob"
@@ -125,53 +147,28 @@
             </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/bottom_small_admob"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingTop="@dimen/_4sdp"
-            android:paddingBottom="@dimen/_2sdp"
-            app:layout_constraintLeft_toRightOf="@id/guide_vertical"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/details_small_admob">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_8sdp"
-                android:layout_marginEnd="@dimen/_8sdp"
-                android:gravity="center"
-                android:paddingStart="@dimen/_6sdp"
-                android:paddingTop="@dimen/_2sdp"
-                android:paddingEnd="@dimen/_6sdp"
-                android:paddingBottom="@dimen/_2sdp"
-                android:text="AD"
-                android:textColor="@color/black"
-                android:textStyle="bold" />
-
             <Button
                 android:id="@+id/ad_call_to_action"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginStart="@dimen/_4sdp"
-                android:layout_marginEnd="@dimen/_8sdp"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_40sdp"
                 android:gravity="center"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
+                android:translationY="2dp"
                 android:text="Install Now"
+                android:textStyle="bold"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_10sdp"
-                android:backgroundTint="@color/clr_dark_orange"/>
-        </LinearLayout>
+                android:textSize="@dimen/_9sdp"
+                android:backgroundTint="@color/clr_dark_orange"
+                app:layout_constraintTop_toBottomOf="@+id/details_small_admob"
+                app:layout_constraintLeft_toRightOf="@id/guide_vertical"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide_vertical"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.4" />
+            app:layout_constraintGuide_percent="0.6" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.gms.ads.nativead.NativeAdView>
 

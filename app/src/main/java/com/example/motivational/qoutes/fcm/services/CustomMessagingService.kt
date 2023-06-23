@@ -1,7 +1,6 @@
 package com.example.motivational.qoutes.fcm.services
 
 import android.annotation.SuppressLint
-import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -9,23 +8,16 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.RingtoneManager
-import android.net.Uri
-import android.os.Build
-import android.os.Handler
 import android.util.Log
-import android.view.View
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import com.example.motivational.qoutes.BuildConfig
 import com.example.motivational.qoutes.R
 import com.example.motivational.qoutes.activities.SplashActivity
 import com.example.motivational.qoutes.database.QuotViewModel
-import com.example.motivational.qoutes.fcm.utils.DB
-import com.example.motivational.qoutes.utils.UtilSharedPerefs
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.Gson
-import com.squareup.picasso.Picasso
 import java.util.concurrent.atomic.AtomicInteger
 
 
@@ -110,10 +102,10 @@ open class CustomMessagingService : FirebaseMessagingService() {
             )
 
         val remoteViews =
-            RemoteViews(BuildConfig.APPLICATION_ID, R.layout.custom_notification_layout)
+            RemoteViews(BuildConfig.APPLICATION_ID, R.layout.custom_notification_layout_light)
 
         val remoteViewSmall =
-            RemoteViews(BuildConfig.APPLICATION_ID, R.layout.small_custom_notification_layout)
+            RemoteViews(BuildConfig.APPLICATION_ID, R.layout.small_custom_notification_layout_light)
 
         remoteViews.setTextViewText(
             R.id.tv_title,

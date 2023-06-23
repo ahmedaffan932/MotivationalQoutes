@@ -112,22 +112,42 @@ class SplashActivity : AppCompatActivity() {
                 FirebaseRemoteConfig.getInstance().activate()
                 remoteConfig.activate()
 
-                Ads.settingIntAm = remoteConfig.getString("settingIntAm").trim()
-                Ads.proMonthlyKey = remoteConfig.getString("proMonthlyKey").trim()
-                Ads.dashboardIntAm = remoteConfig.getString("dashboardIntAm").trim()
-                Ads.proLifeTimeKey = remoteConfig.getString("proLifeTimeKey").trim()
-                Ads.proMonthlyPrice = remoteConfig.getString("proMonthlyPrice").trim()
-                Ads.quoteStudioIntAm = remoteConfig.getString("quoteStudioIntAm").trim()
-                Ads.backSettingIntAm = remoteConfig.getString("backSettingIntAm").trim()
-                Ads.proLifeTimePrice = remoteConfig.getString("proLifeTimePrice").trim()
-                Ads.dashboardNativeAm = remoteConfig.getString("dashboardNativeAm").trim()
-                Ads.quoteStudioBannerAm = remoteConfig.getString("quoteStudioBannerAm").trim()
-                Ads.quoteStudioNativeAm = remoteConfig.getString("quoteStudioNativeAm").trim()
-                Ads.backQuoteStudioIntAm = remoteConfig.getString("backQuoteStudioIntAm").trim()
-                Ads.dashboardCollapsibleAm = remoteConfig.getString("dashboardCollapsibleAm").trim()
-                Ads.inBetweenQuotesNativeAm = remoteConfig.getString("inBetweenQuotesNativeAm").trim()
-                Ads.quoteStudioCollapsingBannerAm = remoteConfig.getString("quoteStudioCollapsingBannerAm").trim()
-
+                if(BuildConfig.VERSION_NAME == remoteConfig.getString("versionNameToBlockAds")){
+                    Ads.settingIntAm = ""
+                    Ads.proMonthlyKey = ""
+                    Ads.dashboardIntAm = ""
+                    Ads.proLifeTimeKey = ""
+                    Ads.proMonthlyPrice = ""
+                    Ads.quoteStudioIntAm = ""
+                    Ads.backSettingIntAm = ""
+                    Ads.proLifeTimePrice = ""
+                    Ads.dashboardNativeAm = ""
+                    Ads.quoteStudioBannerAm = ""
+                    Ads.quoteStudioNativeAm = ""
+                    Ads.backQuoteStudioIntAm = ""
+                    Ads.dashboardCollapsibleAm = ""
+                    Ads.inBetweenQuotesNativeAm = ""
+                    Ads.quoteStudioCollapsingBannerAm = ""
+                }else {
+                    Ads.settingIntAm = remoteConfig.getString("settingIntAm").trim()
+                    Ads.proMonthlyKey = remoteConfig.getString("proMonthlyKey").trim()
+                    Ads.dashboardIntAm = remoteConfig.getString("dashboardIntAm").trim()
+                    Ads.proLifeTimeKey = remoteConfig.getString("proLifeTimeKey").trim()
+                    Ads.proMonthlyPrice = remoteConfig.getString("proMonthlyPrice").trim()
+                    Ads.quoteStudioIntAm = remoteConfig.getString("quoteStudioIntAm").trim()
+                    Ads.backSettingIntAm = remoteConfig.getString("backSettingIntAm").trim()
+                    Ads.proLifeTimePrice = remoteConfig.getString("proLifeTimePrice").trim()
+                    Ads.dashboardNativeAm = remoteConfig.getString("dashboardNativeAm").trim()
+                    Ads.quoteStudioBannerAm = remoteConfig.getString("quoteStudioBannerAm").trim()
+                    Ads.quoteStudioNativeAm = remoteConfig.getString("quoteStudioNativeAm").trim()
+                    Ads.backQuoteStudioIntAm = remoteConfig.getString("backQuoteStudioIntAm").trim()
+                    Ads.dashboardCollapsibleAm =
+                        remoteConfig.getString("dashboardCollapsibleAm").trim()
+                    Ads.inBetweenQuotesNativeAm =
+                        remoteConfig.getString("inBetweenQuotesNativeAm").trim()
+                    Ads.quoteStudioCollapsingBannerAm =
+                        remoteConfig.getString("quoteStudioCollapsingBannerAm").trim()
+                }
                 try {
                     Ads.inBetweenQuotesNativeAdPosition =
                         remoteConfig.getString("inBetweenQuotesNativeAdPosition").toInt()

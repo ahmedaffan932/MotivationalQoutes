@@ -58,6 +58,7 @@ object InterstitialAds {
         } else {
             Log.d("interAdmobShow", "The interstitial ad wasn't ready yet.")
             callback?.onResult()
+            loadInterAdmob(context)
         }
 
         interAdmob?.fullScreenContentCallback = object : FullScreenContentCallback() {

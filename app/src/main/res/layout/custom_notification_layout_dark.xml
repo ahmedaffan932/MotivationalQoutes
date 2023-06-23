@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/app_name"
                 android:lines="1"
-                android:textColor="@android:color/black"
+                android:textColor="@color/white"
                 android:textStyle="bold" />
 
         </RelativeLayout>
@@ -68,6 +68,7 @@
             android:layout_height="@dimen/_250sdp"
             android:adjustViewBounds="true"
             android:contentDescription="@null"
+            android:padding="5dp"
             android:src="@drawable/rp35"
             android:minHeight="50dp"
             android:scaleType="centerCrop" />
