@@ -55,7 +55,7 @@
         android:layout_height="0dp"
         android:layout_marginBottom="@dimen/_6sdp"
         android:scaleType="centerCrop"
-        android:src="@drawable/rp35"
+        android:src="@drawable/rp8"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -65,11 +65,11 @@
         android:id="@+id/quotes_view_pager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/_6sdp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/clAd"
         app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="@dimen/_6sdp"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/clAd"
         app:layout_constraintTop_toBottomOf="@id/bannerTop" />
 
     <androidx.constraintlayout.widget.ConstraintLayout

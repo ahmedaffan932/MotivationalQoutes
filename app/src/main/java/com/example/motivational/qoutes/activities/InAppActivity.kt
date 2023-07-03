@@ -52,6 +52,11 @@ class InAppActivity : AppCompatActivity() {
         binding= ActivityInAppBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        if (Ads.proLifeTimePrice == ""){
+            Ads.proMonthlyPrice = "21.99"
+            Ads.proLifeTimePrice = "0.99"
+        }
+
         binding.txtLifeTime.text="Life Time: $${Ads.proLifeTimePrice}"
         binding.txtMonthly.text="Monthly: $${Ads.proMonthlyPrice}"
         billingClient = BillingClient.newBuilder(this)

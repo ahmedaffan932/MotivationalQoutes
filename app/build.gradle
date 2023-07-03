@@ -15,8 +15,8 @@ android {
         applicationId "com"
         minSdk 26
         targetSdk 33
-        versionCode 15
-        versionName "1.16"
+        versionCode 18
+        versionName "1.19"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

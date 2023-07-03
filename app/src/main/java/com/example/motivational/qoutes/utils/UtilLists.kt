@@ -71,7 +71,7 @@ object UtilLists {
         "purpose"
     )
     val wallpapers = intArrayOf(
-        R.drawable.rp35,
+        R.drawable.rp8,
         R.drawable.rp1,
         R.drawable.rp2,
         R.drawable.rp3,
@@ -80,7 +80,7 @@ object UtilLists {
         R.drawable.rp36,
         R.drawable.rp6,
         R.drawable.rp7,
-        R.drawable.rp8,
+        R.drawable.rp35,
         R.drawable.rp9,
         R.drawable.rp10,
         R.drawable.rp11,

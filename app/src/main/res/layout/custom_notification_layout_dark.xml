@@ -69,7 +69,7 @@
             android:adjustViewBounds="true"
             android:contentDescription="@null"
             android:padding="5dp"
-            android:src="@drawable/rp35"
+            android:src="@drawable/rp8"
             android:minHeight="50dp"
             android:scaleType="centerCrop" />
 

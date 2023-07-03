@@ -17,8 +17,8 @@ object Ads {
     var inBetweenQuotesNativeAdPosition = 0
     var inBetweenQuotesNativeAdStartingIndex = 2
     var inBetweenQuotesNativeAm = "am_hctr"
-    var proMonthlyPrice = ""
-    var proLifeTimePrice = ""
+    var proMonthlyPrice = "21.99"
+    var proLifeTimePrice = "0.99"
     const val admob = "am"
 
     var proMonthlyKey = "android.test.purchased"

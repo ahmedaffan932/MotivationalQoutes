@@ -48,7 +48,7 @@
             android:adjustViewBounds="true"
             android:contentDescription="@null"
             android:scaleType="centerCrop"
-            android:src="@drawable/rp35" />
+            android:src="@drawable/rp8" />
 
     </RelativeLayout>
 

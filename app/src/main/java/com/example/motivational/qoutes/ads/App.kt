@@ -80,7 +80,7 @@ class App : Application(), Application.ActivityLifecycleCallbacks, LifecycleObse
 
                     override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                         // Called when an app open ad has failed to load.
-                        Log.d("logKey", loadAdError.message)
+                        Log.d("logKey", "App open ad error: ${loadAdError.message}")
                         isLoadingAd = false;
                         if(adId== Ads.appOpenAdIdOne){
                             loadAd(context, Ads.appOpenAdIdTwo)
@@ -132,7 +132,7 @@ class App : Application(), Application.ActivityLifecycleCallbacks, LifecycleObse
                     override fun onAdFailedToShowFullScreenContent(adError: AdError) {
                         // Called when fullscreen content failed to show.
                         // Set the reference to null so isAdAvailable() returns false.
-                        Log.d("logKey", adError.message)
+                        Log.d("logKey", "App open ad show error: ${adError.message}")
                         appOpenAd = null
                         isShowingAd = false
 
