@@ -95,10 +95,8 @@ object UtilMiscs {
             }
         }
     }
-    fun getRootPath(){
 
-    }
-    fun unzipFromAssets(context: Context, zipFileName: String, outputDirectory: String) {
+    private fun unzipFromAssets(context: Context, zipFileName: String, outputDirectory: String) {
         try {
             val inputStream = context.assets.open(zipFileName)
             val zipInputStream = ZipInputStream(inputStream)

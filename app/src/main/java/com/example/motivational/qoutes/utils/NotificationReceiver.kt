@@ -82,9 +82,6 @@ class NotificationReceiver : BroadcastReceiver() {
                 RemoteViews(BuildConfig.APPLICATION_ID, R.layout.small_custom_notification_layout_light)
             }
 
-
-
-
         remoteViews.setTextViewText(
             R.id.tv_title,
             category.substring(0, 1).uppercase() + category.substring(1)

@@ -35,6 +35,7 @@ class SplashActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         loadAds()
+
         if (UtilSharedPerefs.getIsFirstTime(this)) {
             Firebase.analytics.logEvent("FirstTimeUser", null)
         } else {
@@ -112,7 +113,7 @@ class SplashActivity : AppCompatActivity() {
                 FirebaseRemoteConfig.getInstance().activate()
                 remoteConfig.activate()
 
-                if(BuildConfig.VERSION_NAME == remoteConfig.getString("versionNameToBlockAds")){
+                if (BuildConfig.VERSION_NAME == remoteConfig.getString("versionNameToBlockAds")) {
                     Ads.settingIntAm = ""
                     Ads.proMonthlyKey = ""
                     Ads.dashboardIntAm = ""
@@ -128,7 +129,7 @@ class SplashActivity : AppCompatActivity() {
                     Ads.dashboardCollapsibleAm = ""
                     Ads.inBetweenQuotesNativeAm = ""
                     Ads.quoteStudioCollapsingBannerAm = ""
-                }else {
+                } else {
                     Ads.settingIntAm = remoteConfig.getString("settingIntAm").trim()
                     Ads.proMonthlyKey = remoteConfig.getString("proMonthlyKey").trim()
                     Ads.dashboardIntAm = remoteConfig.getString("dashboardIntAm").trim()
@@ -170,7 +171,6 @@ class SplashActivity : AppCompatActivity() {
         loadNativeAds()
         InterstitialAds.loadInterAdmob(this)
         BannerAd.load(this)
-
     }
 
     private fun loadNativeAds() {

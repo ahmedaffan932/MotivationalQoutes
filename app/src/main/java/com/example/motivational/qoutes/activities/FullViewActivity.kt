@@ -49,7 +49,7 @@ class FullViewActivity : AppCompatActivity(), InterfaceMisClick {
             lstQuot.add(0, objQuote)
         }
 
-        if(!Ads.quoteStudioCollapsingBannerAm.contains("am")) {
+        if (!Ads.quoteStudioCollapsingBannerAm.contains("am")) {
             NativeAd.showNativeAd(this, Ads.quoteStudioNativeAm, binding.adFrameLayout, null)
         }
 
@@ -73,13 +73,13 @@ class FullViewActivity : AppCompatActivity(), InterfaceMisClick {
                 }
             }
         )
-        if(BannerAd.adView == null){
-            BannerAd.load(this, callBack = object : BannerAd.bannerAdsCallBack{
+        if (BannerAd.adView == null) {
+            BannerAd.load(this, callBack = object : BannerAd.bannerAdsCallBack {
                 override fun onLoaded() {
                     BannerAd.show(Ads.quoteStudioBannerAm, binding.bannerTop)
                 }
             })
-        }else {
+        } else {
             BannerAd.show(Ads.quoteStudioBannerAm, binding.bannerTop)
         }
         InterstitialAds.showInterstitialAdmob(
@@ -136,11 +136,9 @@ class FullViewActivity : AppCompatActivity(), InterfaceMisClick {
                                     binding.emptyLottie.visibility = View.VISIBLE
                                 }
                             }
-
                         }
-
                     } else {
-                        binding.tvHeading.text = cat
+                        binding.tvHeading.text = cat.toUpperCase()
                         CoroutineScope(Dispatchers.IO).launch {
                             for (i in vMdl.readByCat(cat)) {
                                 lstQuot.add(i)
@@ -202,10 +200,10 @@ class FullViewActivity : AppCompatActivity(), InterfaceMisClick {
         InterstitialAds.showInterstitialAdmob(this, this, Ads.backQuoteStudioIntAm, object :
             InterstitialCallback {
             override fun onResult() {
-                if (intent.getStringExtra("quote") != null){
+                if (intent.getStringExtra("quote") != null) {
                     startActivity(Intent(this@FullViewActivity, MainActivity::class.java))
                     finish()
-                }else {
+                } else {
                     finish()
                 }
             }

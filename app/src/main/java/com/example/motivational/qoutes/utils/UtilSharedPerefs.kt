@@ -18,9 +18,12 @@ object UtilSharedPerefs {
         return sharedPreferencesVar(context).edit()
     }
 
+
     fun getDate(context: Context): String {
         return sharedPreferencesVar(context).getString("storedDateKey", "") ?: ""
     }
+
+
 
     fun setDate(context: Context, date: String) {
         sharedPreferancesEditorVar(context).putString("storedDateKey", date).apply()
@@ -39,6 +42,7 @@ object UtilSharedPerefs {
         sharedPreferancesEditorVar(context).putBoolean("isPurchased", b).apply()
     }
 
+
     fun setIsFirstTime(context: Context, b: Boolean) {
         sharedPreferancesEditorVar(context).putBoolean("isFirstTime", b).apply()
     }
@@ -47,16 +51,13 @@ object UtilSharedPerefs {
         sharedPreferancesEditorVar(context).putString("quote", quote).apply()
     }
 
+
     fun getPurchasedStatus(context: Context): Boolean {
         return sharedPreferencesVar(context).getBoolean("isPurchased", false)
     }
 
     fun getIsFirstTime(context: Context): Boolean {
         return sharedPreferencesVar(context).getBoolean("isFirstTime", true)
-    }
-
-    fun getNotificationQuote(context: Context): String {
-        return sharedPreferencesVar(context).getString("quote", "").toString()
     }
 
     fun setIsFullQuote(context: Context, b: Boolean) {
