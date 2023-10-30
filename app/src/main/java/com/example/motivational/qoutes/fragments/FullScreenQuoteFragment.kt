@@ -24,7 +24,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.motivational.qoutes.BuildConfig
 import com.example.motivational.qoutes.R
 import com.example.motivational.qoutes.ads.Ads
-import com.example.motivational.qoutes.ads.NativeAd
 import com.example.motivational.qoutes.database.QuotModel
 import com.example.motivational.qoutes.database.QuotViewModel
 import com.example.motivational.qoutes.databinding.FragmentFullScreenQuoteBinding
@@ -107,49 +106,37 @@ class FullScreenQuoteFragment : Fragment() {
         vMdl = ViewModelProvider(this)[QuotViewModel::class.java]
         infc = activity as InterfaceMisClick
 
-        Log.d("logkey", "param1: $param1")
-        if (param1 == null && NativeAd.amInner != null) {
-            binding.mView.visibility = View.GONE
-            binding.adFrameLayout.visibility = View.VISIBLE
-            NativeAd.showNativeAd(
-                requireContext(),
-                Ads.inBetweenQuotesNativeAm,
-                binding.adFrameLayout,
-                null
-            )
-        } else {
-            binding.mView.visibility = View.VISIBLE
-            binding.adFrameLayout.visibility = View.GONE
-            binding.quotLayout.qoutData.text = param1?.Quote
-            if (param1 == null) {
-                binding.quotLayout.qoutData.text = "Either you run the day or the day runs you"
-            }
-            binding.quotLayout.qoutWallpaper.setImageResource(UtilLists.wallpapers[wallpaperInt])
+        binding.mView.visibility = View.VISIBLE
+        binding.adFrameLayout.visibility = View.GONE
+        binding.quotLayout.qoutData.text = param1?.Quote
+        if (param1 == null) {
+            binding.quotLayout.qoutData.text = "Either you run the day or the day runs you"
+        }
+        binding.quotLayout.qoutWallpaper.setImageResource(UtilLists.wallpapers[wallpaperInt])
 
-            updateUi()
-            btnClicks()
+        updateUi()
+        btnClicks()
 
-            binding.root.setOnClickListener {
-                if (!infc.onMisTouch(param1)) {
-                    if (BottomSheetBehavior.from(binding.bottomSheetQualities.frameLayout).state == BottomSheetBehavior.STATE_EXPANDED) {
-                        BottomSheetBehavior.from(binding.bottomSheetQualities.frameLayout).state =
-                            BottomSheetBehavior.STATE_COLLAPSED
-                    } else {
-                        wallpaperInt = UtilMiscs.getNextWallpaper(wallpaperInt)
-                        binding.quotLayout.qoutWallpaper.setImageResource(UtilLists.wallpapers[wallpaperInt])
-                        binding.quotLayout.qoutWallpaper.destroyDrawingCache()
-                        infc.onWallChange(wallpaperInt)
-                    }
-
+        binding.root.setOnClickListener {
+            if (!infc.onMisTouch(param1)) {
+                if (BottomSheetBehavior.from(binding.bottomSheetQualities.frameLayout).state == BottomSheetBehavior.STATE_EXPANDED) {
+                    BottomSheetBehavior.from(binding.bottomSheetQualities.frameLayout).state =
+                        BottomSheetBehavior.STATE_COLLAPSED
+                } else {
+                    wallpaperInt = UtilMiscs.getNextWallpaper(wallpaperInt)
+                    binding.quotLayout.qoutWallpaper.setImageResource(UtilLists.wallpapers[wallpaperInt])
+                    binding.quotLayout.qoutWallpaper.destroyDrawingCache()
+                    infc.onWallChange(wallpaperInt)
                 }
+
             }
-            binding.root.setOnLongClickListener {
-                if (!infc.onMisTouch(param1)) {
-                    UtilMiscs.copyToClip(requireContext(), param1?.Quote ?: "")
-                    UtilMiscs.showSnackBar(binding.constraintLayoutOptions, "Quote Copied!")
-                }
-                return@setOnLongClickListener true
+        }
+        binding.root.setOnLongClickListener {
+            if (!infc.onMisTouch(param1)) {
+                UtilMiscs.copyToClip(requireContext(), param1?.Quote ?: "")
+                UtilMiscs.showSnackBar(binding.constraintLayoutOptions, "Quote Copied!")
             }
+            return@setOnLongClickListener true
         }
         return binding.root
     }

@@ -22,7 +22,6 @@ import com.example.motivational.qoutes.BuildConfig
 import com.example.motivational.qoutes.R
 import com.example.motivational.qoutes.activities.FullViewActivity
 import com.example.motivational.qoutes.ads.Ads
-import com.example.motivational.qoutes.ads.NativeAd
 import com.example.motivational.qoutes.database.QuotModel
 import com.example.motivational.qoutes.database.QuotViewModel
 import com.example.motivational.qoutes.databinding.FragmentQuoteBinding
@@ -50,20 +49,19 @@ class QuoteFragment : Fragment() {
     private lateinit var infc: InterfaceMisClick
     private val textToSpeechEngine: TextToSpeech by lazy {
         // Pass in context and the listener.
-        TextToSpeech(requireContext(),
-            TextToSpeech.OnInitListener { status ->
-                // set our locale only if init was success.
-                if (status == TextToSpeech.SUCCESS) {
-                    textToSpeechEngine.language = Locale.ENGLISH
-                }
-            })
+        TextToSpeech(requireContext()) { status ->
+            // set our locale only if init was success.
+            if (status == TextToSpeech.SUCCESS) {
+                textToSpeechEngine.language = Locale.ENGLISH
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getParcelable(ARG_PARAM1)
-            param2=it.getInt(ARG_PARAM2)
+            param2 = it.getInt(ARG_PARAM2)
         }
     }
 
@@ -88,65 +86,54 @@ class QuoteFragment : Fragment() {
             peekHeight = 0
             this.state = BottomSheetBehavior.STATE_COLLAPSED
         }
-        Log.d("logkey", "param1: $param1")
-        if (param1 == null) {
-            binding.mView.visibility = View.GONE
-            binding.adFrameLayout.visibility = View.VISIBLE
-            NativeAd.showNativeAd(
-                requireContext(),
-                Ads.inBetweenQuotesNativeAm,
-                binding.adFrameLayout,
-                null
-            )
-        }
-        else {
-            binding.mView.visibility = View.VISIBLE
-            binding.adFrameLayout.visibility = View.GONE
-            binding.quotLayout.qoutData.text = param1?.Quote
-            if (param1==null){
-                binding.quotLayout.qoutData.text = "Either you run the day or the day runs you"
-            }
-            binding.quotLayout.qoutWallpaper.setImageResource(UtilLists.wallpapers[param1!!.wall])
-            updateUi()
-            btnClicks()
 
-            binding.root.setOnClickListener {
-                if (!infc.onMisTouch(param1)) {
-                    if (BottomSheetBehavior.from(binding.bottomSheetQualities.frameLayout).state==BottomSheetBehavior.STATE_EXPANDED){
-                        BottomSheetBehavior.from(binding.bottomSheetQualities.frameLayout).state=BottomSheetBehavior.STATE_COLLAPSED
-                    }
-                    else {
-                        binding.quotLayout.qoutWallpaper.setImageResource(
-                            UtilLists.wallpapers[UtilMiscs.getNextWallpaper(
-                                param1!!.wall
-                            )]
-                        )
-                        binding.quotLayout.qoutWallpaper.destroyDrawingCache()
-                        param1?.wall = UtilMiscs.getNextWallpaper(param1!!.wall)
-                        CoroutineScope(Dispatchers.IO).launch {
-                            vMdl.updateQoute(param1!!)
-                        }
+        binding.mView.visibility = View.VISIBLE
+        binding.adFrameLayout.visibility = View.GONE
+        binding.quotLayout.qoutData.text = param1?.Quote
+        if (param1 == null) {
+            binding.quotLayout.qoutData.text = "Either you run the day or the day runs you"
+        }
+        binding.quotLayout.qoutWallpaper.setImageResource(UtilLists.wallpapers[param1!!.wall])
+        updateUi()
+        btnClicks()
+
+        binding.root.setOnClickListener {
+            if (!infc.onMisTouch(param1)) {
+                if (BottomSheetBehavior.from(binding.bottomSheetQualities.frameLayout).state == BottomSheetBehavior.STATE_EXPANDED) {
+                    BottomSheetBehavior.from(binding.bottomSheetQualities.frameLayout).state =
+                        BottomSheetBehavior.STATE_COLLAPSED
+                } else {
+                    binding.quotLayout.qoutWallpaper.setImageResource(
+                        UtilLists.wallpapers[UtilMiscs.getNextWallpaper(
+                            param1!!.wall
+                        )]
+                    )
+                    binding.quotLayout.qoutWallpaper.destroyDrawingCache()
+                    param1?.wall = UtilMiscs.getNextWallpaper(param1!!.wall)
+                    CoroutineScope(Dispatchers.IO).launch {
+                        vMdl.updateQoute(param1!!)
                     }
                 }
             }
-            binding.root.setOnLongClickListener {
-                if (!infc.onMisTouch(param1)) {
-                    UtilMiscs.copyToClip(requireContext(), param1?.Quote ?: "")
-                    UtilMiscs.showSnackBar(binding.constraintLayoutOptions, "Quote Copied!")
-                }
-                return@setOnLongClickListener true
+        }
+        binding.root.setOnLongClickListener {
+            if (!infc.onMisTouch(param1)) {
+                UtilMiscs.copyToClip(requireContext(), param1?.Quote ?: "")
+                UtilMiscs.showSnackBar(binding.constraintLayoutOptions, "Quote Copied!")
             }
+            return@setOnLongClickListener true
         }
         return binding.root
     }
+
     private fun btnClicks() {
         binding.btnFullScreen.setOnClickListener {
-            UtilSharedPerefs.setIsFullQuote(requireContext(),true)
+            UtilSharedPerefs.setIsFullQuote(requireContext(), true)
             startActivity(
                 Intent(requireActivity(), FullViewActivity::class.java).putExtra(
                     "cat",
                     param1?.Category
-                ).putExtra("pos",param2?:0)
+                ).putExtra("pos", param2 ?: 0)
             )
             activity?.finish()
         }
@@ -154,11 +141,10 @@ class QuoteFragment : Fragment() {
             textToSpeechEngine.speak(param1?.Quote, TextToSpeech.QUEUE_FLUSH, null, "tts1")
         }
         binding.btnFav.setOnClickListener {
-            if (param1?.isFav==1){
-                param1?.isFav=0
-            }
-            else{
-                param1?.isFav=1
+            if (param1?.isFav == 1) {
+                param1?.isFav = 0
+            } else {
+                param1?.isFav = 1
             }
             CoroutineScope(Dispatchers.IO).launch {
                 vMdl.updateQoute(param1!!)
@@ -184,11 +170,15 @@ class QuoteFragment : Fragment() {
                 BottomSheetBehavior.from(binding.bottomSheetQualities.frameLayout).state =
                     BottomSheetBehavior.STATE_COLLAPSED
                 CoroutineScope(Dispatchers.IO).launch {
-                    var dlg: CustomDialog?=null
-                    requireActivity().runOnUiThread{dlg=UtilMiscs.showProgressD(requireContext())}
-                    WallpaperManager.getInstance(requireContext()).setBitmap(binding.quotLayout.root.drawToBitmap())
-                    requireActivity().runOnUiThread{
-                        Toast.makeText(requireContext(),"Wallpaper Updated!", Toast.LENGTH_SHORT).show()
+                    var dlg: CustomDialog? = null
+                    requireActivity().runOnUiThread {
+                        dlg = UtilMiscs.showProgressD(requireContext())
+                    }
+                    WallpaperManager.getInstance(requireContext())
+                        .setBitmap(binding.quotLayout.root.drawToBitmap())
+                    requireActivity().runOnUiThread {
+                        Toast.makeText(requireContext(), "Wallpaper Updated!", Toast.LENGTH_SHORT)
+                            .show()
                         dlg?.dismiss()
                     }
                 }
@@ -196,7 +186,11 @@ class QuoteFragment : Fragment() {
             binding.bottomSheetQualities.btnDownload.setOnClickListener {
                 BottomSheetBehavior.from(binding.bottomSheetQualities.frameLayout).state =
                     BottomSheetBehavior.STATE_COLLAPSED
-                UtilMiscs.downloadImg(requireContext(),binding.quotLayout.root.drawToBitmap(), param1)
+                UtilMiscs.downloadImg(
+                    requireContext(),
+                    binding.quotLayout.root.drawToBitmap(),
+                    param1
+                )
                 Toast.makeText(context, "Saved!", Toast.LENGTH_SHORT).show()
             }
             binding.bottomSheetQualities.btnPlaySound.setOnClickListener {
@@ -208,11 +202,18 @@ class QuoteFragment : Fragment() {
             binding.bottomSheetQualities.btnMoreOpts.setOnClickListener {
                 BottomSheetBehavior.from(binding.bottomSheetQualities.frameLayout).state =
                     BottomSheetBehavior.STATE_COLLAPSED
-                UtilMiscs.downloadImg(requireContext(),binding.quotLayout.root.drawToBitmap(), param1)
-                val model=
-                    File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"${getName(param1?.Category,param1?.id)}.jpg")
+                UtilMiscs.downloadImg(
+                    requireContext(),
+                    binding.quotLayout.root.drawToBitmap(),
+                    param1
+                )
+                val model =
+                    File(
+                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                        "${getName(param1?.Category, param1?.id)}.jpg"
+                    )
 
-                Log.d("logkey","Model Path: ${model.absolutePath}")
+                Log.d("logkey", "Model Path: ${model.absolutePath}")
                 val intentBuilder: ShareCompat.IntentBuilder =
                     ShareCompat.IntentBuilder.from(requireActivity())
                         .setType("image/*")
@@ -229,15 +230,24 @@ class QuoteFragment : Fragment() {
 
             }
             binding.bottomSheetQualities.btnRed.setOnClickListener {
-                UtilMiscs.downloadImg(requireContext(),binding.quotLayout.root.drawToBitmap(), param1)
-                val model=File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"${getName(param1?.Category,param1?.id)}.jpg")
+                UtilMiscs.downloadImg(
+                    requireContext(),
+                    binding.quotLayout.root.drawToBitmap(),
+                    param1
+                )
+                val model = File(
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                    "${getName(param1?.Category, param1?.id)}.jpg"
+                )
                 val intent = Intent(Intent.ACTION_SEND)
                 intent.type = "image/*"
-                intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(
-                    requireContext(),
-                    BuildConfig.APPLICATION_ID + ".provider",
-                    model
-                ))
+                intent.putExtra(
+                    Intent.EXTRA_STREAM, FileProvider.getUriForFile(
+                        requireContext(),
+                        BuildConfig.APPLICATION_ID + ".provider",
+                        model
+                    )
+                )
                 intent.setPackage("com.instagram.android") // Specify Instagram's package name
 
                 try {
@@ -248,16 +258,25 @@ class QuoteFragment : Fragment() {
                 }
             }
             binding.bottomSheetQualities.btnBlack.setOnClickListener {
-                UtilMiscs.downloadImg(requireContext(),binding.quotLayout.root.drawToBitmap(), param1)
+                UtilMiscs.downloadImg(
+                    requireContext(),
+                    binding.quotLayout.root.drawToBitmap(),
+                    param1
+                )
 
-                val model=File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"${getName(param1?.Category,param1?.id)}.jpg")
+                val model = File(
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                    "${getName(param1?.Category, param1?.id)}.jpg"
+                )
                 val intent = Intent(Intent.ACTION_SEND)
                 intent.type = "image/*"
-                intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(
-                    requireContext(),
-                    BuildConfig.APPLICATION_ID + ".provider",
-                    model
-                ))
+                intent.putExtra(
+                    Intent.EXTRA_STREAM, FileProvider.getUriForFile(
+                        requireContext(),
+                        BuildConfig.APPLICATION_ID + ".provider",
+                        model
+                    )
+                )
                 intent.setPackage("com.zhiliaoapp.musically") // Specify Instagram's package name
 
                 try {
@@ -268,15 +287,24 @@ class QuoteFragment : Fragment() {
                 }
             }
             binding.bottomSheetQualities.btnBlue.setOnClickListener {
-                UtilMiscs.downloadImg(requireContext(),binding.quotLayout.root.drawToBitmap(), param1)
-                val model=File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"${getName(param1?.Category,param1?.id)}.jpg")
+                UtilMiscs.downloadImg(
+                    requireContext(),
+                    binding.quotLayout.root.drawToBitmap(),
+                    param1
+                )
+                val model = File(
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                    "${getName(param1?.Category, param1?.id)}.jpg"
+                )
                 val intent = Intent(Intent.ACTION_SEND)
                 intent.type = "image/*"
-                intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(
-                    requireContext(),
-                    BuildConfig.APPLICATION_ID + ".provider",
-                    model
-                ))
+                intent.putExtra(
+                    Intent.EXTRA_STREAM, FileProvider.getUriForFile(
+                        requireContext(),
+                        BuildConfig.APPLICATION_ID + ".provider",
+                        model
+                    )
+                )
                 intent.setPackage("com.facebook.katana") // Specify Instagram's package name
 
                 try {
@@ -287,21 +315,37 @@ class QuoteFragment : Fragment() {
                 }
             }
             binding.bottomSheetQualities.btnGreen.setOnClickListener {
-                UtilMiscs.downloadImg(requireContext(),binding.quotLayout.root.drawToBitmap(), param1)
-                val model=
-                    File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"${getName(param1?.Category,param1?.id)}.jpg")
-                UtilMiscs.onShare(requireContext(),model)
+                UtilMiscs.downloadImg(
+                    requireContext(),
+                    binding.quotLayout.root.drawToBitmap(),
+                    param1
+                )
+                val model =
+                    File(
+                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                        "${getName(param1?.Category, param1?.id)}.jpg"
+                    )
+                UtilMiscs.onShare(requireContext(), model)
             }
             binding.bottomSheetQualities.btnSparrow.setOnClickListener {
-                UtilMiscs.downloadImg(requireContext(),binding.quotLayout.root.drawToBitmap(), param1)
-                val model=File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"${getName(param1?.Category,param1?.id)}.jpg")
+                UtilMiscs.downloadImg(
+                    requireContext(),
+                    binding.quotLayout.root.drawToBitmap(),
+                    param1
+                )
+                val model = File(
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                    "${getName(param1?.Category, param1?.id)}.jpg"
+                )
                 val intent = Intent(Intent.ACTION_SEND)
                 intent.type = "image/*"
-                intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(
-                    requireContext(),
-                    BuildConfig.APPLICATION_ID + ".provider",
-                    model
-                ))
+                intent.putExtra(
+                    Intent.EXTRA_STREAM, FileProvider.getUriForFile(
+                        requireContext(),
+                        BuildConfig.APPLICATION_ID + ".provider",
+                        model
+                    )
+                )
                 intent.setPackage("com.twitter.android") // Specify Instagram's package name
 
                 try {
@@ -318,18 +362,45 @@ class QuoteFragment : Fragment() {
 
 
     private fun downloadImg() {
-        UtilMiscs.saveMediaToStorage(requireContext(),binding.quotLayout.root.drawToBitmap(),"${getName(param1?.Category,param1?.id)}")
+        UtilMiscs.saveMediaToStorage(
+            requireContext(),
+            binding.quotLayout.root.drawToBitmap(),
+            "${getName(param1?.Category, param1?.id)}"
+        )
 
     }
 
-    private fun updateUi(){
-        if (param1?.isFav==1){
-            binding.btnFav.setImageDrawable(ResourcesCompat.getDrawable(requireActivity().resources,R.drawable.ic_my_fav,requireContext().theme))
-            binding.btnFav.imageTintList= ColorStateList.valueOf(ResourcesCompat.getColor(resources,R.color.clr_blue,requireContext().theme))
-        }
-        else{
-            binding.btnFav.setImageDrawable(ResourcesCompat.getDrawable(requireActivity().resources,R.drawable.ic_fav,requireContext().theme))
-            binding.btnFav.imageTintList= ColorStateList.valueOf(ResourcesCompat.getColor(resources,R.color.white,requireContext().theme))
+    private fun updateUi() {
+        if (param1?.isFav == 1) {
+            binding.btnFav.setImageDrawable(
+                ResourcesCompat.getDrawable(
+                    requireActivity().resources,
+                    R.drawable.ic_my_fav,
+                    requireContext().theme
+                )
+            )
+            binding.btnFav.imageTintList = ColorStateList.valueOf(
+                ResourcesCompat.getColor(
+                    resources,
+                    R.color.clr_blue,
+                    requireContext().theme
+                )
+            )
+        } else {
+            binding.btnFav.setImageDrawable(
+                ResourcesCompat.getDrawable(
+                    requireActivity().resources,
+                    R.drawable.ic_fav,
+                    requireContext().theme
+                )
+            )
+            binding.btnFav.imageTintList = ColorStateList.valueOf(
+                ResourcesCompat.getColor(
+                    resources,
+                    R.color.white,
+                    requireContext().theme
+                )
+            )
         }
     }
 
@@ -337,16 +408,16 @@ class QuoteFragment : Fragment() {
         super.onResume()
         updateUi()
         binding.constraintLayoutOptions.visibility = View.VISIBLE
-        binding.btnFullScreen.visibility=View.VISIBLE
+        binding.btnFullScreen.visibility = View.VISIBLE
     }
 
     companion object {
         @JvmStatic
-        fun newInstance(param1: QuotModel?, param2:Int) =
+        fun newInstance(param1: QuotModel?, param2: Int) =
             QuoteFragment().apply {
                 arguments = Bundle().apply {
                     putParcelable(ARG_PARAM1, param1)
-                    putInt(ARG_PARAM2,param2)
+                    putInt(ARG_PARAM2, param2)
                 }
             }
     }

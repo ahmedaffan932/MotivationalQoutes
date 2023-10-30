@@ -49,136 +49,96 @@ class FullViewActivity : AppCompatActivity(), InterfaceMisClick {
             lstQuot.add(0, objQuote)
         }
 
-        if (!Ads.quoteStudioCollapsingBannerAm.contains("am")) {
-            NativeAd.showNativeAd(this, Ads.quoteStudioNativeAm, binding.adFrameLayout, null)
-        }
 
-        BannerAd.loadCollapsibleBanner(
-            Ads.quoteStudioCollapsingBannerAm,
-            binding.adViewOne,
-            object : BannerAd.bannerAdsCallBack {
-                override fun onFailed() {
-                    BannerAd.loadCollapsibleBanner(
-                        Ads.dashboardCollapsibleAm,
-                        binding.adViewTwo,
-                        object : BannerAd.bannerAdsCallBack {
-                            override fun onFailed() {
-                                BannerAd.loadCollapsibleBanner(
-                                    Ads.dashboardCollapsibleAm,
-                                    binding.adViewThree
-                                )
-                            }
-                        }
-                    )
-                }
+        myLoader = UtilMiscs.showProgressD(this@FullViewActivity)
+        if (UtilSharedPerefs.getIsGuideAllowedToShow(this@FullViewActivity)) {
+            UtilMiscs.showGuide(
+                this@FullViewActivity,
+                "handClick.json",
+                resources.getString(R.string.handClickString)
+            ).setOnDismissListener {
+                UtilMiscs.showGuide(
+                    this@FullViewActivity,
+                    "slide.json",
+                    resources.getString(R.string.slideString)
+                )
             }
-        )
-        if (BannerAd.adView == null) {
-            BannerAd.load(this, callBack = object : BannerAd.bannerAdsCallBack {
-                override fun onLoaded() {
-                    BannerAd.show(Ads.quoteStudioBannerAm, binding.bannerTop)
-                }
-            })
-        } else {
-            BannerAd.show(Ads.quoteStudioBannerAm, binding.bannerTop)
+            UtilSharedPerefs.setIsGuideAllowedToShow(this@FullViewActivity, false)
         }
-        InterstitialAds.showInterstitialAdmob(
-            this,
-            this,
-            Ads.quoteStudioIntAm,
-            object : InterstitialCallback {
-                override fun onResult() {
-                    myLoader = UtilMiscs.showProgressD(this@FullViewActivity)
-                    if (UtilSharedPerefs.getIsGuideAllowedToShow(this@FullViewActivity)) {
-                        UtilMiscs.showGuide(
-                            this@FullViewActivity,
-                            "handClick.json",
-                            resources.getString(R.string.handClickString)
-                        ).setOnDismissListener {
-                            UtilMiscs.showGuide(
-                                this@FullViewActivity,
-                                "slide.json",
-                                resources.getString(R.string.slideString)
-                            )
-                        }
-                        UtilSharedPerefs.setIsGuideAllowedToShow(this@FullViewActivity, false)
-                    }
 
-                    if (cat == "MFAV") {
-                        binding.tvHeading.text = "Favourite"
-                        CoroutineScope(Dispatchers.IO).launch {
-                            for (i in vMdl.readAllFav()) {
-                                lstQuot.add(i)
-                            }
-                            if (lstQuot.isNotEmpty()) {
-                                activeQoute = lstQuot[0]
-                            }
-                            //adding ads in list
-                            if (Ads.inBetweenQuotesNativeAdPosition > 1) {
-                                for (i in 0 until lstQuot.size) {
-                                    if (i >= Ads.inBetweenQuotesNativeAdStartingIndex) {
-                                        if (i % Ads.inBetweenQuotesNativeAdPosition == 0) {
-                                            lstQuot.add(i, null)
-                                        }
-                                    }
-                                }
-                            }
-                            runOnUiThread {
-                                binding.quotesViewPager.adapter =
-                                    QuotesPagerAdapter(this@FullViewActivity)
-                                binding.quotesViewPager.offscreenPageLimit = 1
-                                myLoader?.dismiss()
-                                binding.quotesViewPager.currentItem = position
-                                if (lstQuot.size > 0) {
-                                    binding.emptyFlag.visibility = View.GONE
-                                } else {
-                                    binding.emptyFlag.visibility = View.VISIBLE
-                                    binding.emptyLottie.visibility = View.VISIBLE
-                                }
+        if (cat == "MFAV") {
+            binding.tvHeading.text = "Favourite"
+            CoroutineScope(Dispatchers.IO).launch {
+                for (i in vMdl.readAllFav()) {
+                    lstQuot.add(i)
+                }
+                if (lstQuot.isNotEmpty()) {
+                    activeQoute = lstQuot[0]
+                }
+                //adding ads in list
+                if (Ads.inBetweenQuotesNativeAdPosition > 1) {
+                    for (i in 0 until lstQuot.size) {
+                        if (i >= Ads.inBetweenQuotesNativeAdStartingIndex) {
+                            if (i % Ads.inBetweenQuotesNativeAdPosition == 0) {
+                                lstQuot.add(i, null)
                             }
                         }
+                    }
+                }
+                runOnUiThread {
+                    binding.quotesViewPager.adapter =
+                        QuotesPagerAdapter(this@FullViewActivity)
+                    binding.quotesViewPager.offscreenPageLimit = 1
+                    myLoader?.dismiss()
+                    binding.quotesViewPager.currentItem = position
+                    if (lstQuot.size > 0) {
+                        binding.emptyFlag.visibility = View.GONE
                     } else {
-                        binding.tvHeading.text = cat.toUpperCase()
-                        CoroutineScope(Dispatchers.IO).launch {
-                            for (i in vMdl.readByCat(cat)) {
-                                lstQuot.add(i)
-                            }
-                            if (cat == "") {
-                                activeQoute = intent.getParcelableExtra("model")
-                            } else {
-                                if (lstQuot.isNotEmpty()) {
-                                    activeQoute = lstQuot[0]
-                                }
-                            }
+                        binding.emptyFlag.visibility = View.VISIBLE
+                        binding.emptyLottie.visibility = View.VISIBLE
+                    }
+                }
+            }
+        } else {
+            binding.tvHeading.text = cat.toUpperCase()
+            CoroutineScope(Dispatchers.IO).launch {
+                for (i in vMdl.readByCat(cat)) {
+                    lstQuot.add(i)
+                }
+                if (cat == "") {
+                    activeQoute = intent.getParcelableExtra("model")
+                } else {
+                    if (lstQuot.isNotEmpty()) {
+                        activeQoute = lstQuot[0]
+                    }
+                }
 
-                            //adding ads in list
-                            if (Ads.inBetweenQuotesNativeAdPosition > 1) {
-                                for (i in 0 until lstQuot.size) {
-                                    if (i >= Ads.inBetweenQuotesNativeAdStartingIndex) {
-                                        if (i % Ads.inBetweenQuotesNativeAdPosition == 0) {
-                                            lstQuot.add(i, null)
-                                        }
-                                    }
-                                }
-                            }
-                            runOnUiThread {
-                                binding.quotesViewPager.adapter =
-                                    QuotesPagerAdapter(this@FullViewActivity)
-                                binding.quotesViewPager.offscreenPageLimit = 1
-                                myLoader?.dismiss()
-                                binding.quotesViewPager.currentItem = position
-                                if (lstQuot.size > 0) {
-                                    binding.emptyFlag.visibility = View.GONE
-                                } else {
-                                    binding.emptyFlag.visibility = View.VISIBLE
-                                    binding.emptyLottie.visibility = View.VISIBLE
-                                }
+                //adding ads in list
+                if (Ads.inBetweenQuotesNativeAdPosition > 1) {
+                    for (i in 0 until lstQuot.size) {
+                        if (i >= Ads.inBetweenQuotesNativeAdStartingIndex) {
+                            if (i % Ads.inBetweenQuotesNativeAdPosition == 0) {
+                                lstQuot.add(i, null)
                             }
                         }
                     }
                 }
+                runOnUiThread {
+                    binding.quotesViewPager.adapter =
+                        QuotesPagerAdapter(this@FullViewActivity)
+                    binding.quotesViewPager.offscreenPageLimit = 1
+                    myLoader?.dismiss()
+                    binding.quotesViewPager.currentItem = position
+                    if (lstQuot.size > 0) {
+                        binding.emptyFlag.visibility = View.GONE
+                    } else {
+                        binding.emptyFlag.visibility = View.VISIBLE
+                        binding.emptyLottie.visibility = View.VISIBLE
+                    }
+                }
             }
-        )
+        }
+
 
         binding.btnBack.setOnClickListener {
             onBackPressed()
@@ -194,20 +154,6 @@ class FullViewActivity : AppCompatActivity(), InterfaceMisClick {
         override fun createFragment(position: Int): Fragment {
             return FullScreenQuoteFragment.newInstance(lstQuot[position], position)
         }
-    }
-
-    override fun onBackPressed() {
-        InterstitialAds.showInterstitialAdmob(this, this, Ads.backQuoteStudioIntAm, object :
-            InterstitialCallback {
-            override fun onResult() {
-                if (intent.getStringExtra("quote") != null) {
-                    startActivity(Intent(this@FullViewActivity, MainActivity::class.java))
-                    finish()
-                } else {
-                    finish()
-                }
-            }
-        })
     }
 
     override fun onMisTouch(model: QuotModel?): Boolean {

@@ -108,43 +108,15 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
             }
         })
 
-        InterstitialAds.showInterstitialAdmob(
-            this,
-            this, Ads.dashboardIntAm, object : InterstitialCallback {
-                override fun onResult() {
-                    if (ContextCompat.checkSelfPermission(
-                            this@MainActivity,
-                            Manifest.permission.POST_NOTIFICATIONS
-                        ) != PackageManager.PERMISSION_GRANTED
-                    ) {
-                        requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 1)
-                    }
-                }
-            }
-        )
 
-        BannerAd.loadCollapsibleBanner(
-            Ads.dashboardCollapsibleAm,
-            binding.adViewOne,
-            object : BannerAd.bannerAdsCallBack {
-                override fun onFailed() {
-                    BannerAd.loadCollapsibleBanner(
-                        Ads.dashboardCollapsibleAm,
-                        binding.adViewTwo,
-                        object : BannerAd.bannerAdsCallBack {
-                            override fun onFailed() {
-                                BannerAd.loadCollapsibleBanner(
-                                    Ads.dashboardCollapsibleAm,
-                                    binding.adViewThree
-                                )
-                            }
-                        }
-                    )
-                }
-            }
-        )
+        if (ContextCompat.checkSelfPermission(
+                this@MainActivity,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 1)
+        }
 
-        NativeAd.showNativeAd(this, Ads.dashboardNativeAm, binding.adFrameLayout, null)
         vMdl = QuotViewModel(application)
 
         //initialize kerosil list

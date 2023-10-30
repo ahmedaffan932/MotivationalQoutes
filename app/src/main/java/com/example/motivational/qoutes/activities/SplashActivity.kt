@@ -9,9 +9,6 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.motivational.qoutes.BuildConfig
 import com.example.motivational.qoutes.ads.Ads
-import com.example.motivational.qoutes.ads.BannerAd
-import com.example.motivational.qoutes.ads.InterstitialAds
-import com.example.motivational.qoutes.ads.NativeAd
 import com.example.motivational.qoutes.database.QuotModel
 import com.example.motivational.qoutes.databinding.ActivitySplashBinding
 import com.example.motivational.qoutes.utils.CustomDialog
@@ -33,8 +30,6 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        loadAds()
 
         if (UtilSharedPerefs.getIsFirstTime(this)) {
             Firebase.analytics.logEvent("FirstTimeUser", null)
@@ -166,16 +161,5 @@ class SplashActivity : AppCompatActivity() {
             }
         }
     }
-
-    private fun loadAds() {
-        loadNativeAds()
-        InterstitialAds.loadInterAdmob(this)
-        BannerAd.load(this)
-    }
-
-    private fun loadNativeAds() {
-        NativeAd.loadNativeAd(this@SplashActivity)
-    }
-
 
 }

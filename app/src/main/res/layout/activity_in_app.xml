@@ -143,7 +143,7 @@
         android:layout_height="@dimen/_28sdp"
         android:layout_margin="@dimen/_14sdp"
         android:padding="@dimen/_4sdp"
-        android:src="@drawable/admob_close_button_white_circle_black_cross"
+        android:src="@drawable/round_close_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

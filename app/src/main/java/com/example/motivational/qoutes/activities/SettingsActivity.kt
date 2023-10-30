@@ -11,9 +11,6 @@ import android.os.Bundle
 import android.view.Window
 import android.widget.Toast
 import com.example.motivational.qoutes.R
-import com.example.motivational.qoutes.ads.Ads
-import com.example.motivational.qoutes.ads.InterstitialAds
-import com.example.motivational.qoutes.ads.InterstitialCallback
 import com.example.motivational.qoutes.databinding.ActivitySettingsBinding
 import com.example.motivational.qoutes.databinding.DialogRateBinding
 import com.example.motivational.qoutes.utils.UtilMiscs
@@ -24,8 +21,6 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding= ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        InterstitialAds.showInterstitialAdmob(this,this, Ads.settingIntAm,null)
-
 
         binding.btnBack.setOnClickListener {
             onBackPressed()
@@ -115,12 +110,5 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
-    override fun onBackPressed() {
-        InterstitialAds.showInterstitialAdmob(this,this, Ads.backSettingIntAm,object :InterstitialCallback{
-            override fun onResult() {
-                finish()
-            }
-        })
-    }
 
 }
