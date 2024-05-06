@@ -61,4 +61,23 @@
         <item name="android:background">@drawable/bg_mask_tl</item>
     </style>
 
+    <style name="adTheme">
+        <item name="android:text">Ad</item>
+        <item name="android:width">20dp</item>
+        <item name="android:height">14dp</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">left</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/bg_ad</item>
+        <item name="android:backgroundTint">@color/gray_700</item>
+    </style>
+    <style name="lessRoundedCorners" parent="">
+        <item name="cornerSize">10%</item>
+        <item name="cornerFamily">rounded</item>
+    </style>
+
+
 </resources>

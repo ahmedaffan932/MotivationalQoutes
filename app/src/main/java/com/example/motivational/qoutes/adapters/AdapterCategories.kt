@@ -8,7 +8,7 @@ import com.example.motivational.qoutes.R
 import com.example.motivational.qoutes.database.Category
 import com.example.motivational.qoutes.databinding.ItemCatBinding
 import com.example.motivational.qoutes.interfaces.InterfaceCatClick
-import com.example.motivational.qoutes.utils.UtilMiscs
+import com.example.motivational.qoutes.utils.Misc
 
 class AdapterCategories(var context: Context, var arrCategories: ArrayList<Category>, var clickListener: InterfaceCatClick) :
     RecyclerView.Adapter<AdapterCategories.ViewHolderClass>() {
@@ -28,7 +28,7 @@ class AdapterCategories(var context: Context, var arrCategories: ArrayList<Categ
     }
 
     override fun onBindViewHolder(holder: ViewHolderClass, position: Int) {
-        UtilMiscs.zoomInView(holder.binding.root, context, 250)
+        Misc.zoomInView(holder.binding.root, context, 250)
         holder.binding.catImage.setImageResource(arrCategories[position].catWallpaper)
         holder.binding.catName.text = arrCategories[position].catName
         holder.binding.root.setOnClickListener { clickListener.onClick(arrCategories[position].catName) }

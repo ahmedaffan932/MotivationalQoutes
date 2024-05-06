@@ -2,4 +2,8 @@
 <resources>
     <dimen name="viewpager_next_item_visible">166dp</dimen>
     <dimen name="viewpager_current_item_horizontal_margin">166dp</dimen>
+    <dimen name="padding_10">10dp</dimen>
+    <dimen name="padding">8dp</dimen>
+    <dimen name="extra_padding">32dp</dimen>
+    <dimen name="fab_padding">16dp</dimen>
 </resources>

@@ -5,9 +5,7 @@ import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
-import com.example.motivational.qoutes.utils.UtilLists
-import com.example.motivational.qoutes.utils.UtilMiscs
-import java.util.Random
+import com.example.motivational.qoutes.utils.Misc
 
 @Entity(tableName = "quots")
 data class QuotModel(
@@ -19,7 +17,7 @@ data class QuotModel(
     @TypeConverters(CustomObjectConverter::class)
     val Tags: List<String>,
     var isFav:Int=0,
-    var wall:Int= UtilMiscs.getRandom()
+    var wall:Int= Misc.getRandom()
 ):Parcelable{
     constructor(parcel: Parcel) : this(
         parcel.readInt(),

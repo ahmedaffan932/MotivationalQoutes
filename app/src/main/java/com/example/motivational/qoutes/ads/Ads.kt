@@ -1,18 +1,20 @@
 package com.example.motivational.qoutes.ads
 
+import android.app.Activity
+import android.content.Context
+import android.widget.FrameLayout
 import com.example.motivational.qoutes.BuildConfig
 
 object Ads {
-    var quoteStudioBannerAm: String = ""
-    var dashboardCollapsibleAm: String = "am"
+    var dashboardBannerAm: String = "am"
+    var splashNative: String ="am_small_hctr"
     var quoteStudioCollapsingBannerAm: String = ""
 
-    var inBetweenQuotesNativeAdPosition = 0
-    var inBetweenQuotesNativeAdStartingIndex = 2
-    var inBetweenQuotesNativeAm = "am_hctr"
     var proMonthlyPrice = "21.99"
     var proLifeTimePrice = "0.99"
-    const val admob = "am"
+    var inBetweenQuotesNativeAm = "am_hctr"
+    var inBetweenQuotesNativeAdPosition = 0
+    var inBetweenQuotesNativeAdStartingIndex = 2
 
     var proMonthlyKey = "android.test.purchased"
     var proLifeTimeKey = "android.test.purchased"
@@ -22,7 +24,19 @@ object Ads {
     var backSettingIntAm = "am"
     var backQuoteStudioIntAm = "am"
     var dashboardIntAm = "am"
-    var dashboardNativeAm = "am"
-    var quoteStudioNativeAm = "am"
+    var dashboardNativeAm = "am_small_lctr"
+    var quoteStudioNativeAndBannerAm = "am"
 
+    fun showInterstitial(
+        activity: Activity,
+        remoteKey: String,
+        callback: InterstitialCallBack? = null
+    ) {
+        if (remoteKey.contains("am")) {
+            AdmobInterstitialAd.showInterstitial(activity, callback)
+        } else {
+            callback?.onDismiss()
+        }
+    }
+    
 }

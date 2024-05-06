@@ -30,7 +30,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.motivational.qoutes.R
 import com.example.motivational.qoutes.adapters.AdapterCategories
-import com.example.motivational.qoutes.ads.*
+import com.example.motivational.qoutes.ads.AdmobNativeAds
+import com.example.motivational.qoutes.ads.Ads
 import com.example.motivational.qoutes.database.Category
 import com.example.motivational.qoutes.database.QuotModel
 import com.example.motivational.qoutes.database.QuotViewModel
@@ -42,7 +43,7 @@ import com.example.motivational.qoutes.interfaces.InterfaceCatClick
 import com.example.motivational.qoutes.interfaces.InterfaceUserInterfere
 import com.example.motivational.qoutes.utils.NotificationScheduler
 import com.example.motivational.qoutes.utils.UtilLists
-import com.example.motivational.qoutes.utils.UtilMiscs
+import com.example.motivational.qoutes.utils.Misc
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -64,6 +65,10 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
         setContentView(binding.root)
 
         setCategoriesRecyclerView()
+
+
+        AdmobNativeAds.showNativeAd(this, Ads.dashboardNativeAm, binding.adFrameLayout)
+
 
         KeyboardVisibilityEvent.setEventListener(
             this
@@ -152,7 +157,7 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
         }
 
         binding.btnPro.setOnClickListener {
-            startActivity(Intent(this, InAppActivity::class.java))
+//            startActivity(Intent(this, InAppActivity::class.java))
         }
 
         binding.btnShare.setOnClickListener {
@@ -211,7 +216,7 @@ class MainActivity : AppCompatActivity(), InterfaceUserInterfere {
             }
             customLayoutBinding.btnThumbDown.setOnClickListener {
                 alert.dismiss()
-                UtilMiscs.showSnackBar(binding.root, "Thank you for your rating!")
+                Misc.showSnackBar(binding.root, "Thank you for your rating!")
             }
             customLayoutBinding.btnThumbUp.setOnClickListener {
                 alert.dismiss()

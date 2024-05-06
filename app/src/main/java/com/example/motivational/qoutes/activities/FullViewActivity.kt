@@ -1,6 +1,5 @@
 package com.example.motivational.qoutes.activities
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -17,7 +16,7 @@ import com.example.motivational.qoutes.fragments.FullScreenQuoteFragment
 import com.example.motivational.qoutes.interfaces.InterfaceMisClick
 import com.example.motivational.qoutes.utils.CustomDialog
 import com.example.motivational.qoutes.utils.UtilLists
-import com.example.motivational.qoutes.utils.UtilMiscs
+import com.example.motivational.qoutes.utils.Misc
 import com.example.motivational.qoutes.utils.UtilSharedPerefs
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
@@ -50,14 +49,14 @@ class FullViewActivity : AppCompatActivity(), InterfaceMisClick {
         }
 
 
-        myLoader = UtilMiscs.showProgressD(this@FullViewActivity)
+        myLoader = Misc.showProgressD(this@FullViewActivity)
         if (UtilSharedPerefs.getIsGuideAllowedToShow(this@FullViewActivity)) {
-            UtilMiscs.showGuide(
+            Misc.showGuide(
                 this@FullViewActivity,
                 "handClick.json",
                 resources.getString(R.string.handClickString)
             ).setOnDismissListener {
-                UtilMiscs.showGuide(
+                Misc.showGuide(
                     this@FullViewActivity,
                     "slide.json",
                     resources.getString(R.string.slideString)
@@ -145,6 +144,14 @@ class FullViewActivity : AppCompatActivity(), InterfaceMisClick {
         }
     }
 
+    override fun onBackPressed() {
+        Ads.showInterstitial(this, Ads.backQuoteStudioIntAm, object : InterstitialCallBack{
+            override fun onDismiss() {
+                finish()
+            }
+        })
+    }
+
     private inner class QuotesPagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
         override fun getItemCount(): Int {
             return lstQuot.size
@@ -168,6 +175,5 @@ class FullViewActivity : AppCompatActivity(), InterfaceMisClick {
     override fun onWallChange(wall: Int) {
         binding.qoutWallpaper.setImageResource(UtilLists.wallpapers[wall])
     }
-
 
 }

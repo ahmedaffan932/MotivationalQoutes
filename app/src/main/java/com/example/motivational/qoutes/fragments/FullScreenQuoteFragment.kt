@@ -23,14 +23,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.motivational.qoutes.BuildConfig
 import com.example.motivational.qoutes.R
-import com.example.motivational.qoutes.ads.Ads
 import com.example.motivational.qoutes.database.QuotModel
 import com.example.motivational.qoutes.database.QuotViewModel
 import com.example.motivational.qoutes.databinding.FragmentFullScreenQuoteBinding
 import com.example.motivational.qoutes.interfaces.InterfaceMisClick
 import com.example.motivational.qoutes.utils.*
-import com.example.motivational.qoutes.utils.UtilMiscs.getName
-import com.example.motivational.qoutes.utils.UtilMiscs.wallpaperInt
+import com.example.motivational.qoutes.utils.Misc.getName
+import com.example.motivational.qoutes.utils.Misc.wallpaperInt
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -123,7 +122,7 @@ class FullScreenQuoteFragment : Fragment() {
                     BottomSheetBehavior.from(binding.bottomSheetQualities.frameLayout).state =
                         BottomSheetBehavior.STATE_COLLAPSED
                 } else {
-                    wallpaperInt = UtilMiscs.getNextWallpaper(wallpaperInt)
+                    wallpaperInt = Misc.getNextWallpaper(wallpaperInt)
                     binding.quotLayout.qoutWallpaper.setImageResource(UtilLists.wallpapers[wallpaperInt])
                     binding.quotLayout.qoutWallpaper.destroyDrawingCache()
                     infc.onWallChange(wallpaperInt)
@@ -133,8 +132,8 @@ class FullScreenQuoteFragment : Fragment() {
         }
         binding.root.setOnLongClickListener {
             if (!infc.onMisTouch(param1)) {
-                UtilMiscs.copyToClip(requireContext(), param1?.Quote ?: "")
-                UtilMiscs.showSnackBar(binding.constraintLayoutOptions, "Quote Copied!")
+                Misc.copyToClip(requireContext(), param1?.Quote ?: "")
+                Misc.showSnackBar(binding.constraintLayoutOptions, "Quote Copied!")
             }
             return@setOnLongClickListener true
         }
@@ -159,8 +158,8 @@ class FullScreenQuoteFragment : Fragment() {
             updateUi()
         }
         binding.btnCopy.setOnClickListener {
-            UtilMiscs.copyToClip(requireContext(), param1?.Quote ?: "")
-            UtilMiscs.showSnackBar(binding.constraintLayoutOptions, "Quote Copied!")
+            Misc.copyToClip(requireContext(), param1?.Quote ?: "")
+            Misc.showSnackBar(binding.constraintLayoutOptions, "Quote Copied!")
         }
         binding.btnShare.setOnClickListener {
 
@@ -179,7 +178,7 @@ class FullScreenQuoteFragment : Fragment() {
                     CoroutineScope(Dispatchers.IO).launch {
                         var dlg: CustomDialog? = null
                         requireActivity().runOnUiThread {
-                            dlg = UtilMiscs.showProgressD(requireContext())
+                            dlg = Misc.showProgressD(requireContext())
                         }
                         WallpaperManager.getInstance(requireContext())
                             .setBitmap(binding.quotLayout.root.drawToBitmap())
@@ -199,7 +198,7 @@ class FullScreenQuoteFragment : Fragment() {
             binding.bottomSheetQualities.btnDownload.setOnClickListener {
                 BottomSheetBehavior.from(binding.bottomSheetQualities.frameLayout).state =
                     BottomSheetBehavior.STATE_COLLAPSED
-                UtilMiscs.downloadImg(
+                Misc.downloadImg(
                     requireContext(),
                     binding.quotLayout.root.drawToBitmap(),
                     param1
@@ -217,7 +216,7 @@ class FullScreenQuoteFragment : Fragment() {
                 Handler(Looper.getMainLooper()).postDelayed({
                     BottomSheetBehavior.from(binding.bottomSheetQualities.frameLayout).state =
                         BottomSheetBehavior.STATE_COLLAPSED
-                    UtilMiscs.downloadImg(
+                    Misc.downloadImg(
                         requireContext(),
                         binding.quotLayout.root.drawToBitmap(),
                         param1
@@ -249,7 +248,7 @@ class FullScreenQuoteFragment : Fragment() {
             binding.bottomSheetQualities.btnRed.setOnClickListener {
                 binding.quotLayout.qoutWallpaper.visibility = View.VISIBLE
                 Handler(Looper.getMainLooper()).postDelayed({
-                    UtilMiscs.downloadImg(
+                    Misc.downloadImg(
                         requireContext(),
                         binding.quotLayout.root.drawToBitmap(),
                         param1
@@ -282,7 +281,7 @@ class FullScreenQuoteFragment : Fragment() {
             binding.bottomSheetQualities.btnBlack.setOnClickListener {
                 binding.quotLayout.qoutWallpaper.visibility = View.VISIBLE
                 Handler(Looper.getMainLooper()).postDelayed({
-                    UtilMiscs.downloadImg(
+                    Misc.downloadImg(
                         requireContext(),
                         binding.quotLayout.root.drawToBitmap(),
                         param1
@@ -316,7 +315,7 @@ class FullScreenQuoteFragment : Fragment() {
             binding.bottomSheetQualities.btnBlue.setOnClickListener {
                 binding.quotLayout.qoutWallpaper.visibility = View.VISIBLE
                 Handler(Looper.getMainLooper()).postDelayed({
-                    UtilMiscs.downloadImg(
+                    Misc.downloadImg(
                         requireContext(),
                         binding.quotLayout.root.drawToBitmap(),
                         param1
@@ -350,7 +349,7 @@ class FullScreenQuoteFragment : Fragment() {
             binding.bottomSheetQualities.btnGreen.setOnClickListener {
                 binding.quotLayout.qoutWallpaper.visibility = View.VISIBLE
                 Handler(Looper.getMainLooper()).postDelayed({
-                    UtilMiscs.downloadImg(
+                    Misc.downloadImg(
                         requireContext(),
                         binding.quotLayout.root.drawToBitmap(),
                         param1
@@ -361,13 +360,13 @@ class FullScreenQuoteFragment : Fragment() {
                             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
                             "${getName(param1?.Category, param1?.id)}.jpg"
                         )
-                    UtilMiscs.onShare(requireContext(), model)
+                    Misc.onShare(requireContext(), model)
                 }, 100)
             }
             binding.bottomSheetQualities.btnSparrow.setOnClickListener {
                 binding.quotLayout.qoutWallpaper.visibility = View.VISIBLE
                 Handler(Looper.getMainLooper()).postDelayed({
-                    UtilMiscs.downloadImg(
+                    Misc.downloadImg(
                         requireContext(),
                         binding.quotLayout.root.drawToBitmap(),
                         param1

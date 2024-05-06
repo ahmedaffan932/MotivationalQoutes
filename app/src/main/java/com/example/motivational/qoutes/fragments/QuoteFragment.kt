@@ -21,15 +21,14 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.motivational.qoutes.BuildConfig
 import com.example.motivational.qoutes.R
 import com.example.motivational.qoutes.activities.FullViewActivity
-import com.example.motivational.qoutes.ads.Ads
 import com.example.motivational.qoutes.database.QuotModel
 import com.example.motivational.qoutes.database.QuotViewModel
 import com.example.motivational.qoutes.databinding.FragmentQuoteBinding
 import com.example.motivational.qoutes.interfaces.InterfaceMisClick
 import com.example.motivational.qoutes.utils.CustomDialog
 import com.example.motivational.qoutes.utils.UtilLists
-import com.example.motivational.qoutes.utils.UtilMiscs
-import com.example.motivational.qoutes.utils.UtilMiscs.getName
+import com.example.motivational.qoutes.utils.Misc
+import com.example.motivational.qoutes.utils.Misc.getName
 import com.example.motivational.qoutes.utils.UtilSharedPerefs
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.CoroutineScope
@@ -48,9 +47,7 @@ class QuoteFragment : Fragment() {
     private lateinit var vMdl: QuotViewModel
     private lateinit var infc: InterfaceMisClick
     private val textToSpeechEngine: TextToSpeech by lazy {
-        // Pass in context and the listener.
         TextToSpeech(requireContext()) { status ->
-            // set our locale only if init was success.
             if (status == TextToSpeech.SUCCESS) {
                 textToSpeechEngine.language = Locale.ENGLISH
             }
@@ -104,12 +101,12 @@ class QuoteFragment : Fragment() {
                         BottomSheetBehavior.STATE_COLLAPSED
                 } else {
                     binding.quotLayout.qoutWallpaper.setImageResource(
-                        UtilLists.wallpapers[UtilMiscs.getNextWallpaper(
+                        UtilLists.wallpapers[Misc.getNextWallpaper(
                             param1!!.wall
                         )]
                     )
                     binding.quotLayout.qoutWallpaper.destroyDrawingCache()
-                    param1?.wall = UtilMiscs.getNextWallpaper(param1!!.wall)
+                    param1?.wall = Misc.getNextWallpaper(param1!!.wall)
                     CoroutineScope(Dispatchers.IO).launch {
                         vMdl.updateQoute(param1!!)
                     }
@@ -118,8 +115,8 @@ class QuoteFragment : Fragment() {
         }
         binding.root.setOnLongClickListener {
             if (!infc.onMisTouch(param1)) {
-                UtilMiscs.copyToClip(requireContext(), param1?.Quote ?: "")
-                UtilMiscs.showSnackBar(binding.constraintLayoutOptions, "Quote Copied!")
+                Misc.copyToClip(requireContext(), param1?.Quote ?: "")
+                Misc.showSnackBar(binding.constraintLayoutOptions, "Quote Copied!")
             }
             return@setOnLongClickListener true
         }
@@ -153,8 +150,8 @@ class QuoteFragment : Fragment() {
         }
 
         binding.btnCopy.setOnClickListener {
-            UtilMiscs.copyToClip(requireContext(), param1?.Quote ?: "")
-            UtilMiscs.showSnackBar(binding.constraintLayoutOptions, "Quote Copied!")
+            Misc.copyToClip(requireContext(), param1?.Quote ?: "")
+            Misc.showSnackBar(binding.constraintLayoutOptions, "Quote Copied!")
         }
 
 
@@ -172,7 +169,7 @@ class QuoteFragment : Fragment() {
                 CoroutineScope(Dispatchers.IO).launch {
                     var dlg: CustomDialog? = null
                     requireActivity().runOnUiThread {
-                        dlg = UtilMiscs.showProgressD(requireContext())
+                        dlg = Misc.showProgressD(requireContext())
                     }
                     WallpaperManager.getInstance(requireContext())
                         .setBitmap(binding.quotLayout.root.drawToBitmap())
@@ -186,7 +183,7 @@ class QuoteFragment : Fragment() {
             binding.bottomSheetQualities.btnDownload.setOnClickListener {
                 BottomSheetBehavior.from(binding.bottomSheetQualities.frameLayout).state =
                     BottomSheetBehavior.STATE_COLLAPSED
-                UtilMiscs.downloadImg(
+                Misc.downloadImg(
                     requireContext(),
                     binding.quotLayout.root.drawToBitmap(),
                     param1
@@ -202,7 +199,7 @@ class QuoteFragment : Fragment() {
             binding.bottomSheetQualities.btnMoreOpts.setOnClickListener {
                 BottomSheetBehavior.from(binding.bottomSheetQualities.frameLayout).state =
                     BottomSheetBehavior.STATE_COLLAPSED
-                UtilMiscs.downloadImg(
+                Misc.downloadImg(
                     requireContext(),
                     binding.quotLayout.root.drawToBitmap(),
                     param1
@@ -230,7 +227,7 @@ class QuoteFragment : Fragment() {
 
             }
             binding.bottomSheetQualities.btnRed.setOnClickListener {
-                UtilMiscs.downloadImg(
+                Misc.downloadImg(
                     requireContext(),
                     binding.quotLayout.root.drawToBitmap(),
                     param1
@@ -258,7 +255,7 @@ class QuoteFragment : Fragment() {
                 }
             }
             binding.bottomSheetQualities.btnBlack.setOnClickListener {
-                UtilMiscs.downloadImg(
+                Misc.downloadImg(
                     requireContext(),
                     binding.quotLayout.root.drawToBitmap(),
                     param1
@@ -287,7 +284,7 @@ class QuoteFragment : Fragment() {
                 }
             }
             binding.bottomSheetQualities.btnBlue.setOnClickListener {
-                UtilMiscs.downloadImg(
+                Misc.downloadImg(
                     requireContext(),
                     binding.quotLayout.root.drawToBitmap(),
                     param1
@@ -315,7 +312,7 @@ class QuoteFragment : Fragment() {
                 }
             }
             binding.bottomSheetQualities.btnGreen.setOnClickListener {
-                UtilMiscs.downloadImg(
+                Misc.downloadImg(
                     requireContext(),
                     binding.quotLayout.root.drawToBitmap(),
                     param1
@@ -325,10 +322,10 @@ class QuoteFragment : Fragment() {
                         Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
                         "${getName(param1?.Category, param1?.id)}.jpg"
                     )
-                UtilMiscs.onShare(requireContext(), model)
+                Misc.onShare(requireContext(), model)
             }
             binding.bottomSheetQualities.btnSparrow.setOnClickListener {
-                UtilMiscs.downloadImg(
+                Misc.downloadImg(
                     requireContext(),
                     binding.quotLayout.root.drawToBitmap(),
                     param1
@@ -362,7 +359,7 @@ class QuoteFragment : Fragment() {
 
 
     private fun downloadImg() {
-        UtilMiscs.saveMediaToStorage(
+        Misc.saveMediaToStorage(
             requireContext(),
             binding.quotLayout.root.drawToBitmap(),
             "${getName(param1?.Category, param1?.id)}"

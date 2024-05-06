@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:background="@color/clr_dark_grey"
     tools:context=".activities.SplashActivity">
 
@@ -29,33 +30,70 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tvLoading"
         android:text="@string/he_who_conquers_himself_is_the_mightiest_warrior_confucius" />
 
+    <com.airbnb.lottie.LottieAnimationView
+
+        android:id="@+id/animationView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginVertical="@dimen/_8sdp"
+        app:layout_constraintBottom_toTopOf="@+id/tvLoading"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_fileName="loadingsp.json"
+        app:lottie_loop="true" />
+
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/tvLoading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/_24sdp"
         android:text="Loading..."
         android:textColor="@color/white"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/nativeAdFrameLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/animationView"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/btnStart"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_30sdp"
-        android:layout_marginHorizontal="24dp"
-        android:layout_marginVertical="@dimen/_8sdp"
-        app:layout_constraintBottom_toTopOf="@+id/textView5"
+        android:layout_height="56dp"
+        android:layout_margin="@dimen/fab_padding"
+        android:visibility="invisible"
+        android:backgroundTint="@color/clr_dark_yellow"
+        android:elevation="@dimen/fab_padding"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:lottie_autoPlay="true"
-        app:lottie_fileName="loadingsp.json"
-        app:lottie_loop="true" />
+        app:layout_constraintBottom_toTopOf="@id/nativeAdFrameLayout"
+        android:background="@drawable/bg_simple_btn_ripple">
+
+        <TextView
+            android:id="@+id/tvStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="5dp"
+            android:text="Find Your Quotes"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="@dimen/_16sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <FrameLayout
+        android:id="@+id/nativeAdFrameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/padding"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

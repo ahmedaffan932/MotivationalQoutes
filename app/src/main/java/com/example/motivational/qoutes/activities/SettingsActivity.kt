@@ -13,7 +13,7 @@ import android.widget.Toast
 import com.example.motivational.qoutes.R
 import com.example.motivational.qoutes.databinding.ActivitySettingsBinding
 import com.example.motivational.qoutes.databinding.DialogRateBinding
-import com.example.motivational.qoutes.utils.UtilMiscs
+import com.example.motivational.qoutes.utils.Misc
 
 class SettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsBinding
@@ -78,7 +78,7 @@ class SettingsActivity : AppCompatActivity() {
             }
             customLayoutBinding.btnThumbDown.setOnClickListener {
                 alert.dismiss()
-                UtilMiscs.showSnackBar(binding.root, "Thank you for your rating!")
+                Misc.showSnackBar(binding.root, "Thank you for your rating!")
             }
             customLayoutBinding.btnThumbUp.setOnClickListener {
                 alert.dismiss()

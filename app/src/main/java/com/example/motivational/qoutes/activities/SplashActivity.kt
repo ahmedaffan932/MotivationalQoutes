@@ -4,19 +4,29 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import com.example.motivational.qoutes.BuildConfig
+import com.example.motivational.qoutes.R
+import com.example.motivational.qoutes.ads.AdmobInterstitialAd
+import com.example.motivational.qoutes.ads.AdmobNativeAds
 import com.example.motivational.qoutes.ads.Ads
+import com.example.motivational.qoutes.ads.InterstitialCallBack
+import com.example.motivational.qoutes.ads.LoadAdCallBack
 import com.example.motivational.qoutes.database.QuotModel
 import com.example.motivational.qoutes.databinding.ActivitySplashBinding
 import com.example.motivational.qoutes.utils.CustomDialog
 import com.example.motivational.qoutes.utils.UtilLists
-import com.example.motivational.qoutes.utils.UtilMiscs
-import com.example.motivational.qoutes.utils.UtilMiscs.setupRoomDb
-import com.example.motivational.qoutes.utils.UtilMiscs.unZipFolder
+import com.example.motivational.qoutes.utils.Misc
+import com.example.motivational.qoutes.utils.Misc.setupRoomDb
+import com.example.motivational.qoutes.utils.Misc.unZipFolder
 import com.example.motivational.qoutes.utils.UtilSharedPerefs
+import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -26,6 +36,10 @@ import com.google.gson.Gson
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySplashBinding
+    private var isIntAdLoaded = false
+    private var isNativeAdLoaded = false
+    private var isStartButtonVisible = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySplashBinding.inflate(layoutInflater)
@@ -56,7 +70,7 @@ class SplashActivity : AppCompatActivity() {
         setupRoomDb(application)
 
         if (intent.getStringExtra("quote") != null) {
-            val myLoader: CustomDialog = UtilMiscs.showProgressD(this)
+            val myLoader: CustomDialog = Misc.showProgressD(this)
 
             object : CountDownTimer(3000, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
@@ -72,10 +86,10 @@ class SplashActivity : AppCompatActivity() {
                     Log.d("logKeyQuoteSplash", objQuote.Quote)
                     Firebase.analytics.logEvent("UserFromNotification", null)
 
-                    val intent = Intent(this@SplashActivity, FullViewActivity::class.java)
-                    intent.putExtra("quote", quoteExtra)
-                    startActivity(intent)
-                    finish()
+//                    val intent = Intent(this@SplashActivity, FullViewActivity::class.java)
+//                    intent.putExtra("quote", quoteExtra)
+//                    startActivity(intent)
+//                    finish()
                 }
             }.start()
         } else {
@@ -87,11 +101,52 @@ class SplashActivity : AppCompatActivity() {
 
                 override fun onFinish() {
                     // This method is called after the countdown finishes
-                    Firebase.analytics.logEvent("UserFromSplash", null)
-                    startActivity(Intent(this@SplashActivity, MainActivity::class.java))
-                    finish()
+//                    Firebase.analytics.logEvent("UserFromSplash", null)
+//                    startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+//                    finish()
                 }
             }.start()
+        }
+
+        object : CountDownTimer(12000, 3000) {
+            @SuppressLint("SetTextI18n")
+            override fun onTick(p0: Long) {
+                if (isIntAdLoaded && isNativeAdLoaded) {
+                    showStartButton()
+                }
+            }
+
+            override fun onFinish() {
+                showStartButton()
+            }
+        }.start()
+
+        AdmobNativeAds.loadAdmobNative(this, callBack = object : LoadAdCallBack {
+            override fun onLoaded(interstitialAd: InterstitialAd?) {
+                isNativeAdLoaded = true
+                AdmobNativeAds.showNativeAd(
+                    this@SplashActivity,
+                    Ads.splashNative,
+                    binding.nativeAdFrameLayout
+                )
+            }
+        })
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            AdmobInterstitialAd.loadInterAdmob(this,
+                callback = object : LoadAdCallBack {
+                    override fun onLoaded(interstitialAd: InterstitialAd?) {
+                        isIntAdLoaded = true
+                    }
+                })
+        }, 1000)
+
+        binding.btnStart.setOnClickListener {
+            Ads.showInterstitial(this, Ads.dashboardIntAm, object : InterstitialCallBack{
+                override fun onDismiss() {
+                    startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+                }
+            })
         }
     }
 
@@ -118,10 +173,9 @@ class SplashActivity : AppCompatActivity() {
                     Ads.backSettingIntAm = ""
                     Ads.proLifeTimePrice = ""
                     Ads.dashboardNativeAm = ""
-                    Ads.quoteStudioBannerAm = ""
-                    Ads.quoteStudioNativeAm = ""
+//                    Ads.quoteStudioNativeAm = ""
                     Ads.backQuoteStudioIntAm = ""
-                    Ads.dashboardCollapsibleAm = ""
+                    Ads.dashboardBannerAm = ""
                     Ads.inBetweenQuotesNativeAm = ""
                     Ads.quoteStudioCollapsingBannerAm = ""
                 } else {
@@ -134,11 +188,11 @@ class SplashActivity : AppCompatActivity() {
                     Ads.backSettingIntAm = remoteConfig.getString("backSettingIntAm").trim()
                     Ads.proLifeTimePrice = remoteConfig.getString("proLifeTimePrice").trim()
                     Ads.dashboardNativeAm = remoteConfig.getString("dashboardNativeAm").trim()
-                    Ads.quoteStudioBannerAm = remoteConfig.getString("quoteStudioBannerAm").trim()
-                    Ads.quoteStudioNativeAm = remoteConfig.getString("quoteStudioNativeAm").trim()
                     Ads.backQuoteStudioIntAm = remoteConfig.getString("backQuoteStudioIntAm").trim()
-                    Ads.dashboardCollapsibleAm =
-                        remoteConfig.getString("dashboardCollapsibleAm").trim()
+                    Ads.quoteStudioNativeAndBannerAm =
+                        remoteConfig.getString("quoteStudioNativeAndBannerAm").trim()
+                    Ads.dashboardBannerAm =
+                        remoteConfig.getString("dashboardBannerAm").trim()
                     Ads.inBetweenQuotesNativeAm =
                         remoteConfig.getString("inBetweenQuotesNativeAm").trim()
                     Ads.quoteStudioCollapsingBannerAm =
@@ -160,6 +214,34 @@ class SplashActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun showStartButton() {
+        if (!isStartButtonVisible) {
+            Handler(Looper.getMainLooper()).postDelayed({
+                Misc.zoomInView(binding.btnStart, this, 250)
+            }, 250)
+
+            binding.tvLoading.visibility = View.INVISIBLE
+            binding.animationView.visibility = View.INVISIBLE
+
+            val a: Animation = AnimationUtils.loadAnimation(this, R.anim.zoom_in_logo)
+            a.duration = 500
+
+            a.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(p0: Animation?) {
+
+                }
+
+                override fun onAnimationEnd(p0: Animation?) {
+                }
+
+                override fun onAnimationRepeat(p0: Animation?) {
+
+                }
+            })
+        }
+        isStartButtonVisible = true
     }
 
 }
