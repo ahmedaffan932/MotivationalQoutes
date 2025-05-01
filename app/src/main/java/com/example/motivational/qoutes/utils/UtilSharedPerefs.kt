@@ -53,7 +53,7 @@ object UtilSharedPerefs {
 
 
     fun getPurchasedStatus(context: Context): Boolean {
-        return sharedPreferencesVar(context).getBoolean("isPurchased", false)
+        return sharedPreferencesVar(context).getBoolean("isPurchased", true)
     }
 
     fun getIsFirstTime(context: Context): Boolean {
